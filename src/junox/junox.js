@@ -9,7 +9,7 @@ import {
   chorusModeToWet,
   sliderToLFOFreq,
   sliderToLFODelay,
-  sliderToHPF
+  sliderToHPF,
 } from './params'
 import { clampVolume } from './utils'
 
@@ -20,28 +20,33 @@ export default class Junox {
     this.maxVoices = polyphony
     this.patch = patch
     this.sampleRate = sampleRate
+
     this.chorus = new Chorus({ sampleRate, rate: 1, delay: 0.00166 })
+
     this.lfo = new LFO({
       frequency: sliderToLFOFreq(patch.lfo.frequency),
       delay: 0,
-      sampleRate
+      sampleRate,
     })
+
     this.bassBoost = new BassBoost({ frequency: 75 })
+
     this.hpf = new HighPassFilter({
       cutoff: sliderToHPF(patch.hpf),
       resonance: 1,
-      sampleRate
+      sampleRate,
     })
+
     this.update()
   }
 
   noteOn(note, velocity) {
-    const voiceIndex = this.voices.findIndex(voice => voice.note === note)
+    const voiceIndex = this.voices.findIndex((voice) => voice.note === note)
     const newVoice = new Voice({
       note,
       patch: this.patch,
       velocity,
-      sampleRate: this.sampleRate
+      sampleRate: this.sampleRate,
     })
     if (!this.voices.length && this.patch.lfo.autoTrigger) {
       this.lfo.trigger()
@@ -59,7 +64,7 @@ export default class Junox {
   }
 
   noteOff(note) {
-    this.voices.forEach(voice => voice.note === note && voice.noteOff())
+    this.voices.forEach((voice) => voice.note === note && voice.noteOff())
   }
 
   tick() {
@@ -82,10 +87,12 @@ export default class Junox {
 
   render(outL, outR) {
     // remove dead voices first
-    this.voices = this.voices.filter(voice => !voice.isFinished())
+    this.voices = this.voices.filter((voice) => !voice.isFinished())
+
     for (let i = 0; i < outL.length; i++) {
       this.tick()
 
+      // Gather the outputs from each voice.
       let monoOut = 0
       for (let j = 0; j < this.voices.length; j++) {
         if (!this.voices[j].isFinished()) {
@@ -93,12 +100,17 @@ export default class Junox {
         }
       }
 
+      // Apply the VCA gain.
+      monoOut *= this.vcaGainFactor
+
+      // Apply high-pass filter.
       if (this.patch.hpf < 0.3) {
-        const bassBoost = this.bassBoost.render(monoOut, 0.3)
-        monoOut = clampVolume(bassBoost + monoOut)
+        monoOut = clampVolume(monoOut + this.bassBoost.render(monoOut, 0.3))
       } else {
         monoOut = this.hpf.render(monoOut)
       }
+
+      // Apply the chorus effect.
       if (this.patch.chorus) {
         this.chorus.render(monoOut)
         outL[i] = this.chorus.out[0]
@@ -107,8 +119,6 @@ export default class Junox {
         outL[i] = monoOut
         outR[i] = monoOut
       }
-      outL[i] *= this.patch.vca
-      outR[i] *= this.patch.vca
     }
   }
 
@@ -119,13 +129,16 @@ export default class Junox {
 
   update() {
     // TODO: fix me for real time
-    this.voices.forEach(voice => voice.updatePatch(this.patch))
+    this.voices.forEach((voice) => voice.updatePatch(this.patch))
     this.chorus.lfo.frequency = chorusModeToFreq(this.patch.chorus)
     this.chorus.wet = chorusModeToWet(this.patch.chorus)
     this.chorus.render(0, 0)
     this.lfo.setRate(sliderToLFOFreq(this.patch.lfo.frequency))
     this.lfo.setDelay(sliderToLFODelay(this.patch.lfo.delay))
     this.hpf.setCutoff(sliderToHPF(this.patch.hpf))
+
+    // VCA gain. 0.0 => 0.1, 0.5 => 0.316, 1.0 => 1.0
+    this.vcaGainFactor = Math.pow(1.2589, this.patch.vca * 10) * 0.1
   }
 
   panic() {
