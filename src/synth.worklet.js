@@ -9,7 +9,7 @@ import {
   SET_PARAM,
   SET_PATCH,
   START_SAMPLE_TIME,
-  STOP_SAMPLE_TIME,
+  STOP_SAMPLE_TIME
 } from './synth.constants'
 
 class JunoxWorker extends AudioWorkletProcessor {
@@ -18,7 +18,7 @@ class JunoxWorker extends AudioWorkletProcessor {
     this.synth = new Junox({
       patch: patches[0],
       sampleRate: 44100,
-      polyphony: 6,
+      polyphony: 6
     })
     this.port.onmessage = this.handleMessage.bind(this)
   }
@@ -26,13 +26,13 @@ class JunoxWorker extends AudioWorkletProcessor {
   sendStartTime(samples) {
     this.port.postMessage({
       type: START_SAMPLE_TIME,
-      samples,
+      samples
     })
   }
 
   sendStopTime() {
     this.port.postMessage({
-      type: STOP_SAMPLE_TIME,
+      type: STOP_SAMPLE_TIME
     })
   }
 
@@ -53,7 +53,7 @@ class JunoxWorker extends AudioWorkletProcessor {
     } else if (event.data.action === PANIC) {
       this.synth.panic()
     } else {
-      console.log('Unmanaged message', JSON.stringify(event.data))
+      console.log('Unamanaged message', JSON.stringify(event.data))
     }
   }
 
