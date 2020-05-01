@@ -8,13 +8,13 @@ export default React.memo(function DCO({
   range,
   lfo,
   pwm,
-  lfoMod,
+  pwmMod,
   pulse,
   saw,
   sub,
   subAmount,
   noise,
-  setValue
+  setValue,
 }) {
   return (
     <Section title="DCO">
@@ -36,18 +36,23 @@ export default React.memo(function DCO({
       <AfterButtonLED />
       <Slider label="LFO" value={lfo} onChange={setValue('dco.lfo')} />
       <Slider label="PWM" value={pwm} onChange={setValue('dco.pwm')} />
-      <Column>
-        <ButtonLED
-          active={lfoMod}
-          label="LFO"
-          toggle={setValue('dco.lfoMod', true)}
-        />
-        <ButtonLED
-          active={!lfoMod}
-          label="Man"
-          toggle={setValue('dco.lfoMod', false)}
-        />
-      </Column>
+      <ButtonLED
+        active={pwmMod === 'l'}
+        label="LFO"
+        toggle={setValue('dco.pwmMod', 'l')}
+      />
+      <ButtonLED
+        active={pwmMod === 'm'}
+        label="Man"
+        toggle={setValue('dco.pwmMod', 'm')}
+      />
+      <ButtonLED
+        active={pwmMod === 'e'}
+        label="Env"
+        toggle={setValue('dco.pwmMod', 'e')}
+      />
+      <AfterButtonLED />
+
       <ButtonLED
         active={pulse}
         label="PULSE"

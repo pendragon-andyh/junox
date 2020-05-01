@@ -29,7 +29,7 @@ export default function App({ synth, audioContext }) {
     patch,
     setPatch,
     setSynthPatchValue,
-    setSynthValue
+    setSynthValue,
   } = useSynth(synth, setLastNoteOn)
 
   usePatchUrl(setSynthPatchValue)
@@ -56,7 +56,7 @@ export default function App({ synth, audioContext }) {
         />
         <DCO
           lfo={patch.dco.lfo}
-          lfoMod={patch.dco.lfoMod}
+          pwmMod={patch.dco.pwmMod}
           noise={patch.dco.noise}
           pulse={patch.dco.pulse}
           pwm={patch.dco.pwm}
