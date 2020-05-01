@@ -56,7 +56,7 @@ const FaderMarks = styled.div`
 
 const FaderMark = styled.div`
   background-color: white;
-  height: ${props => (props.bold ? '2px' : '1px')};
+  height: ${(props) => (props.bold ? '2px' : '1px')};
   margin-bottom: 3px;
   width: 100%;
 `
@@ -72,7 +72,7 @@ export const SliderThumb = React.memo(function SliderThumb(props) {
 export const SliderTrackRange = React.memo(function SliderTrackRange({
   children,
   label,
-  props
+  props,
 }) {
   const faders = (
     <FaderMarks>
@@ -82,7 +82,15 @@ export const SliderTrackRange = React.memo(function SliderTrackRange({
       <Spacer />
       <FaderMark />
       <Spacer />
+      <FaderMark />
+      <Spacer />
+      <FaderMark />
+      <Spacer />
       <FaderMark bold />
+      <Spacer />
+      <FaderMark />
+      <Spacer />
+      <FaderMark />
       <Spacer />
       <FaderMark />
       <Spacer />
@@ -111,12 +119,12 @@ export const SliderTrackRange = React.memo(function SliderTrackRange({
 const SliderTrackContainer = styled.div`
   display: flex;
   flex-direction: row;
-  height: 140px;
+  height: 120px;
   width: 70px;
 `
 const SliderTrack = styled.div`
   background-color: #000000;
   border-radius: 2px;
-  height: 135px;
+  height: 115px;
   width: 7px;
 `
