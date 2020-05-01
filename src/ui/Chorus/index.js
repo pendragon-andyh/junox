@@ -6,21 +6,15 @@ export default React.memo(function Chorus({ chorus, setValue }) {
   return (
     <Section title="Chorus">
       <ButtonLED
-        active={chorus === 0}
-        label="Off"
-        toggle={setValue('chorus', 0)}
-        variant="white"
-      />
-      <ButtonLED
-        active={chorus === 1}
+        active={(chorus & 1) === 1}
         label="I"
-        toggle={setValue('chorus', 1)}
+        toggle={setValue('chorus', chorus ^ 1)}
         variant="yellow"
       />
       <ButtonLED
-        active={chorus === 2}
+        active={(chorus & 2) === 2}
         label="II"
-        toggle={setValue('chorus', 2)}
+        toggle={setValue('chorus', chorus ^ 2)}
         variant="orange"
       />
     </Section>

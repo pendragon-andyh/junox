@@ -1,64 +1,105 @@
 import LFO from './lfo'
 
-const MAXBUFFERSIZE = 256
-
 class RingBuffer {
-  constructor() {
-    this.buffer = new Float32Array(MAXBUFFERSIZE).fill(0)
-    this.index = 0
+  constructor(maxBufferSize) {
+    this.buffer = new Float32Array(maxBufferSize).fill(0)
+    this.writeIndex = 0
+    this.maxBufferSize = maxBufferSize
   }
 
   ringBufferIndex(index) {
     if (index < 0) {
-      return index + MAXBUFFERSIZE
+      return index + this.maxBufferSize
     }
-    if (index >= MAXBUFFERSIZE) {
-      return index - MAXBUFFERSIZE
+    if (index >= this.maxBufferSize) {
+      return index - this.maxBufferSize
     }
     return index
   }
 
-  getSample(sampleIndex) {
-    let localIndex = this.ringBufferIndex(this.index - sampleIndex)
-    const indexA = Math.trunc(localIndex)
-    const fractional = localIndex - indexA
+  getSample(readOffset) {
+    const readIndex = this.ringBufferIndex(this.writeIndex - readOffset)
+    const indexA = Math.floor(readIndex)
+    const fractional = readIndex - indexA
     const indexB = this.ringBufferIndex(indexA + 1)
     return (
-      this.buffer[indexA] * fractional + this.buffer[indexB] * (1 - fractional)
+      this.buffer[indexA] * (1 - fractional) + this.buffer[indexB] * fractional
     )
   }
 
   addSample(sample) {
-    this.buffer[this.index] = sample
-    this.index = (this.index + 1) % MAXBUFFERSIZE
+    this.buffer[this.writeIndex] = sample
+    this.writeIndex = (this.writeIndex + 1) % this.maxBufferSize
   }
 }
 
 export default class Chorus {
-  constructor({ sampleRate, rate, delay, wet = 0.5 }) {
-    this.ringBuffer = new RingBuffer()
-    this.sampleRate = sampleRate
-    this.lfo = new LFO({ frequency: rate, sampleRate })
-    this.delay = delay * sampleRate
-    this.minDelaySamples = this.sampleRate * 0.00369
-    this.wet = wet
-    this.out = [0, 0]
+  /**
+   * Proportion of wet (delayed signal) to dry (original signal). Normally between 0.0 and 0.5.
+   */
+  wet = 0.0
+
+  /**
+   * Output from left-side of chorus.
+   */
+  leftOutput = 0.0
+
+  /**
+   * Output from right-side of chorus.
+   */
+  rightOutput = 0.0
+
+  /**
+   * The average number of samples between the writeIndex and the read-index.
+   * Must be smaller than `maxBufferSize`.
+   */
+  averageDelaySamples = 0.0
+
+  /**
+   * The maximum number of samples that the delay will be modulated by.
+   * Must be smaller than `averageDelaySamples` and `(maxBufferSize - averageDelaySamples)`.
+   */
+  maxDelayOffset = 0.0
+
+  /**
+   * @constructor
+   * @param {number} sampleRate
+   * @param {number} maxDelaySeconds
+   * @param {number} avgDelaySeconds
+   */
+  constructor(sampleRate, maxDelaySeconds, avgDelaySeconds) {
+    this.ringBuffer = new RingBuffer(Math.trunc(sampleRate * maxDelaySeconds))
+    this.lfo = new LFO({ frequency: 0, sampleRate })
+    this.averageDelaySamples = sampleRate * avgDelaySeconds
+    this.maxDelayOffset = this.averageDelaySamples * 0.5
   }
 
-  reset() {
-    this.ringBuffer.buffer.fill(0)
-  }
-
+  /**
+   * Calculate the `leftOutput` and `rightOutput` signal values for the specified `input`.
+   * @param {number} input
+   */
   render(input) {
-    const lfo = this.lfo.render() / 2 + 0.5
-    const leftMod = lfo
-    const rightMod = 1 - lfo
-    const leftDelayTime = this.delay * leftMod + this.minDelaySamples
-    const rightDelayTime = this.delay * rightMod + this.minDelaySamples
-    const lYN = this.ringBuffer.getSample(leftDelayTime)
-    const rYN = this.ringBuffer.getSample(rightDelayTime)
+    const wet = this.wet
+    if (wet <= 0) {
+      this.leftOutput = input
+      this.rightOutput = input
+    } else {
+      const lfoValue = this.lfo.render()
+      const currentOffsetSamples = lfoValue * this.maxDelayOffset
+      const leftDelaySamples = this.averageDelaySamples + currentOffsetSamples
+      const rightDelaySamples =
+        this.maxDelayOffset <= 0
+          ? leftDelaySamples
+          : this.averageDelaySamples - currentOffsetSamples
+
+      const leftDelayedValue = this.ringBuffer.getSample(leftDelaySamples)
+      const rightDelayedValue = this.ringBuffer.getSample(rightDelaySamples)
+
+      const dryOutput = input * (1.0 - this.wet)
+      this.leftOutput = dryOutput + leftDelayedValue * this.wet
+      this.rightOutput = dryOutput + rightDelayedValue * this.wet
+    }
+
     this.ringBuffer.addSample(input)
-    this.out[0] = input + lYN * this.wet
-    this.out[1] = input + rYN * this.wet
   }
 }

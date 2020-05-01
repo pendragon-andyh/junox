@@ -18,11 +18,6 @@ export default class ADSREnvelope {
     this.msPerSample = 1000 / sampleRate
   }
 
-  reset() {
-    this.time = 0
-    this.state = ENVELOPE_STATES.ATTACK
-  }
-
   render() {
     this.time = this.time + this.msPerSample
     // TODO: refactor this, it reads horribly

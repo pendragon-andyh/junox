@@ -4,13 +4,7 @@ import Chorus from './chorus'
 import LFO from './lfo'
 import BassBoost from './bassboost'
 import HighPassFilter from './hpf'
-import {
-  chorusModeToFreq,
-  chorusModeToWet,
-  sliderToLFOFreq,
-  sliderToLFODelay,
-  sliderToHPF,
-} from './params'
+import { sliderToLFOFreq, sliderToLFODelay, sliderToHPF } from './params'
 import { clampVolume } from './utils'
 
 export default class Junox {
@@ -21,7 +15,7 @@ export default class Junox {
     this.patch = patch
     this.sampleRate = sampleRate
 
-    this.chorus = new Chorus({ sampleRate, rate: 1, delay: 0.00166 })
+    this.chorus = new Chorus(sampleRate, 0.006, 0.0035)
 
     this.lfo = new LFO({
       frequency: sliderToLFOFreq(patch.lfo.frequency),
@@ -104,14 +98,9 @@ export default class Junox {
       }
 
       // Apply the chorus effect.
-      if (this.patch.chorus) {
-        this.chorus.render(monoOut)
-        outL[i] = this.chorus.out[0]
-        outR[i] = this.chorus.out[1]
-      } else {
-        outL[i] = monoOut
-        outR[i] = monoOut
-      }
+      this.chorus.render(monoOut)
+      outL[i] = this.chorus.leftOutput
+      outR[i] = this.chorus.rightOutput
     }
   }
 
@@ -123,11 +112,33 @@ export default class Junox {
   update() {
     // TODO: fix me for real time
     this.voices.forEach((voice) => voice.updatePatch(this.patch))
-    this.chorus.lfo.frequency = chorusModeToFreq(this.patch.chorus)
-    this.chorus.wet = chorusModeToWet(this.patch.chorus)
-    this.chorus.render(0, 0)
+
+    switch (this.patch.chorus) {
+      case 1:
+        this.chorus.lfo.setRate(0.513)
+        this.chorus.wet = 0.5
+        this.chorus.maxDelayOffset = 0.00185 * this.sampleRate
+        break
+      case 2:
+        this.chorus.lfo.setRate(0.863)
+        this.chorus.wet = 0.5
+        this.chorus.maxDelayOffset = 0.00185 * this.sampleRate
+        break
+      case 3:
+        this.chorus.lfo.setRate(10)
+        this.chorus.wet = 0.5
+        this.chorus.maxDelayOffset = 0.0002 * this.sampleRate
+        break
+      default:
+        this.chorus.lfo.setRate(0.513)
+        this.chorus.wet = 0.0
+        this.chorus.maxDelayOffset = 0.00185 * this.sampleRate
+        break
+    }
+
     this.lfo.setRate(sliderToLFOFreq(this.patch.lfo.frequency))
     this.lfo.setDelay(sliderToLFODelay(this.patch.lfo.delay))
+
     this.hpf.setCutoff(sliderToHPF(this.patch.hpf))
 
     // VCA gain. 0.0 => 0.1, 0.5 => 0.316, 1.0 => 1.0

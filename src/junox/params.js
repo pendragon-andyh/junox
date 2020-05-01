@@ -63,7 +63,7 @@ export function sliderToHPF(val) {
     0: 0,
     1: 250,
     2: 520,
-    3: 1220
+    3: 1220,
   }
   return hpfMap[Math.floor(val * 3)]
 }
@@ -79,18 +79,4 @@ export function sliderToFilterFreqNorm(val, sampleRate) {
 
 export function sliderToResonance(val) {
   return val + 0.01
-}
-
-export function chorusModeToFreq(val) {
-  if (val === 1) {
-    return 0.513
-  }
-  return 0.863
-}
-
-export function chorusModeToWet(val) {
-  if (val === 1) {
-    return 0.3
-  }
-  return 0.6
 }
