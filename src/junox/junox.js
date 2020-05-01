@@ -67,15 +67,6 @@ export default class Junox {
     this.voices.forEach((voice) => voice.note === note && voice.noteOff())
   }
 
-  tick() {
-    const canLFO = this.patch.lfo.autoTrigger || this.lfoTriggered
-    const lfo = canLFO ? this.lfo.render() : 0
-    const positiveLFO = lfo / 2 + 0.5
-    for (let i = 0; i < this.voices.length; i++) {
-      this.voices[i].tick(lfo, positiveLFO)
-    }
-  }
-
   lfoTrigger() {
     this.lfo.trigger()
     this.lfoTriggered = true
@@ -90,20 +81,22 @@ export default class Junox {
     this.voices = this.voices.filter((voice) => !voice.isFinished())
 
     for (let i = 0; i < outL.length; i++) {
-      this.tick()
+      const canLFO = this.patch.lfo.autoTrigger || this.lfoTriggered
+      const lfo = canLFO ? this.lfo.render() : 0
+      const positiveLFO = lfo / 2 + 0.5
 
       // Gather the outputs from each voice.
       let monoOut = 0
       for (let j = 0; j < this.voices.length; j++) {
         if (!this.voices[j].isFinished()) {
-          monoOut += this.voices[j].render()
+          monoOut += this.voices[j].render(lfo, positiveLFO)
         }
       }
 
       // Apply the VCA gain.
       monoOut *= this.vcaGainFactor
 
-      // Apply high-pass filter.
+      // Apply high-pass filter (or base boost).
       if (this.patch.hpf < 0.3) {
         monoOut = clampVolume(monoOut + this.bassBoost.render(monoOut, 0.3))
       } else {

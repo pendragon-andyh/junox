@@ -4,7 +4,7 @@ const ENVELOPE_STATES = {
   ATTACK: 'attack',
   DECAY: 'decay',
   SUSTAIN: 'sustain',
-  RELEASE: 'release'
+  RELEASE: 'release',
 }
 
 export default class ADSREnvelope {
@@ -24,6 +24,16 @@ export default class ADSREnvelope {
   }
 
   render() {
+    this.time = this.time + this.msPerSample
+    // TODO: refactor this, it reads horribly
+    if (this.time > this.attack && this.state === ENVELOPE_STATES.ATTACK) {
+      this.time = 0
+      this.decayStartVal = this.out
+      this.state = ENVELOPE_STATES.DECAY
+    } else if (this.time > this.decay && this.state === ENVELOPE_STATES.DECAY) {
+      this.state = ENVELOPE_STATES.SUSTAIN
+    }
+
     if (this.state === ENVELOPE_STATES.SUSTAIN) {
       this.out = this.sustain
     }
@@ -42,18 +52,6 @@ export default class ADSREnvelope {
       }
     }
     return this.out
-  }
-
-  tick() {
-    this.time = this.time + this.msPerSample
-    // TODO: refactor this, it reads horribly
-    if (this.time > this.attack && this.state === ENVELOPE_STATES.ATTACK) {
-      this.time = 0
-      this.decayStartVal = this.out
-      this.state = ENVELOPE_STATES.DECAY
-    } else if (this.time > this.decay && this.state === ENVELOPE_STATES.DECAY) {
-      this.state = ENVELOPE_STATES.SUSTAIN
-    }
   }
 
   noteOff() {

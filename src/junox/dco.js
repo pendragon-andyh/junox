@@ -8,7 +8,7 @@ export default class Oscillator {
     subAmount,
     noise,
     range,
-    pwm = 0.5
+    pwm = 0.5,
   }) {
     this.sampleRate = sampleRate
     this.pwm = pwm
@@ -20,10 +20,9 @@ export default class Oscillator {
     this.pulse = pulse
     this.saw = saw
     this.frequency = frequency * range
-    this.tick(0, this.pwm)
   }
 
-  tick(freqMod, pwmMod) {
+  render(freqMod, pwmMod) {
     const frequency = this.frequency * Math.pow(2, freqMod / 12)
     this.samplesPerPeriod = Math.round(this.sampleRate / frequency)
     this.phase = (this.phase + 1) % this.samplesPerPeriod
@@ -32,9 +31,7 @@ export default class Oscillator {
     if (pwmMod > 0.01) {
       this.pwm = pwmMod
     }
-  }
 
-  render() {
     const phase = this.phase / this.samplesPerPeriod
     const phaseSub = this.phaseSub / this.samplesPerPeriodSub
     let out = 0
