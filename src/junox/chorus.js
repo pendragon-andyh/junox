@@ -1,37 +1,5 @@
 import LFO from './lfo'
-
-class RingBuffer {
-  constructor(maxBufferSize) {
-    this.buffer = new Float32Array(maxBufferSize).fill(0)
-    this.writeIndex = 0
-    this.maxBufferSize = maxBufferSize
-  }
-
-  ringBufferIndex(index) {
-    if (index < 0) {
-      return index + this.maxBufferSize
-    }
-    if (index >= this.maxBufferSize) {
-      return index - this.maxBufferSize
-    }
-    return index
-  }
-
-  getSample(readOffset) {
-    const readIndex = this.ringBufferIndex(this.writeIndex - readOffset)
-    const indexA = Math.floor(readIndex)
-    const fractional = readIndex - indexA
-    const indexB = this.ringBufferIndex(indexA + 1)
-    return (
-      this.buffer[indexA] * (1 - fractional) + this.buffer[indexB] * fractional
-    )
-  }
-
-  addSample(sample) {
-    this.buffer[this.writeIndex] = sample
-    this.writeIndex = (this.writeIndex + 1) % this.maxBufferSize
-  }
-}
+import { RingBuffer } from './ringBuffer'
 
 export default class Chorus {
   /**
@@ -92,14 +60,14 @@ export default class Chorus {
           ? leftDelaySamples
           : this.averageDelaySamples - currentOffsetSamples
 
-      const leftDelayedValue = this.ringBuffer.getSample(leftDelaySamples)
-      const rightDelayedValue = this.ringBuffer.getSample(rightDelaySamples)
+      const leftDelayedValue = this.ringBuffer.readSample(leftDelaySamples)
+      const rightDelayedValue = this.ringBuffer.readSample(rightDelaySamples)
 
       const dryOutput = input * (1.0 - this.wet)
       this.leftOutput = dryOutput + leftDelayedValue * this.wet
       this.rightOutput = dryOutput + rightDelayedValue * this.wet
     }
 
-    this.ringBuffer.addSample(input)
+    this.ringBuffer.writeSample(input)
   }
 }
