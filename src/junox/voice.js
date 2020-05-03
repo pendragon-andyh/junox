@@ -111,20 +111,22 @@ export default class Voice {
   }
 
   updatePatch(patch) {
-    // TODO: this can be optimised by updating only what changed
     this.dco.saw = patch.dco.saw
     this.dco.pulse = patch.dco.pulse
     this.dco.sub = patch.dco.sub
     this.dco.noise = patch.dco.noise
     this.dco.pwm = paramToPWM(patch.dco.pwm)
 
-    this.env.attack = sliderToAttack(patch.env.attack)
-    this.env.decay = sliderToDecay(patch.env.decay)
+    this.env.attack = sliderToAttack(patch.env.attack) * 1000
+    this.env.decay = sliderToDecay(patch.env.decay) * 1000
     this.env.sustain = sliderToSustain(patch.env.sustain)
-    this.env.release = sliderToRelease(patch.env.release)
+    this.env.release = sliderToRelease(patch.env.release) * 1000
 
     const sliderResonance = sliderToResonance(patch.vcf.resonance)
-    const sliderCutoff = sliderToFilterFreqNorm(patch.vcf.frequency * 10 * 1.4)
+    const sliderCutoff = sliderToFilterFreqNorm(
+      patch.vcf.frequency,
+      this.sampleRate
+    )
     this.moogVCF.resonance = sliderResonance * 3.99
     this.moogVCF.cutoff = sliderCutoff
     this.diodeLadderVCF.setCutoff(sliderCutoff * 18000)

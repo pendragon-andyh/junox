@@ -45,19 +45,18 @@ export default class LFO {
   }
 
   render() {
-    let oldValue = this.value
-    let newValue = oldValue
+    let newValue = this.value
     if (this.direction === 1) {
       newValue += this.rateFactor
-      if (newValue > 1) {
+      if (newValue > 1.0) {
         this.direction = -1
-        newValue = oldValue - this.rateFactor
+        newValue = 2.0 - newValue
       }
     } else {
       newValue -= this.rateFactor
-      if (newValue < -1) {
+      if (newValue < -1.0) {
         this.direction = 1
-        newValue = oldValue + this.rateFactor
+        newValue = -2.0 - newValue
       }
     }
     this.value = newValue

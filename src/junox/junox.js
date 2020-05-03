@@ -15,7 +15,7 @@ export default class Junox {
     this.patch = patch
     this.sampleRate = sampleRate
 
-    this.chorus = new Chorus(sampleRate, 0.006, 0.0035)
+    this.chorus = new Chorus(sampleRate)
 
     this.lfo = new LFO({
       frequency: sliderToLFOFreq(patch.lfo.frequency),
@@ -110,31 +110,9 @@ export default class Junox {
   }
 
   update() {
-    // TODO: fix me for real time
     this.voices.forEach((voice) => voice.updatePatch(this.patch))
 
-    switch (this.patch.chorus) {
-      case 1:
-        this.chorus.lfo.setRate(0.513)
-        this.chorus.wet = 0.5
-        this.chorus.maxDelayOffset = 0.00185 * this.sampleRate
-        break
-      case 2:
-        this.chorus.lfo.setRate(0.863)
-        this.chorus.wet = 0.5
-        this.chorus.maxDelayOffset = 0.00185 * this.sampleRate
-        break
-      case 3:
-        this.chorus.lfo.setRate(9.75)
-        this.chorus.wet = 0.5
-        this.chorus.maxDelayOffset = -0.0002 * this.sampleRate
-        break
-      default:
-        this.chorus.lfo.setRate(0.513)
-        this.chorus.wet = 0.0
-        this.chorus.maxDelayOffset = 0.00185 * this.sampleRate
-        break
-    }
+    this.chorus.update(this.patch.chorus)
 
     this.lfo.setRate(sliderToLFOFreq(this.patch.lfo.frequency))
     this.lfo.setDelay(sliderToLFODelay(this.patch.lfo.delay))
