@@ -125,9 +125,9 @@ export default class Junox {
         this.chorus.maxDelayOffset = 0.00185 * this.sampleRate
         break
       case 3:
-        this.chorus.lfo.setRate(10)
+        this.chorus.lfo.setRate(9.75)
         this.chorus.wet = 0.5
-        this.chorus.maxDelayOffset = 0.0002 * this.sampleRate
+        this.chorus.maxDelayOffset = -0.0002 * this.sampleRate
         break
       default:
         this.chorus.lfo.setRate(0.513)
