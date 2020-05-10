@@ -36,33 +36,34 @@ export class DiodeLadder {
     }
 
     const g = Math.tan(cutoff * this.piOverSampleRate)
+    const onePlusG = 1.0 + g
+    const halfG = 0.5 * g
+    const oneOverOnePlusG = 1.0 / onePlusG
 
     // Big G's
-    const G4 = (0.5 * g) / (1.0 + g)
-    const G3 = (0.5 * g) / (1.0 + g - 0.5 * g * G4)
-    const G2 = (0.5 * g) / (1.0 + g - 0.5 * g * G3)
-    const G1 = g / (1.0 + g - g * G2)
+    const G4 = halfG * oneOverOnePlusG
+    const G3 = halfG / (onePlusG - halfG * G4)
+    const G2 = halfG / (onePlusG - halfG * G3)
+    const G1 = g / (onePlusG - g * G2)
 
     // our big G value GAMMA
-    this.gamma = G4 * G3 * G2 * G1
-
-    this.SG1 = G4 * G3 * G2
-    this.SG2 = G4 * G3
     this.SG3 = G4
+    this.SG2 = G4 * G3
+    this.SG1 = this.SG2 * G2
+    this.gamma = this.SG1 * G1
 
     // set alphas
-    const alphaG = g / (1.0 + g)
+    const alphaG = g * oneOverOnePlusG
     this.lpf1.alpha = alphaG
     this.lpf2.alpha = alphaG
     this.lpf3.alpha = alphaG
     this.lpf4.alpha = alphaG
 
     // set betas
-    const betaG = 1.0 + g
-    this.lpf1.beta = 1.0 / (betaG - g * G2)
-    this.lpf2.beta = 1.0 / (betaG - 0.5 * g * G3)
-    this.lpf3.beta = 1.0 / (betaG - 0.5 * g * G4)
-    this.lpf4.beta = 1.0 / betaG
+    this.lpf1.beta = 1.0 / (onePlusG - g * G2)
+    this.lpf2.beta = 1.0 / (onePlusG - halfG * G3)
+    this.lpf3.beta = 1.0 / (onePlusG - halfG * G4)
+    this.lpf4.beta = oneOverOnePlusG
 
     // set gammas
     this.lpf1.gamma = 1.0 + G1 * G2
@@ -70,10 +71,9 @@ export class DiodeLadder {
     this.lpf3.gamma = 1.0 + G3 * G4
 
     // set deltas
-    const deltaG = 0.5 * g
     this.lpf1.delta = g
-    this.lpf2.delta = deltaG
-    this.lpf3.delta = deltaG
+    this.lpf2.delta = halfG
+    this.lpf3.delta = halfG
 
     // set epsilons
     this.lpf1.epsilon = G2
