@@ -1,34 +1,56 @@
-export default class LPF {
-  // resonance should be between 1 and 5
-  constructor({ type, cutoff, resonance, sampleRate }) {
-    this.type = type
-    this.cutoff = cutoff
-    this.resonance = resonance
-    this.sampleRate = sampleRate
-    this.in1 = 0
-    this.in2 = 0
-    this.in3 = 0
-    this.in4 = 0
-    this.out1 = 0
-    this.out2 = 0
-    this.out3 = 0
-    this.out4 = 0
+import { fastTanh } from './utils'
+
+/**
+ * Implementation of Moog-style low pass filter (based on a paper by Stilson/Smith).
+ * https://www.musicdsp.org/en/latest/Filters/26-moog-vcf-variation-2.html
+ */
+export class MoogLowPassFilter {
+  constructor(sampleRate) {
+    this.cutoffToNormalizedFactor = (1.16 * 2.0) / sampleRate
+
+    // Resonance factor (0 = no resonance, 4 = self-oscillation).
+    this.resonance = 0.0
+
+    this._in1 = 0.0
+    this._in2 = 0.0
+    this._in3 = 0.0
+    this._in4 = 0.0
+    this._out1 = 0.0
+    this._out2 = 0.0
+    this._out3 = 0.0
+    this._out4 = 0.0
   }
 
-  render(input) {
-    const f = this.cutoff * 1.16
+  /**
+   * Render a single quantum through the filter.
+   * @param {number} input - Input signal value.
+   * @param {number} fc - Cutoff frequency (Hz).
+   */
+  render(input, fc) {
+    let f = fc * this.cutoffToNormalizedFactor
+    if (f > 1.16) {
+      f = 1.16
+    }
+
     const fSquare = f * f
     const fb = this.resonance * (1.0 - 0.15 * fSquare)
-    const f1 = 1 - f
-    const curIn = (input - this.out4 * fb) * 0.35013 * fSquare * fSquare
-    this.out1 = curIn + 0.3 * this.in1 + f1 * this.out1 // Pole 1
-    this.in1 = curIn
-    this.out2 = this.out1 + 0.3 * this.in2 + f1 * this.out2 // Pole 2
-    this.in2 = this.out1
-    this.out3 = this.out2 + 0.3 * this.in3 + f1 * this.out3 // Pole 3
-    this.in3 = this.out2
-    this.out4 = this.out3 + 0.3 * this.in4 + f1 * this.out4 // Pole 4
-    this.in4 = this.out3
-    return this.out4
+    const f1 = 1.0 - f
+
+    input -= this._out4 * fb // TODO - apply fastTanH here?
+    input *= 0.35013 * fSquare * fSquare
+
+    this._out1 = input + 0.3 * this._in1 + f1 * this._out1 // Pole 1
+    this._in1 = input
+
+    this._out2 = this._out1 + 0.3 * this._in2 + f1 * this._out2 // Pole 2
+    this._in2 = this._out1
+
+    this._out3 = this._out2 + 0.3 * this._in3 + f1 * this._out3 // Pole 3
+    this._in3 = this._out2
+
+    this._out4 = this._out3 + 0.3 * this._in4 + f1 * this._out4 // Pole 4
+    this._in4 = this._out3
+
+    return this._out4
   }
 }

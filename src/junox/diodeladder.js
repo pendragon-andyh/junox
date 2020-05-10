@@ -1,23 +1,21 @@
 // Diode Ladder Filter based on Will Pirkle's C++ Code
-import OnePoleFilter from './onepolefilter'
-import { TWOPI, fastTanh } from './utils'
+import { OnePoleFilter } from './onepolefilter'
+import { fastTanh } from './utils'
 
-export default class DiodeLadder {
-  constructor({ cutoff, resonance, sampleRate }) {
-    this.lpf1 = new OnePoleFilter({ sampleRate })
-    this.lpf2 = new OnePoleFilter({ sampleRate })
-    this.lpf3 = new OnePoleFilter({ sampleRate })
-    this.lpf4 = new OnePoleFilter({ sampleRate })
-
-    this.T = 1 / sampleRate
-
-    this.K = 0
+export class DiodeLadder {
+  constructor(sampleRate) {
+    this.maxCutoff = sampleRate * 0.49
+    this.piOverSampleRate = Math.PI / sampleRate
+    this.K = 0.0
     this.gamma = 0.0
-
     this.SG1 = 0.0
     this.SG2 = 0.0
     this.SG3 = 0.0
-    this.SG4 = 0.0
+
+    this.lpf1 = new OnePoleFilter(sampleRate)
+    this.lpf2 = new OnePoleFilter(sampleRate)
+    this.lpf3 = new OnePoleFilter(sampleRate)
+    this.lpf4 = new OnePoleFilter(sampleRate)
 
     this.lpf1.a0 = 1.0
     this.lpf2.a0 = 0.5
@@ -28,15 +26,16 @@ export default class DiodeLadder {
     this.lpf4.gamma = 1.0
     this.lpf4.delta = 0.0
     this.lpf4.epsilon = 0.0
-    this.setCutoff(cutoff)
-    this.setResonance(resonance)
+
+    this.setResonance(500.0)
   }
 
   setCutoff(cutoff) {
-    // calculate alphas
-    const wd = TWOPI * cutoff
-    const wa = (2 / this.T) * Math.tan((wd * this.T) / 2)
-    const g = (wa * this.T) / 2
+    if (cutoff > this.maxCutoff) {
+      cutoff = this.maxCutoff
+    }
+
+    const g = Math.tan(cutoff * this.piOverSampleRate)
 
     // Big G's
     const G4 = (0.5 * g) / (1.0 + g)
@@ -50,7 +49,6 @@ export default class DiodeLadder {
     this.SG1 = G4 * G3 * G2
     this.SG2 = G4 * G3
     this.SG3 = G4
-    this.SG4 = 1.0
 
     // set alphas
     const alphaG = g / (1.0 + g)
@@ -83,9 +81,9 @@ export default class DiodeLadder {
     this.lpf3.epsilon = G4
   }
 
-  // decode the resonance value - resonance is [1..10]
+  // decode the resonance value - resonance is [0..1]
   setResonance(resonance) {
-    this.K = (17.0 * (resonance - 1.0)) / 9.0
+    this.K = resonance * 17.0
   }
 
   render(xn) {
@@ -98,10 +96,10 @@ export default class DiodeLadder {
       this.SG1 * this.lpf1.feedbackOutput() +
       this.SG2 * this.lpf2.feedbackOutput() +
       this.SG3 * this.lpf3.feedbackOutput() +
-      this.SG4 * this.lpf4.feedbackOutput()
+      this.lpf4.feedbackOutput()
 
     // --- form input
-    let U = (xn - this.K * sigma) / (1 + this.K * this.gamma)
+    let U = (xn - this.K * sigma) / (1.0 + this.K * this.gamma)
 
     // ---NLP
     U = fastTanh(U)

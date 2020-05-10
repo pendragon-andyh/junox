@@ -10,12 +10,13 @@ const ENVELOPE_STATES = {
 export default class ADSREnvelope {
   constructor({ attack, decay, sustain, release, sampleRate }) {
     this.state = ENVELOPE_STATES.ATTACK
-    this.time = 0
-    this.attack = attack * 1000
-    this.decay = decay * 1000
+    this.time = 0.0
+    this.attack = attack * 1000.0
+    this.decay = decay * 1000.0
     this.sustain = sustain
-    this.release = release * 1000
-    this.msPerSample = 1000 / sampleRate
+    this.release = release * 1000.0
+    this.msPerSample = 1000.0 / sampleRate
+    this.out = 0.0
   }
 
   render() {
@@ -44,6 +45,9 @@ export default class ADSREnvelope {
         this.out = 0
       } else {
         this.out = lerp(this.releaseStartVal, 0, t)
+        if (!this.out && this.out !== 0) {
+          this.out = 0
+        }
       }
     }
     return this.out

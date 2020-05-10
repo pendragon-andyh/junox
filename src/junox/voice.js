@@ -1,18 +1,16 @@
 import DCO from './dco'
 import ADSREnvelope from './envelope'
 import { noteToFrequency } from '../utils'
-import MoogLowPassFilter from './mooglpf'
-import DiodeLadder from './diodeladder'
+import { MoogLowPassFilter } from './mooglpf'
+import { DiodeLadder } from './diodeladder'
 import {
   paramToPWM,
   sliderToAttack,
-  sliderToFilterFreqNorm,
-  sliderToResonance,
   sliderToSustain,
   sliderToDecay,
   sliderToRelease,
 } from './params'
-import { VCA_ENV, VCF_DIODELADDER, VCF_MOOG } from './constants'
+import { VCA_ENV, VCF_DIODELADDER } from './constants'
 
 export default class Voice {
   constructor({ note, patch, velocity, sampleRate }) {
@@ -50,17 +48,10 @@ export default class Voice {
       sampleRate,
     })
 
-    this.moogVCF = new MoogLowPassFilter({
-      sampleRate,
-      resonance: sliderToResonance(patch.vcf.resonance),
-      cutoff: sliderToFilterFreqNorm(patch.vcf.frequency, sampleRate) * 3.99,
-    })
+    this.moogVCF = new MoogLowPassFilter(sampleRate)
+    this.diodeLadderVCF = new DiodeLadder(sampleRate)
 
-    this.diodeLadderVCF = new DiodeLadder({
-      sampleRate,
-      cutoff: sliderToFilterFreqNorm(patch.vcf.frequency, sampleRate) * 18000,
-      resonance: sliderToResonance(patch.vcf.resonance) * 9 + 1,
-    })
+    this.updatePatch(patch)
   }
 
   render(lfo, positiveLFO) {
@@ -72,30 +63,33 @@ export default class Voice {
       paramToPWM(positiveLFO * this.patch.dco.pwm * this.patch.dco.lfoMod)
     )
 
+    let vcfCutoffValue = this.patch.vcf.frequency * 1.1 * 10
+
+    const vcfDirection = this.patch.vcf.modPositive ? 1 : -1
+    vcfCutoffValue += this.env.out * this.patch.vcf.envMod * 14 * vcfDirection
+
+    vcfCutoffValue += lfo * this.patch.vcf.lfoMod * 3.5
+
     const C2NoteNumber = 36
     const keyFollowDenominator = 5 * 12
-    const vcfDirection = this.patch.vcf.modPositive ? 1 : -1
-    let vcfCutoffValue = this.patch.vcf.frequency * 1.1 * 10
-    vcfCutoffValue += this.env.out * this.patch.vcf.envMod * 14 * vcfDirection
-    vcfCutoffValue += lfo * this.patch.vcf.lfoMod * 3.5
     vcfCutoffValue +=
       this.patch.vcf.keyMod *
       5 *
       ((this.note - C2NoteNumber) / keyFollowDenominator - 0.4)
-    const cutoffNormalized = sliderToFilterFreqNorm(
-      vcfCutoffValue,
-      this.sampleRate
-    )
-    if (this.patch.vcf.type === VCF_MOOG) {
-      this.moogVCF.cutoff = cutoffNormalized
-    } else {
-      this.diodeLadderVCF.setCutoff(cutoffNormalized * 18000)
+
+    const cutoffFrequency = 60.0 * Math.pow(2, vcfCutoffValue)
+    if (this.patch.vcf.type === VCF_DIODELADDER) {
+      this.diodeLadderVCF.setCutoff(cutoffFrequency)
     }
 
-    const vcfOut =
+    let vcfOut =
       this.patch.vcf.type === VCF_DIODELADDER
         ? this.diodeLadderVCF.render(dcoOut)
-        : this.moogVCF.render(dcoOut)
+        : this.moogVCF.render(dcoOut, cutoffFrequency)
+    if (isNaN(vcfOut) || Math.abs(vcfOut) >= 2.0) {
+      // TODO - Remove this (only used for exposing exploding filters).
+      vcfOut = 0
+    }
 
     const vca = this.patch.vcaType === VCA_ENV ? env : gate
     return this.velocity * vcfOut * vca
@@ -111,6 +105,8 @@ export default class Voice {
   }
 
   updatePatch(patch) {
+    this.patch = patch
+
     this.dco.saw = patch.dco.saw
     this.dco.pulse = patch.dco.pulse
     this.dco.sub = patch.dco.sub
@@ -122,14 +118,8 @@ export default class Voice {
     this.env.sustain = sliderToSustain(patch.env.sustain)
     this.env.release = sliderToRelease(patch.env.release) * 1000
 
-    const sliderResonance = sliderToResonance(patch.vcf.resonance)
-    const sliderCutoff = sliderToFilterFreqNorm(
-      patch.vcf.frequency,
-      this.sampleRate
-    )
+    const sliderResonance = patch.vcf.resonance
     this.moogVCF.resonance = sliderResonance * 3.99
-    this.moogVCF.cutoff = sliderCutoff
-    this.diodeLadderVCF.setCutoff(sliderCutoff * 18000)
-    this.diodeLadderVCF.setResonance(sliderResonance * 9 + 1)
+    this.diodeLadderVCF.setResonance(sliderResonance)
   }
 }
