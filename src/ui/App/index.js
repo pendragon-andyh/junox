@@ -72,7 +72,7 @@ export default function App({ synth, audioContext }) {
         <VCF
           envMod={patch.vcf.envMod}
           frequency={patch.vcf.frequency}
-          keyMod={patch.vcf.lfoMod}
+          keyMod={patch.vcf.keyMod}
           lfoMod={patch.vcf.lfoMod}
           modPositive={patch.vcf.modPositive}
           resonance={patch.vcf.resonance}
