@@ -1,27 +1,21 @@
 import DCO from './dco'
-import ADSREnvelope from './envelope'
+import { Juno60Envelope } from './juno60Envelope'
 import { noteToFrequency } from '../utils'
 import { MoogLowPassFilter } from './mooglpf'
 import { DiodeLadder } from './diodeladder'
-import {
-  paramToPWM,
-  sliderToAttack,
-  sliderToSustain,
-  sliderToDecay,
-  sliderToRelease,
-} from './params'
+import { paramToPWM } from './params'
 import { VCA_ENV, VCF_DIODELADDER } from './constants'
 
 export default class Voice {
-  constructor({ note, patch, velocity, sampleRate }) {
-    this.note = note
+  constructor({ patch, sampleRate }) {
+    this.note = -1
     this.finished = false
-    this.velocity = velocity
+    this.velocity = 0
     this.patch = patch
     this.sampleRate = sampleRate
 
     this.dco = new DCO({
-      frequency: noteToFrequency(this.note),
+      frequency: 0,
       sampleRate,
       saw: patch.dco.saw,
       pulse: patch.dco.pulse,
@@ -32,21 +26,8 @@ export default class Voice {
       pwm: paramToPWM(patch.dco.pwm),
     })
 
-    this.env = new ADSREnvelope({
-      attack: sliderToAttack(patch.env.attack),
-      decay: sliderToDecay(patch.env.decay),
-      sustain: sliderToSustain(patch.env.sustain),
-      release: sliderToRelease(patch.env.release),
-      sampleRate,
-    })
-
-    this.gate = new ADSREnvelope({
-      attack: sliderToAttack(0.1),
-      decay: sliderToDecay(0.1),
-      sustain: sliderToSustain(1),
-      release: sliderToRelease(0.1),
-      sampleRate,
-    })
+    this.modEnv = new Juno60Envelope(sampleRate)
+    this.ampEnv = new Juno60Envelope(sampleRate)
 
     this.moogVCF = new MoogLowPassFilter(sampleRate)
     this.diodeLadderVCF = new DiodeLadder(sampleRate)
@@ -55,18 +36,18 @@ export default class Voice {
   }
 
   render(lfo, positiveLFO) {
-    const env = this.env.render()
-    const gate = this.gate.render()
+    const modEnvOut = this.modEnv.render()
+    const ampEnvOut = this.ampEnv.render()
 
     const dcoOut = this.dco.render(
       lfo * this.patch.dco.lfo,
-      paramToPWM(positiveLFO * this.patch.dco.pwm * this.patch.dco.lfoMod)
+      paramToPWM(positiveLFO * this.patch.dco.pwm)
     )
 
     let vcfCutoffValue = this.patch.vcf.frequency * 1.1 * 10
 
     const vcfDirection = this.patch.vcf.modPositive ? 1 : -1
-    vcfCutoffValue += this.env.out * this.patch.vcf.envMod * 14 * vcfDirection
+    vcfCutoffValue += modEnvOut * this.patch.vcf.envMod * 14 * vcfDirection
 
     vcfCutoffValue += lfo * this.patch.vcf.lfoMod * 3.5
 
@@ -91,17 +72,28 @@ export default class Voice {
       vcfOut = 0
     }
 
-    const vca = this.patch.vcaType === VCA_ENV ? env : gate
-    return this.velocity * vcfOut * vca
+    return this.velocity * vcfOut * ampEnvOut
+  }
+
+  noteOn(note, velocity) {
+    if (note !== this.note) {
+      this.note = note
+      this.dco.frequency = this.patch.dco.range * noteToFrequency(note)
+      this.modEnv.reset()
+      this.ampEnv.reset()
+    }
+    this.velocity = velocity
+    this.modEnv.noteOn()
+    this.ampEnv.noteOn()
   }
 
   noteOff() {
-    this.env.noteOff()
-    this.gate.noteOff()
+    this.modEnv.noteOff()
+    this.ampEnv.noteOff()
   }
 
   isFinished() {
-    return this.env.isFinished() && this.gate.isFinished()
+    return this.ampEnv.isFinished()
   }
 
   updatePatch(patch) {
@@ -113,10 +105,22 @@ export default class Voice {
     this.dco.noise = patch.dco.noise
     this.dco.pwm = paramToPWM(patch.dco.pwm)
 
-    this.env.attack = sliderToAttack(patch.env.attack) * 1000
-    this.env.decay = sliderToDecay(patch.env.decay) * 1000
-    this.env.sustain = sliderToSustain(patch.env.sustain)
-    this.env.release = sliderToRelease(patch.env.release) * 1000
+    this.modEnv.setValuesFromSliders(
+      patch.env.attack,
+      patch.env.decay,
+      patch.env.sustain,
+      patch.env.release
+    )
+    if (this.patch.vcaType === VCA_ENV) {
+      this.ampEnv.setValuesFromSliders(
+        patch.env.attack,
+        patch.env.decay,
+        patch.env.sustain,
+        patch.env.release
+      )
+    } else {
+      this.ampEnv.setValuesFromSliders(0.1, 0, 1, 0.1)
+    }
 
     const sliderResonance = patch.vcf.resonance
     this.moogVCF.resonance = sliderResonance * 3.99

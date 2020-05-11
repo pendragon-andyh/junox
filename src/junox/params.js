@@ -4,11 +4,6 @@ export function paramToPWM(value) {
   return 0.5 + value * 0.45
 }
 
-const sliderToAttackDenominator = Math.exp(10 * 0.5) - 1
-export function sliderToAttack(val) {
-  return 0.001 + ((Math.exp(val * 5) - 1) / sliderToAttackDenominator) * 3.25
-}
-
 const sliderToDecayDenominator = Math.exp(10 * 0.4) - 1
 export function sliderToDecay(val, maxValue = 17.46) {
   const slider = val * 10
@@ -18,22 +13,6 @@ export function sliderToDecay(val, maxValue = 17.46) {
       slider *
       0.1 *
       maxValue
-  )
-}
-
-export function sliderToSustain(val) {
-  const x = 1 // how far we are in the decay phase?
-  return val + (1 - val) * Math.exp(-3.5 * x) - Math.exp(-3.5)
-}
-
-export function sliderToRelease(val) {
-  const slider = val * 10
-  return (
-    0.002 +
-    ((Math.exp(slider * 0.4) - 1) / (Math.exp(10 * 0.4) - 1)) *
-      slider *
-      0.1 *
-      17.46
   )
 }
 

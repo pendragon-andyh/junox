@@ -66,6 +66,16 @@ export class AbstractEnvelope {
   }
 
   /**
+   * Reset the envelope (only used when the voice is silent).
+   */
+  reset() {
+    this.currentPhase = -1
+    for (let segment of this._segments) {
+      segment.reset()
+    }
+  }
+
+  /**
    * Calculate the next value of the envelope.
    */
   render() {

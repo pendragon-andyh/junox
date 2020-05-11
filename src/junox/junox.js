@@ -35,22 +35,26 @@ export default class Junox {
   }
 
   noteOn(note, velocity) {
+    // If note already playing then retrigger.
     const voiceIndex = this.voices.findIndex((voice) => voice.note === note)
-    const newVoice = new Voice({
-      note,
-      patch: this.patch,
-      velocity,
-      sampleRate: this.sampleRate,
-    })
+    if (voiceIndex >= 0) {
+      this.voices[voiceIndex].noteOn(note, velocity)
+      return
+    }
+
+    // TODO - Fix triggering and release for LFO.
     if (!this.voices.length && this.patch.lfo.autoTrigger) {
       this.lfo.trigger()
     }
+
+    const newVoice = new Voice({
+      patch: this.patch,
+      sampleRate: this.sampleRate,
+    })
+    newVoice.noteOn(note, velocity)
+
     if (this.voices.length < this.maxVoices) {
       this.voices.push(newVoice)
-      return
-    }
-    if (voiceIndex > -1) {
-      this.voices[voiceIndex] = newVoice
       return
     }
     // TODO: recycle voice at minimum volume
