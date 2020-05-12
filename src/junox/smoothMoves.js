@@ -40,6 +40,16 @@ export class SmoothMoves {
   }
 
   /**
+   * Reset immediately to the target value.
+   * This should only be used if the instrument is currently silent.
+   */
+  reset() {
+    this._currentValue = this._targetValue
+    this._stepSize = 0.0
+    this._isStarted = false
+  }
+
+  /**
    * Get the next value of parameter.
    * @returns {number}
    */
