@@ -86,6 +86,13 @@ export class DiodeLadder {
     this.K = resonance * 17.0
   }
 
+  reset() {
+    this.lpf1.reset()
+    this.lpf2.reset()
+    this.lpf3.reset()
+    this.lpf4.reset()
+  }
+
   render(xn) {
     this.lpf3.setFeedback(this.lpf4.feedbackOutput())
     this.lpf2.setFeedback(this.lpf3.feedbackOutput())

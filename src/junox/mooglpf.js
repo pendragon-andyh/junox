@@ -1,5 +1,3 @@
-import { fastTanh } from './utils'
-
 /**
  * Implementation of Moog-style low pass filter (based on a paper by Stilson/Smith).
  * https://www.musicdsp.org/en/latest/Filters/26-moog-vcf-variation-2.html
@@ -11,6 +9,17 @@ export class MoogLowPassFilter {
     // Resonance factor (0 = no resonance, 4 = self-oscillation).
     this.resonance = 0.0
 
+    this._in1 = 0.0
+    this._in2 = 0.0
+    this._in3 = 0.0
+    this._in4 = 0.0
+    this._out1 = 0.0
+    this._out2 = 0.0
+    this._out3 = 0.0
+    this._out4 = 0.0
+  }
+
+  reset() {
     this._in1 = 0.0
     this._in2 = 0.0
     this._in3 = 0.0

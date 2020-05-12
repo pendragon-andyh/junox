@@ -24,6 +24,11 @@ export class OnePoleFilter {
     this.alpha = g / (1.0 + g)
   }
 
+  reset() {
+    this.z1 = 0.0
+    this.feedback = 0.0
+  }
+
   render(input) {
     const xIn =
       input * this.gamma + this.feedback + this.epsilon * this.feedbackOutput()
