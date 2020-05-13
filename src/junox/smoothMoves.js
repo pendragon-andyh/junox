@@ -9,21 +9,16 @@ export class SmoothMoves {
    * @param {number} sampleRate - Samples-per-second for the current audio context.
    */
   constructor(value, sampleRate) {
-    this._currentValue = value
-    this._targetValue = value
-    this._sampleRate = sampleRate
-  }
+    const fc = 5
 
-  _stepSize = 0.0
-  _isStarted = false
+    this.b1 = -Math.exp((-2.0 * fc * Math.PI) / sampleRate)
+    this.a0 = 1.0 + this.b1
 
-  /**
-   * Change the current value instantly to a new value.
-   * @param {number} value - New parameter value.
-   */
-  setValue(value) {
-    this._targetValue = value
-    this._stepSize = value - this._currentValue
+    this.targetValue = value
+    this.isStarted = false
+    this.z1 = 0.0
+
+    this.reset()
   }
 
   /**
@@ -32,10 +27,11 @@ export class SmoothMoves {
    * @param {number} duration - Duration (in seconds) of the transition from the old value to the new one.
    */
   linearRampToValueAtTime(value, duration) {
-    this.setValue(value)
+    this.targetValue = value
 
-    if (this._currentValue !== value && duration && this._isStarted) {
-      this._stepSize /= duration * this._sampleRate
+    if (!this.isStarted || duration <= 0) {
+      this.reset()
+      return
     }
   }
 
@@ -44,9 +40,8 @@ export class SmoothMoves {
    * This should only be used if the instrument is currently silent.
    */
   reset() {
-    this._currentValue = this._targetValue
-    this._stepSize = 0.0
-    this._isStarted = false
+    this.z1 = this.targetValue - this.targetValue * this.a0
+    this.isStarted = false
   }
 
   /**
@@ -54,26 +49,9 @@ export class SmoothMoves {
    * @returns {number}
    */
   getNextValue() {
-    let value = this._currentValue
-
-    // Check if we are mid-transition.
-    if (value !== this._targetValue) {
-      // Increment the current value towards the target value.
-      value += this._stepSize
-
-      // Check if we have reached/overshot any transition.
-      if (
-        Math.sign(this._targetValue - value) *
-          Math.sign(this._targetValue - this._currentValue) <=
-        0
-      ) {
-        value = this._targetValue
-      }
-
-      this._isStarted = true
-      this._currentValue = value
-    }
-
-    return value
+    this.isStarted = true
+    const xout = this.targetValue * this.a0 - this.z1
+    this.z1 = this.b1 * xout
+    return xout
   }
 }
