@@ -15,7 +15,7 @@ export default class LFO {
 
   setRate(frequency) {
     this.rateFactor = frequency * this.anchorRate
-    this.value = -this.rateFactor
+    //this.value = -this.rateFactor
   }
 
   setDelay(delay) {

@@ -66,9 +66,8 @@ export class BiquadFilter {
    * @param {number} fc - Cutoff frequency (Hz)
    */
   setCoefficientsForOnePoleLowPass(fc) {
-    this.b1 = Math.exp(-2.0 * fc * this.piOverSampleRate)
-    this.a0 = 1.0 - this.b1
-    this.b1 = -this.b1
+    this.b1 = -Math.exp(-2.0 * fc * this.piOverSampleRate)
+    this.a0 = 1.0 + this.b1
     this.a1 = this.a2 = this.b2 = 0.0
   }
 
@@ -77,9 +76,8 @@ export class BiquadFilter {
    * @param {number} fc - Cutoff frequency (Hz)
    */
   setCoefficientsForOnePoleHighPass(fc) {
-    this.b1 = -Math.exp(-2.0 * Math.PI * (0.5 - fc / this.sampleRate))
-    this.a0 = 1.0 + this.b1
-    this.b1 = -this.b1
+    this.b1 = Math.exp(-2.0 * Math.PI * (0.5 - fc / this.sampleRate))
+    this.a0 = 1.0 - this.b1
     this.a1 = this.a2 = this.b2 = 0.0
   }
 
