@@ -1,37 +1,47 @@
-import FTrig from '../vendor/FTrig'
-
-export const fastTrig = new FTrig(FTrig.HIGH)
-
 export const SQRT2 = Math.sqrt(2.0)
 export const TWOPI = Math.PI * 2.0
+export const ONEOVERPI = 1.0 / Math.PI
 
-// this is the same as Math.min(Math.max(-1, value), 1)
-// but it's only 1 function call instead of 2
-export function clampVolume(val) {
-  if (val > 1) {
-    return 1
-  }
-  if (val < -1) {
-    return -1
-  }
-  return val
+/**
+ * Clamp a number within a specified range.
+ * @param {number} val - Number to be clamped.
+ * @param {number} min - Minimum threshold.
+ * @param {number} max - Maximum threshold.
+ */
+export function clamp(val, min = -1.0, max = 1.0) {
+  return val > max ? max : val < min ? min : val
 }
 
-export function clamp(val) {
-  if (val > 1) {
-    return 1
-  }
-  if (val < 0) {
-    return 0
-  }
-  return val
-}
-
+/**
+ * Fast approximation of the hyperbolic tangent of a number.
+ * @param {number} x - A numeric expression that contains an angle measured in radians
+ */
 export function fastTanh(x) {
-  if (x < -3) {
-    return -1
-  } else if (x > 3) {
-    return 1
+  if (x < -3.0) {
+    return -1.0
+  } else if (x > 3.0) {
+    return 1.0 + Math.tanh
   }
-  return (x * (27 + x * x)) / (27 + 9 * x * x)
+  const xSquared = x * x
+  return (x * (27.0 + xSquared)) / (27.0 + 9.0 * xSquared)
+}
+
+/**
+ * Use linear interpolation to lookup a value from an array.
+ * @param {number} value - Index into the table (floating-point between `0` and `table.length - 1`)
+ * @param {number[]} table - List of values that form the table to be looked-up from
+ */
+export function interpolatedLookup(value, table) {
+  if (value < 0.0) {
+    return table[0]
+  }
+  if (value > table.length - 1) {
+    return table[table.length - 1]
+  }
+  const index = value | 0
+  const factor = value - index
+  if (factor === 0) {
+    return table[index]
+  }
+  return table[index] * (1.0 - factor) + table[index + 1] * factor
 }

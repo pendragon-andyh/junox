@@ -65,13 +65,7 @@ export default class Voice {
       pulseWidth *= modEnvOut
     }
 
-    let dcoOut = this.dco.render(
-      detuneFactor,
-      0.5 + pulseWidth,
-      sawLevel,
-      pulseLevel,
-      subLevel
-    )
+    let dcoOut = this.dco.render(detuneFactor, 0.5 + pulseWidth, sawLevel, pulseLevel, subLevel)
     if (noiseLevel > 0.0) {
       dcoOut += this.noise.render() * noiseLevel
     }
@@ -113,13 +107,13 @@ export default class Voice {
 
     this.velocity = velocity
     this.updatePatch(this.patch)
-    this.modEnv.noteOn()
-    this.ampEnv.noteOn()
+    this.modEnv.trigger()
+    this.ampEnv.trigger()
   }
 
   noteOff() {
-    this.modEnv.noteOff()
-    this.ampEnv.noteOff()
+    this.modEnv.release()
+    this.ampEnv.release()
   }
 
   isFinished() {

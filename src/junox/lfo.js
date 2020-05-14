@@ -1,65 +1,87 @@
-import { delayToLFOAttackRate } from './params'
-
-export default class LFO {
-  constructor({ frequency, delay = 0, sampleRate }) {
-    // we need the phase to go x4 because of triangle
-    this.anchorRate = 3.95 / sampleRate
-    this.sampleRate = sampleRate
-    this.direction = 1
-    this.value = 0
-    this.attackPhase = 0
-    this.setRate(frequency)
-    this.setDelay(delay)
-    this.trigger()
+/**
+ * Implementation of a low frequency oscillator.
+ *  * Capable of different output waveforms.
+ * Note: You might want to pipe the output from a lowpass filter (see biquad).
+ */
+export class LFO {
+  /**
+   * @constructor.
+   * @param {number} sampleRate - Samples-per-second for the current audio context.
+   */
+  constructor(sampleRate) {
+    this._oneOverSampleRate = 1.0 / sampleRate
   }
 
-  setRate(frequency) {
-    this.rateFactor = frequency * this.anchorRate
-    //this.value = -this.rateFactor
+  /** Current phase of the LFO (0.0 to 1.0) */
+  currentPhase = 1.0
+
+  /** Current value of the LFO. */
+  currentValue = 0.0
+
+  /** Has the LFO's cycled in the latest sample? This is useful when you want to automatically retrigger the envelope. */
+  isRestarted = false
+
+  /** Waveform ("none", "triangle", "square", "sine", "random", "noise") */
+  waveform = 'triangle'
+
+  /**
+   * Reset the LFO (only used when the instrument is silent).
+   */
+  reset() {
+    this.currentPhase = 1.0
+    this.currentValue = 0.0
   }
 
-  setDelay(delay) {
-    this.delaySamples = delay * this.sampleRate
-    this.attackSamples = delayToLFOAttackRate(delay) * this.sampleRate
-  }
-
-  trigger() {
-    this.direction = 1
-    this.delayPhase = 0
-    this.attackPhase = 0
-    this.attackRateFactor = 0
-    this.attackOutput = 0.01
-  }
-
-  delayEnv() {
-    this.delayPhase = this.delayPhase + 1
-    if (this.attackPhase > this.attackSamples) {
-      return 1
-    } else if (this.delayPhase > this.delaySamples) {
-      this.attackPhase = this.attackPhase + 1
-      this.attackRateFactor = this.attackPhase / this.attackSamples
-      this.attackOutput = (1 - this.attackOutput) * this.attackRateFactor
-      return Math.max(this.attackOutput * 2, 1)
-    }
-    return 0
-  }
-
+  /**
+   * Calculate the next value of the LFO.
+   */
   render() {
-    let newValue = this.value
-    if (this.direction === 1) {
-      newValue += this.rateFactor
-      if (newValue > 1.0) {
-        this.direction = -1
-        newValue = 2.0 - newValue
-      }
-    } else {
-      newValue -= this.rateFactor
-      if (newValue < -1.0) {
-        this.direction = 1
-        newValue = -2.0 - newValue
-      }
+    // Increment the phase of the LFO.
+    this.isRestarted = false
+    this.currentPhase += this._phaseIncrement
+    if (this.currentPhase > 1.0) {
+      this.isRestarted = true
+      this.currentPhase -= 1.0
     }
-    this.value = newValue
-    return this.value * this.delayEnv()
+
+    // Convert the phase into the output waveform.
+    let value = 0.0
+    switch (this.waveform) {
+      case 'none':
+        value = 0.0
+        break
+      case 'sine':
+        value = Math.sin(this.currentPhase * 2 * Math.PI)
+        break
+      case 'square':
+        value = this.currentPhase > 0.5 ? -1.0 : 1.0
+        break
+      case 'random':
+        value = this.isRestarted ? Math.random() * 2.0 - 1.0 : this.currentValue
+        break
+      case 'noise':
+        value = Math.random() * 2.0 - 1.0
+        break
+      default:
+        // Default to triangle.
+        value = this.currentPhase * 4.0
+        if (value > 1.0) {
+          value = 2.0 - value
+        }
+        if (value < -1.0) {
+          value = -2.0 - value
+        }
+        break
+    }
+
+    return (this.currentValue = value)
+  }
+
+  /**
+   * Set the speed of the LFO..
+   * @param {number} frequency - Frequency of the LFO (Hz).
+   */
+  setRate(frequency) {
+    this._phaseIncrement = frequency * this._oneOverSampleRate
   }
 }

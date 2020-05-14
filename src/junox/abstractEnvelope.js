@@ -40,7 +40,7 @@ export class AbstractEnvelope {
   /**
    * Trigger (or retrigger) the envelope.
    */
-  noteOn() {
+  trigger() {
     this._currentPhase = 0
     for (let segment of this._segments) {
       segment.reset()
@@ -50,7 +50,7 @@ export class AbstractEnvelope {
   /**
    * Release the current note.
    */
-  noteOff() {
+  release() {
     if (this._currentPhase !== -1) {
       this._currentPhase = this._segments.length - 2
     }
@@ -69,9 +69,10 @@ export class AbstractEnvelope {
    * Reset the envelope (only used when the voice is silent).
    */
   reset() {
-    this.currentPhase = -1
-    for (let segment of this._segments) {
-      segment.reset()
+    this._currentPhase = -1
+    this._currentValue = 0.0
+    for (let i = 0; i < this._segments.length; i++) {
+      this._segments[i].reset()
     }
   }
 
@@ -125,9 +126,7 @@ export class AttackSegment {
    */
   setDuration(duration) {
     const samples = this._sampleRate * duration
-    this._attackCoeff = Math.exp(
-      -Math.log((1.0 + this._attackTCO) / this._attackTCO) / samples
-    )
+    this._attackCoeff = Math.exp(-Math.log((1.0 + this._attackTCO) / this._attackTCO) / samples)
     this._attackOffset = (1.0 + this._attackTCO) * (1.0 - this._attackCoeff)
   }
 
@@ -178,11 +177,8 @@ export class DecaySegment {
    */
   setDuration(seconds) {
     const samples = this._sampleRate * seconds
-    this._decayCoeff = Math.exp(
-      -Math.log((1.0 + this._decayTCO) / this._decayTCO) / samples
-    )
-    this._decayOffset =
-      (this.target - this._decayTCO) * (1.0 - this._decayCoeff)
+    this._decayCoeff = Math.exp(-Math.log((1.0 + this._decayTCO) / this._decayTCO) / samples)
+    this._decayOffset = (this.target - this._decayTCO) * (1.0 - this._decayCoeff)
   }
 
   /**
@@ -205,8 +201,7 @@ export class DecaySegment {
    * @param {number} value - Value to test.
    * @returns {bool} - True if the value if the segment is now complete.
    */
-  isComplete = (value) =>
-    (value <= this.target && !this._isSustainAtEnd) || value < 0.02
+  isComplete = (value) => (value <= this.target && !this._isSustainAtEnd) || value < 0.02
 }
 
 export class DelaySegment {

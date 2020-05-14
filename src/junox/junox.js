@@ -1,12 +1,11 @@
 import { set } from 'lodash'
 import { SmoothMoves } from './smoothMoves'
 import Voice from './voice'
-import Chorus from './chorus'
-import LFO from './lfo'
+import { Chorus } from './chorus'
+import { LFOWithEnvelope } from './lfoWithEnvelope'
 import BassBoost from './bassboost'
 import HighPassFilter from './hpf'
-import { sliderToLFOFreq, sliderToLFODelay, sliderToHPF } from './params'
-import { clampVolume } from './utils'
+import { fastTanh, interpolatedLookup } from './utils'
 
 const synthStatus = {
   SILENT: 0,
@@ -26,7 +25,6 @@ export default class Junox {
     this.parameters = [
       (this.pitchBendParam = new SmoothMoves(0, sampleRate)),
       (this.pitchBendDepthParam = new SmoothMoves(1, sampleRate)),
-      (this.lfoRateParam = new SmoothMoves(0, sampleRate)),
       (this.pitchLfoModDepthParam = new SmoothMoves(0, sampleRate)),
       (this.pwmDepthParam = new SmoothMoves(0, sampleRate)),
       (this.sawLevelParam = new SmoothMoves(0, sampleRate)),
@@ -41,16 +39,12 @@ export default class Junox {
       (this.vcaGainFactorParam = new SmoothMoves(0, sampleRate)),
     ]
 
-    this.lfo = new LFO({
-      frequency: sliderToLFOFreq(patch.lfo.frequency),
-      delay: 0,
-      sampleRate,
-    })
+    this.lfo = new LFOWithEnvelope(sampleRate)
 
     this.bassBoost = new BassBoost({ frequency: 75 })
 
     this.hpf = new HighPassFilter({
-      cutoff: sliderToHPF(patch.hpf),
+      cutoff: 0,
       resonance: 1,
       sampleRate,
     })
@@ -75,10 +69,7 @@ export default class Junox {
       this.lfo.trigger()
     }
 
-    const newVoice = new Voice({
-      patch: this.patch,
-      sampleRate: this.sampleRate,
-    })
+    const newVoice = new Voice({ patch: this.patch, sampleRate: this.sampleRate })
     newVoice.noteOn(note, velocity)
 
     if (this.voices.length < this.maxVoices) {
@@ -90,18 +81,15 @@ export default class Junox {
   }
 
   noteOff(note) {
-    this.voices.forEach(
-      (voice) => voice.note === note && !voice.isFinished() && voice.noteOff()
-    )
+    this.voices.forEach((voice) => voice.note === note && !voice.isFinished() && voice.noteOff())
   }
 
   lfoTrigger() {
     this.lfo.trigger()
-    this.lfoTriggered = true
   }
 
   lfoRelease() {
-    this.lfoTriggered = false
+    this.lfo.release()
   }
 
   render(outL, outR) {
@@ -109,7 +97,7 @@ export default class Junox {
     if (this.status === synthStatus.SILENT) {
       return
     }
-    this.synthStatus--
+    this.status--
 
     // TODO - Just leave voices deactivated.
     // remove dead voices first
@@ -140,11 +128,10 @@ export default class Junox {
         // TODO
       }
 
-      const canLFO = this.patch.lfo.autoTrigger || this.lfoTriggered
-      const lfoOut = canLFO ? this.lfo.render() : 0.0
+      const lfoOut = this.lfo.render()
 
       // All voices are detuned by the same relative-amount.
-      let detuneOctaves = lfoOut * pitchLfoModDepth + pitchBend * pitchBendDepth
+      const detuneOctaves = lfoOut * pitchLfoModDepth + pitchBend * pitchBendDepth
       let detuneFactor = this.patch.dco.range
       if (detuneOctaves !== 0.0) {
         detuneFactor *= Math.pow(2, detuneOctaves)
@@ -177,12 +164,13 @@ export default class Junox {
 
       // Apply high-pass filter (or base boost).
       if (this.patch.hpf < 0.3) {
-        monoOut = clampVolume(monoOut + this.bassBoost.render(monoOut, 0.3))
+        monoOut += this.bassBoost.render(monoOut, 0.3)
       } else {
         monoOut = this.hpf.render(monoOut)
       }
 
-      // TODO - tanh here??
+      // Soft clip (to ensure that the output signal is not outside of range).
+      monoOut = fastTanh(3.0 * monoOut)
 
       // Apply the chorus effect.
       this.chorus.render(monoOut)
@@ -202,6 +190,9 @@ export default class Junox {
       }
 
       // Reset any stateful elements (filters, delay-buffers, lfo, etc).
+      if (this.patch.lfo.autoTrigger) {
+        this.lfo.reset()
+      }
       this.bassBoost.reset()
       this.hpf.reset()
       this.chorus.reset()
@@ -242,76 +233,70 @@ export default class Junox {
       mixFactor = 2.0
     }
 
-    this.sawLevelParam.linearRampToValueAtTime(
-      sawLevel * mixFactor,
-      changeDuration
-    )
-    this.pulseLevelParam.linearRampToValueAtTime(
-      pulseLevel * mixFactor,
-      changeDuration
-    )
-    this.subLevelParam.linearRampToValueAtTime(
-      subLevel * mixFactor,
-      changeDuration
-    )
-    this.noiseLevelParam.linearRampToValueAtTime(
-      noiseLevel * mixFactor,
-      changeDuration
-    )
-    this.pitchLfoModDepthParam.linearRampToValueAtTime(
-      this.patch.dco.lfo,
-      changeDuration
-    )
-    this.pwmDepthParam.linearRampToValueAtTime(
-      this.patch.dco.pwm,
-      changeDuration
-    )
+    this.sawLevelParam.linearRampToValueAtTime(sawLevel * mixFactor, changeDuration)
+    this.pulseLevelParam.linearRampToValueAtTime(pulseLevel * mixFactor, changeDuration)
+    this.subLevelParam.linearRampToValueAtTime(subLevel * mixFactor, changeDuration)
+    this.noiseLevelParam.linearRampToValueAtTime(noiseLevel * mixFactor, changeDuration)
+    this.pitchLfoModDepthParam.linearRampToValueAtTime(this.patch.dco.lfo, changeDuration)
+    this.pwmDepthParam.linearRampToValueAtTime(this.patch.dco.pwm, changeDuration)
 
     const envModDirection = this.patch.vcf.modPositive ? 1.0 : -1.0
-    this.filterCutoffParam.linearRampToValueAtTime(
-      this.patch.vcf.frequency,
-      changeDuration * 200
-    )
-    this.filterResonanceParam.linearRampToValueAtTime(
-      this.patch.vcf.resonance,
-      changeDuration
-    )
+    this.filterCutoffParam.linearRampToValueAtTime(this.patch.vcf.frequency, changeDuration)
+    this.filterResonanceParam.linearRampToValueAtTime(this.patch.vcf.resonance, changeDuration)
     this.filterEnvModParam.linearRampToValueAtTime(
       this.patch.vcf.envMod * envModDirection,
       changeDuration
     )
-    this.filterLfoModParam.linearRampToValueAtTime(
-      this.patch.vcf.lfoMod,
-      changeDuration
-    )
-    this.filterKeyModParam.linearRampToValueAtTime(
-      this.patch.vcf.keyMod,
-      changeDuration
-    )
+    this.filterLfoModParam.linearRampToValueAtTime(this.patch.vcf.lfoMod, changeDuration)
+    this.filterKeyModParam.linearRampToValueAtTime(this.patch.vcf.keyMod, changeDuration)
 
     this.chorus.update(this.patch.chorus)
-
-    // TODO
-    this.lfoRateParam.linearRampToValueAtTime(
-      this.patch.lfo.frequency,
-      changeDuration
-    )
-    this.lfo.setRate(sliderToLFOFreq(this.patch.lfo.frequency))
-    this.lfo.setDelay(sliderToLFODelay(this.patch.lfo.delay))
-
-    // TODO
-    this.hpf.setCutoff(sliderToHPF(this.patch.hpf))
+    setLfoValuesFromSliders(this.lfo, this.patch.lfo.frequency, this.patch.lfo.delay)
+    setHpfValuesFromSliders(this.hpf, this.patch.hpf)
 
     // VCA gain. 0.0 => 0.1, 0.5 => 0.316, 1.0 => 1.0
     const vcaGainFactor = Math.pow(1.2589, this.patch.vca * 10) * 0.1
-    this.vcaGainFactorParam.linearRampToValueAtTime(
-      vcaGainFactor,
-      changeDuration
-    )
+    this.vcaGainFactorParam.linearRampToValueAtTime(vcaGainFactor, changeDuration)
   }
 
   panic() {
     // TODO - Use shutdown().
     this.voices = []
   }
+}
+
+const curveFromLfoRateSliderToFreq = [0.3, 0.85, 3.39, 11.49, 22.22]
+const curveFromLfoDelaySliderToDelay = [0.0, 0.0639, 0.85, 1.2, 2.685]
+const curveFromLfoDelaySliderToAttack = [0.0, 0.053, 0.188, 0.348, 1.15]
+
+/**
+ * Configure the LFO from the Juno60's slider values.
+ * @param {LFO} - Instance of LFO class.
+ * @param {number} rateSlider - Value of the rate slider (0.0 to 1.0).
+ * @param {number} delaySlider - Value of the delay slider (0.0 to 1.0).
+ */
+function setLfoValuesFromSliders(lfo, rateSlider, delaySlider) {
+  const frequency = interpolatedLookup(
+    rateSlider * (curveFromLfoRateSliderToFreq.length - 1),
+    curveFromLfoRateSliderToFreq
+  )
+  const delayDuration = interpolatedLookup(
+    delaySlider * (curveFromLfoDelaySliderToDelay.length - 1),
+    curveFromLfoDelaySliderToDelay
+  )
+  const attackDuration = interpolatedLookup(
+    delaySlider * (curveFromLfoDelaySliderToAttack.length - 1),
+    curveFromLfoDelaySliderToAttack
+  )
+  lfo.setValues(frequency, delayDuration, attackDuration)
+}
+
+const curveFromHpfSliderToFreq = [0, 250, 520, 1220]
+
+function setHpfValuesFromSliders(hpf, rateSlider) {
+  const frequency = interpolatedLookup(
+    rateSlider * (curveFromHpfSliderToFreq.length - 1),
+    curveFromHpfSliderToFreq
+  )
+  hpf.setCutoff(frequency)
 }

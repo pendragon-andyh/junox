@@ -1,11 +1,11 @@
-import LFO from './lfo'
+import { LFO } from './lfo'
 import { RingBuffer } from './ringBuffer'
 import { SmoothMoves } from './smoothMoves'
 
 /**
  * Emulation of a Roland Juno 60 chorus effect.
  */
-export default class Chorus {
+export class Chorus {
   /**
    * Output from left-side of chorus.
    */
@@ -29,7 +29,7 @@ export default class Chorus {
   constructor(sampleRate) {
     this.sampleRate = sampleRate
     this.ringBuffer = new RingBuffer(Math.trunc(sampleRate * 0.006))
-    this.lfo = new LFO({ frequency: 0, sampleRate })
+    this.lfo = new LFO(sampleRate)
     this._averageDelaySamples = sampleRate * 0.0035
 
     // The maximum number of samples that the delay will be modulated by.
@@ -56,9 +56,7 @@ export default class Chorus {
       const currentOffsetSamples = lfoValue * maxDelayOffset
       const leftDelaySamples = this._averageDelaySamples + currentOffsetSamples
       const rightDelaySamples =
-        maxDelayOffset <= 0
-          ? leftDelaySamples
-          : this._averageDelaySamples - currentOffsetSamples
+        maxDelayOffset <= 0 ? leftDelaySamples : this._averageDelaySamples - currentOffsetSamples
 
       const leftDelayedValue = this.ringBuffer.readSample(leftDelaySamples)
       const rightDelayedValue = this.ringBuffer.readSample(rightDelaySamples)
@@ -72,6 +70,13 @@ export default class Chorus {
   }
 
   /**
+   * Reset the delay-line's contents (only used when the instrument is silent).
+   */
+  reset() {
+    this.ringBuffer.reset()
+  }
+
+  /**
    * Update the chorus effect to the specified mode.
    * @param {number} chorusMode - New chorus-mode setting.
    */
@@ -80,35 +85,23 @@ export default class Chorus {
       case 1: // Mode I.
         this.lfo.setRate(0.513)
         this.wet.linearRampToValueAtTime(0.5, 0.002)
-        this.maxDelayOffset.linearRampToValueAtTime(
-          0.00185 * this.sampleRate,
-          0.002
-        )
+        this.maxDelayOffset.linearRampToValueAtTime(0.00185 * this.sampleRate, 0.002)
         break
       case 2: // Mode II.
         this.lfo.setRate(0.863)
         this.wet.linearRampToValueAtTime(0.5, 0.002)
-        this.maxDelayOffset.linearRampToValueAtTime(
-          0.00185 * this.sampleRate,
-          0.002
-        )
+        this.maxDelayOffset.linearRampToValueAtTime(0.00185 * this.sampleRate, 0.002)
         break
       case 3: // Mode I+II.
         this.lfo.setRate(9.75)
         this.wet.linearRampToValueAtTime(0.5, 0.002)
-        this.maxDelayOffset.linearRampToValueAtTime(
-          -0.0002 * this.sampleRate,
-          0.002
-        )
+        this.maxDelayOffset.linearRampToValueAtTime(-0.0002 * this.sampleRate, 0.002)
         break
       default:
         // Off
         this.lfo.setRate(0.513)
         this.wet.linearRampToValueAtTime(0.0, 0.002)
-        this.maxDelayOffset.linearRampToValueAtTime(
-          0.00185 * this.sampleRate,
-          0.002
-        )
+        this.maxDelayOffset.linearRampToValueAtTime(0.00185 * this.sampleRate, 0.002)
         break
     }
   }
