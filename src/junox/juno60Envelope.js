@@ -1,9 +1,4 @@
-import {
-  AbstractEnvelope,
-  AttackSegment,
-  DecaySegment,
-  ShutdownSegment,
-} from './abstractEnvelope'
+import { AbstractEnvelope, AttackSegment, DecaySegment, ShutdownSegment } from './abstractEnvelope'
 
 /**
  * Specific implementation of the Juno60 envelope.
@@ -16,10 +11,10 @@ export class Juno60Envelope extends AbstractEnvelope {
   constructor(sampleRate) {
     super()
     this._segments = [
-      (this.attack = new AttackSegment(sampleRate, 0.632, 1.0, false)),
-      (this.decay = new DecaySegment(sampleRate, 0.025, 0.0, true)),
-      (this.release = new DecaySegment(sampleRate, 0.025, 0.0, false)),
-      (this.shutdown = new ShutdownSegment(sampleRate, 0.001)),
+      (this._attack = new AttackSegment(sampleRate, 0.632, 1.0, false)),
+      (this._decay = new DecaySegment(sampleRate, 0.025, 0.0, true)),
+      (this._release = new DecaySegment(sampleRate, 0.025, 0.0, false)),
+      (this._shutdown = new ShutdownSegment(sampleRate, 0.001)),
     ]
   }
 
@@ -31,10 +26,10 @@ export class Juno60Envelope extends AbstractEnvelope {
    * @param {number} releaseDuration - Number of seconds for the duration of the release phase.
    */
   setValues(attackDuration, decayDuration, sustainLevel, releaseDuration) {
-    this.attack.setDuration(attackDuration)
-    this.decay.target = Math.max(0.02, sustainLevel)
-    this.decay.setDuration(decayDuration)
-    this.release.setDuration(this.decay.target <= 0.02 ? 0.01 : releaseDuration)
+    this._attack.setDuration(attackDuration)
+    this._decay.target = Math.max(0.02, sustainLevel)
+    this._decay.setDuration(decayDuration)
+    this._release.setDuration(this._decay.target <= 0.02 ? 0.01 : releaseDuration)
   }
 
   /**
@@ -44,29 +39,12 @@ export class Juno60Envelope extends AbstractEnvelope {
    * @param {number} sustainSlider - Value of the sustain slider (0.0 to 1.0).
    * @param {number} releaseSlider - Value of the release slider (0.0 to 1.0).
    */
-  setValuesFromSliders(
-    attackSlider,
-    decaySlider,
-    sustainSlider,
-    releaseSlider
-  ) {
-    const attackDuration =
-      0.001 + ((Math.exp(attackSlider * 5.0) - 1) / (Math.exp(5.0) - 1)) * 3.25
+  setValuesFromSliders(attackSlider, decaySlider, sustainSlider, releaseSlider) {
+    const attackDuration = 0.001 + ((Math.exp(attackSlider * 5.0) - 1) / (Math.exp(5.0) - 1)) * 3.25
     const decayDuration =
-      0.002 +
-      ((Math.exp(decaySlider * 4.0) - 1) / (Math.exp(4.0) - 1)) *
-        decaySlider *
-        19.78
+      0.002 + ((Math.exp(decaySlider * 4.0) - 1) / (Math.exp(4.0) - 1)) * decaySlider * 19.78
     const releaseDuration =
-      0.002 +
-      ((Math.exp(releaseSlider * 4.0) - 1) / (Math.exp(4.0) - 1)) *
-        releaseSlider *
-        19.78
-    this.setValues(
-      attackDuration,
-      decayDuration,
-      sustainSlider,
-      releaseDuration
-    )
+      0.002 + ((Math.exp(releaseSlider * 4.0) - 1) / (Math.exp(4.0) - 1)) * releaseSlider * 19.78
+    this.setValues(attackDuration, decayDuration, sustainSlider, releaseDuration)
   }
 }
