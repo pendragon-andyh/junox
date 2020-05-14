@@ -35,9 +35,7 @@ export class RingBuffer {
     const indexA = Math.floor(readIndex)
     const fractional = readIndex - indexA
     const indexB = this.ringBufferIndex(indexA + 1)
-    return (
-      this.buffer[indexA] * (1 - fractional) + this.buffer[indexB] * fractional
-    )
+    return this.buffer[indexA] * (1 - fractional) + this.buffer[indexB] * fractional
   }
 
   /**
@@ -47,5 +45,12 @@ export class RingBuffer {
   writeSample(input) {
     this.buffer[this.writeIndex] = input
     this.writeIndex = (this.writeIndex + 1) % this.maxBufferSize
+  }
+
+  /**
+   * Reset the delay-line's contents (only used when the instrument is silent).
+   */
+  reset() {
+    this.buffer.fill(0.0)
   }
 }
