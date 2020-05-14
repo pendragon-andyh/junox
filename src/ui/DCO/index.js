@@ -2,7 +2,6 @@ import React from 'react'
 import Section from '../Section'
 import Slider from '../Slider'
 import ButtonLED, { AfterButtonLED } from '../ButtonLED'
-import { Column } from '../Flexbox'
 
 export default React.memo(function DCO({
   range,
