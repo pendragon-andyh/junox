@@ -47,7 +47,7 @@ export class Chorus {
   render(input) {
     const wet = this.wet.getNextValue()
 
-    if (wet <= 0) {
+    if (wet <= 0.001) {
       this.leftOutput = input
       this.rightOutput = input
     } else {
@@ -74,6 +74,8 @@ export class Chorus {
    */
   reset() {
     this.ringBuffer.reset()
+    this.maxDelayOffset.reset()
+    this.wet.reset()
   }
 
   /**
@@ -84,24 +86,24 @@ export class Chorus {
     switch (chorusMode) {
       case 1: // Mode I.
         this.lfo.setRate(0.513)
-        this.wet.linearRampToValueAtTime(0.5, 0.002)
-        this.maxDelayOffset.linearRampToValueAtTime(0.00185 * this.sampleRate, 0.002)
+        this.wet.setValue(0.5)
+        this.maxDelayOffset.setValue(0.00185 * this.sampleRate)
         break
       case 2: // Mode II.
         this.lfo.setRate(0.863)
-        this.wet.linearRampToValueAtTime(0.5, 0.002)
-        this.maxDelayOffset.linearRampToValueAtTime(0.00185 * this.sampleRate, 0.002)
+        this.wet.setValue(0.5)
+        this.maxDelayOffset.setValue(0.00185 * this.sampleRate)
         break
       case 3: // Mode I+II.
         this.lfo.setRate(9.75)
-        this.wet.linearRampToValueAtTime(0.5, 0.002)
-        this.maxDelayOffset.linearRampToValueAtTime(-0.0002 * this.sampleRate, 0.002)
+        this.wet.setValue(0.5)
+        this.maxDelayOffset.setValue(-0.0002 * this.sampleRate)
         break
       default:
         // Off
         this.lfo.setRate(0.513)
-        this.wet.linearRampToValueAtTime(0.0, 0.002)
-        this.maxDelayOffset.linearRampToValueAtTime(0.00185 * this.sampleRate, 0.002)
+        this.wet.setValue(0.0)
+        this.maxDelayOffset.setValue(0.00185 * this.sampleRate)
         break
     }
   }

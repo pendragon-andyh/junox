@@ -7,10 +7,9 @@ export class SmoothMoves {
    * Create a new parameter.
    * @param {number} value - Initial value of the parameter.
    * @param {number} sampleRate - Samples-per-second for the current audio context.
+   * @param {number} fc - Amount of smoothing for the LPF used to smooth changes (Hz).
    */
-  constructor(value, sampleRate) {
-    const fc = 5
-
+  constructor(value, sampleRate, fc = 5.0) {
     this.b1 = -Math.exp((-2.0 * fc * Math.PI) / sampleRate)
     this.a0 = 1.0 + this.b1
 
@@ -24,12 +23,12 @@ export class SmoothMoves {
   /**
    * Change the current value to a new value using a linear transition over a period of time.
    * @param {number} value - New parameter value.
-   * @param {number} duration - Duration (in seconds) of the transition from the old value to the new one.
+   * @param {boolean} useSmoothing = true - If true then the transition to the new value will be smoothed.
    */
-  linearRampToValueAtTime(value, duration) {
+  setValue(value, useSmoothing) {
     this.targetValue = value
 
-    if (!this.isStarted || duration <= 0) {
+    if (!this.isStarted || !useSmoothing) {
       this.reset()
       return
     }

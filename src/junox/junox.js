@@ -217,7 +217,7 @@ export default class Junox {
       isActive = isActive || !voice.isFinished()
     }
 
-    let changeDuration = isActive ? 128.0 / this.sampleRate : 0.0
+    const useSmoothing = !isActive
 
     // Relative volumes of each source.
     const sawLevel = this.patch.dco.saw ? 0.2 : 0.0
@@ -233,22 +233,19 @@ export default class Junox {
       mixFactor = 2.0
     }
 
-    this.sawLevelParam.linearRampToValueAtTime(sawLevel * mixFactor, changeDuration)
-    this.pulseLevelParam.linearRampToValueAtTime(pulseLevel * mixFactor, changeDuration)
-    this.subLevelParam.linearRampToValueAtTime(subLevel * mixFactor, changeDuration)
-    this.noiseLevelParam.linearRampToValueAtTime(noiseLevel * mixFactor, changeDuration)
-    this.pitchLfoModDepthParam.linearRampToValueAtTime(this.patch.dco.lfo, changeDuration)
-    this.pwmDepthParam.linearRampToValueAtTime(this.patch.dco.pwm, changeDuration)
+    this.sawLevelParam.setValue(sawLevel * mixFactor, useSmoothing)
+    this.pulseLevelParam.setValue(pulseLevel * mixFactor, useSmoothing)
+    this.subLevelParam.setValue(subLevel * mixFactor, useSmoothing)
+    this.noiseLevelParam.setValue(noiseLevel * mixFactor, useSmoothing)
+    this.pitchLfoModDepthParam.setValue(this.patch.dco.lfo, useSmoothing)
+    this.pwmDepthParam.setValue(this.patch.dco.pwm, useSmoothing)
 
     const envModDirection = this.patch.vcf.modPositive ? 1.0 : -1.0
-    this.filterCutoffParam.linearRampToValueAtTime(this.patch.vcf.frequency, changeDuration)
-    this.filterResonanceParam.linearRampToValueAtTime(this.patch.vcf.resonance, changeDuration)
-    this.filterEnvModParam.linearRampToValueAtTime(
-      this.patch.vcf.envMod * envModDirection,
-      changeDuration
-    )
-    this.filterLfoModParam.linearRampToValueAtTime(this.patch.vcf.lfoMod, changeDuration)
-    this.filterKeyModParam.linearRampToValueAtTime(this.patch.vcf.keyMod, changeDuration)
+    this.filterCutoffParam.setValue(this.patch.vcf.frequency, useSmoothing)
+    this.filterResonanceParam.setValue(this.patch.vcf.resonance, useSmoothing)
+    this.filterEnvModParam.setValue(this.patch.vcf.envMod * envModDirection, useSmoothing)
+    this.filterLfoModParam.setValue(this.patch.vcf.lfoMod, useSmoothing)
+    this.filterKeyModParam.setValue(this.patch.vcf.keyMod, useSmoothing)
 
     this.chorus.update(this.patch.chorus)
     setLfoValuesFromSliders(this.lfo, this.patch.lfo.frequency, this.patch.lfo.delay)
@@ -256,7 +253,7 @@ export default class Junox {
 
     // VCA gain. 0.0 => 0.1, 0.5 => 0.316, 1.0 => 1.0
     const vcaGainFactor = Math.pow(1.2589, this.patch.vca * 10) * 0.1
-    this.vcaGainFactorParam.linearRampToValueAtTime(vcaGainFactor, changeDuration)
+    this.vcaGainFactorParam.setValue(vcaGainFactor, useSmoothing)
   }
 
   panic() {
