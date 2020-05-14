@@ -16,6 +16,13 @@ export default function Record({ audioContext, outNode }) {
   const stopRecording = () => {
     recorder.stop()
     saveAs(recorder.exportWaveBlob(), 'recorded.wav')
+
+    // Hack to reset. I think that AudioRecord is designer with the assumption that
+    // a new instance would be used for each recording session.
+    recorder['leftChannel'] = []
+    recorder['rightChannel'] = []
+    recorder['recordingLength'] = 0
+
     setRecording(false)
   }
 
