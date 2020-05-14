@@ -12,12 +12,12 @@
  * Note: Biquad filter is NOT designed for heavy modulation.
  */
 export class BiquadFilter {
-  constructor(fs) {
-    this.sampleRate = fs
-    this.piOverSampleRate = Math.PI / fs
+  constructor(sampleRate) {
+    this.oneOversampleRate = 1.0 / sampleRate
+    this.piOverSampleRate = Math.PI * this.oneOverSampleRate
   }
 
-  a0 = 0.0
+  a0 = 1.0
   a1 = 0.0
   a2 = 0.0
   b1 = 0.0
@@ -76,7 +76,7 @@ export class BiquadFilter {
    * @param {number} fc - Cutoff frequency (Hz)
    */
   setCoefficientsForOnePoleHighPass(fc) {
-    this.b1 = Math.exp(-2.0 * Math.PI * (0.5 - fc / this.sampleRate))
+    this.b1 = Math.exp(-2.0 * Math.PI * (0.5 - fc / this.oneOverSampleRate))
     this.a0 = 1.0 - this.b1
     this.a1 = this.a2 = this.b2 = 0.0
   }
