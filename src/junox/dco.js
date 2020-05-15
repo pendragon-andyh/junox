@@ -1,4 +1,4 @@
-import { fastTanh } from './utils'
+import { fastTanh } from './utils.js'
 
 export class Juno60DCO {
   constructor(sampleRate) {
@@ -54,17 +54,9 @@ export class Juno60DCO {
     let newPulseOutput = 0.0
     if (pulseLevel > 0.0) {
       newPulseOutput = this.currentPhase > this.pulseWidth ? 1.0 : -1.0
-      newPulseOutput -= this.calcPolyBLEP2(
-        this.currentPhase,
-        phaseIncrement,
-        1.0
-      )
+      newPulseOutput -= this.calcPolyBLEP2(this.currentPhase, phaseIncrement, 1.0)
       const x = this.currentPhase - this.pulseWidth
-      newPulseOutput += this.calcPolyBLEP2(
-        x < 0.0 ? x + 1.0 : x,
-        phaseIncrement,
-        1.0
-      )
+      newPulseOutput += this.calcPolyBLEP2(x < 0.0 ? x + 1.0 : x, phaseIncrement, 1.0)
     }
 
     // Sub flip-flops between -1 and +1 when the phase reaches 0.5.
@@ -82,11 +74,7 @@ export class Juno60DCO {
     }
 
     // Return the mixed-down output.
-    return (
-      newSawOutput * sawLevel +
-      newPulseOutput * pulseLevel +
-      newSubOutput * subLevel
-    )
+    return newSawOutput * sawLevel + newPulseOutput * pulseLevel + newSubOutput * subLevel
   }
 
   /**
