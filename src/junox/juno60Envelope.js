@@ -1,4 +1,14 @@
-import { AbstractEnvelope, AttackSegment, DecaySegment, ShutdownSegment } from './abstractEnvelope'
+import {
+  AbstractEnvelope,
+  AttackSegment,
+  DecaySegment,
+  ShutdownSegment,
+} from './abstractEnvelope.js'
+import { interpolatedLookup } from './utils.js'
+
+const curveFromAttackSliderToDuration = [0.001, 0.03, 0.24, 0.65, 3.25]
+const curveFromDecaySliderToDuration = [0.002, 0.096, 0.984, 4.449, 19.783]
+const curveFromReleaseSliderToDuration = [0.002, 0.096, 0.984, 4.449, 19.783]
 
 /**
  * Specific implementation of the Juno60 envelope.
@@ -40,11 +50,10 @@ export class Juno60Envelope extends AbstractEnvelope {
    * @param {number} releaseSlider - Value of the release slider (0.0 to 1.0).
    */
   setValuesFromSliders(attackSlider, decaySlider, sustainSlider, releaseSlider) {
-    const attackDuration = 0.001 + ((Math.exp(attackSlider * 5.0) - 1) / (Math.exp(5.0) - 1)) * 3.25
-    const decayDuration =
-      0.002 + ((Math.exp(decaySlider * 4.0) - 1) / (Math.exp(4.0) - 1)) * decaySlider * 19.78
-    const releaseDuration =
-      0.002 + ((Math.exp(releaseSlider * 4.0) - 1) / (Math.exp(4.0) - 1)) * releaseSlider * 19.78
+    const attackDuration = interpolatedLookup(attackSlider, curveFromAttackSliderToDuration)
+    const decayDuration = interpolatedLookup(decaySlider, curveFromDecaySliderToDuration)
+    const releaseDuration = interpolatedLookup(releaseSlider, curveFromReleaseSliderToDuration)
+
     this.setValues(attackDuration, decayDuration, sustainSlider, releaseDuration)
   }
 }

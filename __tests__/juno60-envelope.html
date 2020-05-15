@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Envelope | Juno60</title>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"
+      integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <h1>Emulating the envelope for the Juno60</h1>
+
+    <fieldset>
+      <legend>Parameters</legend>
+      <div>
+        <label style="width: 150px; display: inline-block;">Attack:</label>
+        <input id="attackInput" type="range" min="0" max="100" value="50" style="width: 400px;" />
+        <span id="attackValue"></span>
+      </div>
+
+      <div>
+        <label style="width: 150px; display: inline-block;">Decay:</label>
+        <input id="decayInput" type="range" min="0" max="100" value="50" style="width: 400px;" />
+        <span id="decayValue"></span>
+      </div>
+
+      <div>
+        <label style="width: 150px; display: inline-block;">Sustain:</label>
+        <input id="sustainInput" type="range" min="0" max="100" value="50" style="width: 400px;" />
+        <span id="sustainValue"></span>
+      </div>
+
+      <div>
+        <label style="width: 150px; display: inline-block;">Release:</label>
+        <input id="releaseInput" type="range" min="0" max="100" value="50" style="width: 400px;" />
+        <span id="releaseValue"></span>
+      </div>
+    </fieldset>
+
+    <div
+      id="graph"
+      style="height: 370px; max-width: 100%; border: 1px blue solid; margin-top: 10px;"
+    ></div>
+
+    <p>
+      See
+      <a href="https://github.com/pendragon-andyh/Juno60/blob/master/Envelope/README.md">analysis</a
+      >.
+    </p>
+
+    <script type="module">
+      import { Juno60Envelope } from '../src/junox/Juno60Envelope.js'
+
+      $(function () {
+        onSliderChange()
+        $('#attackInput, #decayInput, #sustainInput, #releaseInput').on('input', onSliderChange)
+      })
+
+      let drawHandle = null
+      function onSliderChange() {
+        const attackValue = ($('#attackInput').val() | 0) / 100
+        const decayValue = ($('#decayInput').val() | 0) / 100
+        const sustainValue = ($('#sustainInput').val() | 0) / 100
+        const releaseValue = ($('#releaseInput').val() | 0) / 100
+
+        // Calculate the segment durations.
+        const attackDuration =
+          0.001 + ((Math.exp(attackValue * 5.0) - 1) / (Math.exp(5.0) - 1)) * 3.25
+        const decayDuration =
+          0.002 + ((Math.exp(decayValue * 4.0) - 1) / (Math.exp(4.0) - 1)) * decayValue * 19.78
+        const releaseDuration =
+          0.002 + ((Math.exp(releaseValue * 4.0) - 1) / (Math.exp(4.0) - 1)) * releaseValue * 19.78
+
+        // Plotting graph is slow - so debounce rapid requests.
+        clearTimeout(drawHandle)
+        drawHandle = setTimeout(function () {
+          drawOutput(attackDuration, decayDuration, sustainValue, releaseDuration)
+        }, 0)
+
+        $('#attackValue').text(
+          `${(attackValue * 10).toFixed(1)} (duration=${attackDuration.toFixed(4)} seconds)`
+        )
+        $('#decayValue').text(
+          `${(decayValue * 10).toFixed(1)} (duration=${decayDuration.toFixed(4)} seconds)`
+        )
+        $('#sustainValue').text(`${(sustainValue * 10).toFixed(1)}`)
+        $('#releaseValue').text(
+          `${(releaseValue * 10).toFixed(1)} (duration=${releaseDuration.toFixed(4)} seconds)`
+        )
+      }
+
+      function drawOutput(attackDuration, decayDuration, sustainValue, releaseDuration) {
+        const dataOutput = { x: [], y: [], fill: 'tonexty', type: 'scatter', name: 'Output' }
+        const dataRelease = { x: [], y: [], fill: 'markers', name: 'Release' }
+
+        const env = new Juno60Envelope(4800)
+        env.setValues(attackDuration, decayDuration, sustainValue, releaseDuration)
+        env.trigger(0)
+
+        let sustainCounter = 2400
+        let value = 0.0
+        let i = 0
+        for (i = 0; i < 20 * 4800 && !env.isFinished(); i++) {
+          value = env.render(value)
+
+          dataOutput.x.push(i / 4800)
+          dataOutput.y.push(value)
+
+          if (env._currentPhase === 1 && value <= sustainValue + 0.001) {
+            sustainCounter--
+            if (sustainCounter <= 0) {
+              env.release(0)
+              dataRelease.x.push(i / 4800)
+              dataRelease.y.push(value)
+            }
+          }
+        }
+
+        const layout = {
+          xaxis: { range: [0.0, Math.max(4, i / 4800)], title: 'Time (seconds)' },
+          yaxis: { range: [0, 1], title: 'Level' },
+        }
+
+        Plotly.purge(document.getElementById('graph'))
+        Plotly.plot(document.getElementById('graph'), [dataOutput, dataRelease], layout, {
+          responsive: true,
+        })
+      }
+    </script>
+  </body>
+</html>

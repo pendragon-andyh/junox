@@ -80,25 +80,22 @@ export class AbstractEnvelope {
    * Calculate the next value of the envelope.
    */
   render() {
-    if (this._currentPhase !== -1) {
-      while (this._currentPhase < this._segments.length) {
-        // Calculate the next value of the current segment.
-        const segment = this._segments[this._currentPhase]
-        const nextValue = segment.process(this._currentValue)
-        if (segment.isComplete(nextValue)) {
-          // Switch to next phase of the envelope.
-          this._currentPhase++
-          if (this._currentPhase >= this._segments.length) {
-            // All phases are complete, so update to "not-active".
-            this._currentValue = 0.0
-            this._currentPhase = -1
-            break
-          }
-        } else {
-          // Otherwise the calculate value was good.
-          this._currentValue = nextValue
-          break
+    while (this._currentPhase !== -1 && this._currentPhase < this._segments.length) {
+      // Calculate the next value of the current segment.
+      const segment = this._segments[this._currentPhase]
+      const nextValue = segment.process(this._currentValue)
+      if (segment.isComplete(nextValue)) {
+        // Switch to next phase of the envelope.
+        this._currentPhase++
+        if (this._currentPhase >= this._segments.length) {
+          // All phases are complete, so update to "not-active".
+          this._currentValue = 0.0
+          this._currentPhase = -1
         }
+      } else {
+        // Otherwise the calculate value was good.
+        this._currentValue = nextValue
+        break
       }
     }
     return this._currentValue
@@ -116,8 +113,10 @@ export class AttackSegment {
   constructor(sampleRate, attackTCO, target, isSustainAtEnd) {
     this._sampleRate = sampleRate
     this._attackTCO = attackTCO
-    this.target = target
+    this._attackCoeff = 0.0
+    this._attackOffset = 0.0
     this._isSustainAtEnd = isSustainAtEnd
+    this.target = target
   }
 
   /**
@@ -167,8 +166,10 @@ export class DecaySegment {
   constructor(sampleRate, decayTCO, target, isSustainAtEnd) {
     this._sampleRate = sampleRate
     this._decayTCO = decayTCO
-    this.target = target
+    this._decayCoeff = 0.0
+    this._decayOffset = 0.0
     this._isSustainAtEnd = isSustainAtEnd
+    this.target = target
   }
 
   /**
