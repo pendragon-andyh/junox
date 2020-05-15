@@ -1,11 +1,11 @@
-import { LFO } from './lfo'
+import { LFO } from './lfo.js'
 import {
   AbstractEnvelope,
   DelaySegment,
   AttackSegment,
   DecaySegment,
   ShutdownSegment,
-} from './abstractEnvelope'
+} from './abstractEnvelope.js'
 
 /**
  * Implementation of a low frequency oscillator - with the ability to delay the onset of modulation.
