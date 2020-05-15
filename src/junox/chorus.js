@@ -1,6 +1,6 @@
-import { LFO } from './lfo'
-import { RingBuffer } from './ringBuffer'
-import { SmoothMoves } from './smoothMoves'
+import { LFO } from './lfo.js'
+import { RingBuffer } from './ringBuffer.js'
+import { SmoothMoves } from './smoothMoves.js'
 
 /**
  * Emulation of a Roland Juno 60 chorus effect.
