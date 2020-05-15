@@ -217,8 +217,6 @@ export default class Junox {
       isActive = isActive || !voice.isFinished()
     }
 
-    const useSmoothing = !isActive
-
     // Relative volumes of each source.
     const sawLevel = this.patch.dco.saw ? 0.2 : 0.0
     const pulseLevel = this.patch.dco.pulse ? 0.2 : 0.0
@@ -233,19 +231,19 @@ export default class Junox {
       mixFactor = 2.0
     }
 
-    this.sawLevelParam.setValue(sawLevel * mixFactor, useSmoothing)
-    this.pulseLevelParam.setValue(pulseLevel * mixFactor, useSmoothing)
-    this.subLevelParam.setValue(subLevel * mixFactor, useSmoothing)
-    this.noiseLevelParam.setValue(noiseLevel * mixFactor, useSmoothing)
-    this.pitchLfoModDepthParam.setValue(this.patch.dco.lfo, useSmoothing)
-    this.pwmDepthParam.setValue(this.patch.dco.pwm, useSmoothing)
+    this.sawLevelParam.setValue(sawLevel * mixFactor, isActive)
+    this.pulseLevelParam.setValue(pulseLevel * mixFactor, isActive)
+    this.subLevelParam.setValue(subLevel * mixFactor, isActive)
+    this.noiseLevelParam.setValue(noiseLevel * mixFactor, isActive)
+    this.pitchLfoModDepthParam.setValue(this.patch.dco.lfo, isActive)
+    this.pwmDepthParam.setValue(this.patch.dco.pwm, isActive)
 
     const envModDirection = this.patch.vcf.modPositive ? 1.0 : -1.0
-    this.filterCutoffParam.setValue(this.patch.vcf.frequency, useSmoothing)
-    this.filterResonanceParam.setValue(this.patch.vcf.resonance, useSmoothing)
-    this.filterEnvModParam.setValue(this.patch.vcf.envMod * envModDirection, useSmoothing)
-    this.filterLfoModParam.setValue(this.patch.vcf.lfoMod, useSmoothing)
-    this.filterKeyModParam.setValue(this.patch.vcf.keyMod, useSmoothing)
+    this.filterCutoffParam.setValue(this.patch.vcf.frequency, isActive)
+    this.filterResonanceParam.setValue(this.patch.vcf.resonance, isActive)
+    this.filterEnvModParam.setValue(this.patch.vcf.envMod * envModDirection, isActive)
+    this.filterLfoModParam.setValue(this.patch.vcf.lfoMod, isActive)
+    this.filterKeyModParam.setValue(this.patch.vcf.keyMod, isActive)
 
     this.chorus.update(this.patch.chorus)
     setLfoValuesFromSliders(this.lfo, this.patch.lfo.frequency, this.patch.lfo.delay)
@@ -253,7 +251,7 @@ export default class Junox {
 
     // VCA gain. 0.0 => 0.1, 0.5 => 0.316, 1.0 => 1.0
     const vcaGainFactor = Math.pow(1.2589, this.patch.vca * 10) * 0.1
-    this.vcaGainFactorParam.setValue(vcaGainFactor, useSmoothing)
+    this.vcaGainFactorParam.setValue(vcaGainFactor, isActive)
   }
 
   panic() {
@@ -264,7 +262,7 @@ export default class Junox {
 
 const curveFromLfoRateSliderToFreq = [0.3, 0.85, 3.39, 11.49, 22.22]
 const curveFromLfoDelaySliderToDelay = [0.0, 0.0639, 0.85, 1.2, 2.685]
-const curveFromLfoDelaySliderToAttack = [0.0, 0.053, 0.188, 0.348, 1.15]
+const curveFromLfoDelaySliderToAttack = [0.001, 0.053, 0.188, 0.348, 1.15]
 
 /**
  * Configure the LFO from the Juno60's slider values.
@@ -273,27 +271,16 @@ const curveFromLfoDelaySliderToAttack = [0.0, 0.053, 0.188, 0.348, 1.15]
  * @param {number} delaySlider - Value of the delay slider (0.0 to 1.0).
  */
 function setLfoValuesFromSliders(lfo, rateSlider, delaySlider) {
-  const frequency = interpolatedLookup(
-    rateSlider * (curveFromLfoRateSliderToFreq.length - 1),
-    curveFromLfoRateSliderToFreq
-  )
-  const delayDuration = interpolatedLookup(
-    delaySlider * (curveFromLfoDelaySliderToDelay.length - 1),
-    curveFromLfoDelaySliderToDelay
-  )
-  const attackDuration = interpolatedLookup(
-    delaySlider * (curveFromLfoDelaySliderToAttack.length - 1),
-    curveFromLfoDelaySliderToAttack
-  )
+  const frequency = interpolatedLookup(rateSlider, curveFromLfoRateSliderToFreq)
+  const delayDuration = interpolatedLookup(delaySlider, curveFromLfoDelaySliderToDelay)
+  const attackDuration = interpolatedLookup(delaySlider, curveFromLfoDelaySliderToAttack)
+
   lfo.setValues(frequency, delayDuration, attackDuration)
 }
 
 const curveFromHpfSliderToFreq = [0, 250, 520, 1220]
 
 function setHpfValuesFromSliders(hpf, rateSlider) {
-  const frequency = interpolatedLookup(
-    rateSlider * (curveFromHpfSliderToFreq.length - 1),
-    curveFromHpfSliderToFreq
-  )
+  const frequency = interpolatedLookup(rateSlider, curveFromHpfSliderToFreq)
   hpf.setCutoff(frequency)
 }

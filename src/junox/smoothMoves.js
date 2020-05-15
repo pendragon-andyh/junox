@@ -39,7 +39,7 @@ export class SmoothMoves {
    * This should only be used if the instrument is currently silent.
    */
   reset() {
-    this.z1 = this.targetValue - this.targetValue * this.a0
+    this.z1 = this.targetValue * this.a0 - this.targetValue
     this.isStarted = false
   }
 

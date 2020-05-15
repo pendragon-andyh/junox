@@ -28,20 +28,23 @@ export function fastTanh(x) {
 
 /**
  * Use linear interpolation to lookup a value from an array.
- * @param {number} value - Index into the table (floating-point between `0` and `table.length - 1`)
+ * @param {number} value - Input value (range is 0..1).
  * @param {number[]} table - List of values that form the table to be looked-up from
  */
 export function interpolatedLookup(value, table) {
-  if (value < 0.0) {
+  if (value <= 0.0) {
     return table[0]
   }
-  if (value > table.length - 1) {
+  if (value >= 1.0) {
     return table[table.length - 1]
   }
+
+  value *= table.length - 1
   const index = value | 0
   const factor = value - index
   if (factor === 0) {
     return table[index]
   }
+
   return table[index] * (1.0 - factor) + table[index + 1] * factor
 }

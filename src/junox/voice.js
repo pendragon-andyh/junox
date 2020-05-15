@@ -1,9 +1,9 @@
+import { VCA_ENV, VCF_DIODELADDER } from './constants'
 import { Juno60DCO } from './dco'
-import { Noise } from './noise'
+import { DiodeLadder } from './diodeladder'
 import { Juno60Envelope } from './juno60Envelope'
 import { MoogLowPassFilter } from './mooglpf'
-import { DiodeLadder } from './diodeladder'
-import { VCA_ENV, VCF_DIODELADDER } from './constants'
+import { Noise } from './noise'
 
 export default class Voice {
   constructor({ patch, sampleRate }) {
@@ -121,21 +121,14 @@ export default class Voice {
   }
 
   updatePatch(patch) {
-    this.modEnv.setValuesFromSliders(
-      patch.env.attack,
-      patch.env.decay,
-      patch.env.sustain,
-      patch.env.release
-    )
+    const env = patch.env
+
+    this.modEnv.setValuesFromSliders(env.attack, env.decay, env.sustain, env.release)
+
     if (patch.vcaType === VCA_ENV) {
-      this.ampEnv.setValuesFromSliders(
-        patch.env.attack,
-        patch.env.decay,
-        patch.env.sustain,
-        patch.env.release
-      )
+      this.ampEnv.setValuesFromSliders(env.attack, env.decay, env.sustain, env.release)
     } else {
-      this.ampEnv.setValuesFromSliders(0.1, 1.0, 0.95, 0.1)
+      this.ampEnv.setValues(0.003, 0.006, 1.0, 0.006)
     }
 
     this.patch = patch
