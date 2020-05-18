@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Benchmark</title>
+    <meta charset="UTF-8" />
+    <!--
+    See https://codepen.io/thotzl/pen/dXgGkG
+    JsPerf alternative - by Torsten Hötzel
+  --></head>
+  <body>
+    <h1>Benchmark</h1>
+
+    <ul id="cycleResults"></ul>
+    <div id="result"></div>
+    <br />
+    <button id="btn">Run Tests</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/benchmark/1.0.0/benchmark.min.js"></script>
+    <script type="module">
+      var cycleResults = document.getElementById('cycleResults'),
+        result = document.getElementById('result'),
+        btn = document.getElementById('btn'),
+        tests = {
+          test1: function () {
+            return this
+          },
+          test2: function () {
+            return this
+          },
+        }
+
+      // BENCHMARK ====================
+      btn.onclick = function runTests() {
+        btn.setAttribute('disable', true)
+        cycleResults.innerHTML = ''
+        result.textContent = 'Tests running...'
+
+        var suite = new Benchmark.Suite()
+
+        for (var test in tests) {
+          if (tests.hasOwnProperty(test)) {
+            suite.add(test, tests[test])
+          }
+        }
+
+        // add tests
+        suite
+          .on('cycle', function (event) {
+            var result = document.createElement('li')
+            result.textContent = String(event.target)
+
+            document.getElementById('cycleResults').appendChild(result)
+          })
+          .on('complete', function () {
+            result.textContent = 'Fastest is ' + this.filter('fastest').pluck('name')
+            btn.setAttribute('disable', false)
+          })
+          // run async
+          .run({
+            async: true,
+          })
+      }
+    </script>
+  </body>
+</html>

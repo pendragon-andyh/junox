@@ -91,7 +91,7 @@
 
         const dco = new Juno60DCO(48000)
         dco.noteOn(69)
-        const noise = new Noise(48000)
+        const noise = new Noise(48000, 5000)
 
         for (let i = 0; i < 1000; i++) {
           const dcoValue = dco.render(

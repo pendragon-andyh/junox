@@ -1,5 +1,5 @@
 // Loosely based on Pirkle's HPF for KG25
-import { TWOPI, fastTanh } from './utils'
+import { TWOPI } from './utils'
 
 export default class HPF {
   constructor({ cutoff, sampleRate }) {
@@ -30,6 +30,6 @@ export default class HPF {
     // update memory
     this.z1 = vn + lpf
     // do the HPF
-    return fastTanh(xn - lpf)
+    return xn - lpf
   }
 }

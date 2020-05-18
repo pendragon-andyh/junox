@@ -14,7 +14,7 @@ export default class Voice {
     this.filterNoteFactor = 0.0
 
     this.dco = new Juno60DCO(sampleRate)
-    this.noise = new Noise()
+    this.noise = new Noise(sampleRate, 5000)
 
     this.modEnv = new Juno60Envelope(sampleRate)
     this.ampEnv = new Juno60Envelope(sampleRate)

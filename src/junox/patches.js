@@ -1,5 +1,34 @@
 export default [
   {
+    name: 'Test baseline',
+    vca: 1.0,
+    vcaType: 'gate',
+    lfo: { autoTrigger: true, frequency: 0.0, delay: 0.0 },
+    dco: {
+      range: 1,
+      saw: false,
+      pulse: true,
+      sub: false,
+      subAmount: 0,
+      noise: 0,
+      pwm: 0,
+      pwmMod: 'm',
+      lfo: 0,
+    },
+    hpf: 0,
+    vcf: {
+      type: 'diode-ladder',
+      frequency: 1.0,
+      resonance: 0.0,
+      modPositive: true,
+      envMod: 0,
+      lfoMod: 0,
+      keyMod: 0,
+    },
+    env: { attack: 0.5, decay: 0.5, sustain: 0.5, release: 0.5 },
+    chorus: 0,
+  },
+  {
     name: 'Strings I',
     vca: 0.7,
     vcaType: 'env',
@@ -13,7 +42,7 @@ export default [
       noise: 0,
       pwm: 0,
       pwmMod: 'l',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -23,10 +52,10 @@ export default [
       modPositive: true,
       envMod: 0,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0.4, decay: 0, sustain: 1, release: 0.4 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Strings II',
@@ -42,7 +71,7 @@ export default [
       noise: 0,
       pwm: 0.6,
       pwmMod: 'l',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -52,10 +81,10 @@ export default [
       modPositive: true,
       envMod: 0,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0.4, decay: 0, sustain: 1, release: 0.4 },
-    chorus: 2
+    chorus: 2,
   },
   {
     name: 'Strings III',
@@ -71,7 +100,7 @@ export default [
       noise: 0,
       pwm: 0.7,
       pwmMod: 'l',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -81,10 +110,10 @@ export default [
       modPositive: true,
       envMod: 0,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0.3, decay: 0, sustain: 1, release: 0.6 },
-    chorus: 2
+    chorus: 2,
   },
   {
     name: 'Organ I',
@@ -100,7 +129,7 @@ export default [
       noise: 0,
       pwm: 0.5,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -110,10 +139,10 @@ export default [
       modPositive: true,
       envMod: 0.4,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0, decay: 0, sustain: 0, release: 0 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Organ II',
@@ -129,7 +158,7 @@ export default [
       noise: 0,
       pwm: 0.5,
       pwmMod: 'l',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -139,10 +168,10 @@ export default [
       modPositive: true,
       envMod: 0.4,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0, decay: 0.1, sustain: 0, release: 0.1 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Organ III',
@@ -158,7 +187,7 @@ export default [
       noise: 0,
       pwm: 0.5,
       pwmMod: 'l',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -168,10 +197,10 @@ export default [
       modPositive: true,
       envMod: 0.3,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0, decay: 0.1, sustain: 0, release: 0.1 },
-    chorus: 2
+    chorus: 2,
   },
   {
     name: 'Brass',
@@ -187,7 +216,7 @@ export default [
       noise: 0,
       pwm: 0,
       pwmMod: 'm',
-      lfo: 0.1
+      lfo: 0.1,
     },
     hpf: 0,
     vcf: {
@@ -197,10 +226,10 @@ export default [
       modPositive: true,
       envMod: 0.8,
       lfoMod: 0,
-      keyMod: 0.4
+      keyMod: 0.4,
     },
     env: { attack: 0.2, decay: 0.4, sustain: 0.6, release: 0.2 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Phase Brass',
@@ -216,7 +245,7 @@ export default [
       noise: 0,
       pwm: 1,
       pwmMod: 'e',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -226,10 +255,10 @@ export default [
       modPositive: true,
       envMod: 0.5,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0.2, decay: 0.4, sustain: 0.4, release: 0.3 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Piano I',
@@ -245,7 +274,7 @@ export default [
       noise: 0,
       pwm: 0.6,
       pwmMod: 'm',
-      lfo: 0.4
+      lfo: 0.4,
     },
     hpf: 0,
     vcf: {
@@ -255,10 +284,10 @@ export default [
       modPositive: true,
       envMod: 0.7,
       lfoMod: 0,
-      keyMod: 0.4
+      keyMod: 0.4,
     },
     env: { attack: 0, decay: 0.8, sustain: 0.1, release: 0.3 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Piano II',
@@ -274,7 +303,7 @@ export default [
       noise: 0,
       pwm: 0.4,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -284,10 +313,10 @@ export default [
       modPositive: true,
       envMod: 0.2,
       lfoMod: 0.2,
-      keyMod: 0.8
+      keyMod: 0.8,
     },
     env: { attack: 0, decay: 0.7, sustain: 0, release: 0.3 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Celesta',
@@ -303,7 +332,7 @@ export default [
       noise: 0,
       pwm: 0.5,
       pwmMod: 'e',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0.3333333333333333,
     vcf: {
@@ -313,10 +342,10 @@ export default [
       modPositive: true,
       envMod: 0,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0, decay: 0.6, sustain: 0.2, release: 0.5 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Mellow Piano',
@@ -332,7 +361,7 @@ export default [
       noise: 0,
       pwm: 0.5,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -342,10 +371,10 @@ export default [
       modPositive: true,
       envMod: 0.2,
       lfoMod: 0.1,
-      keyMod: 0.9
+      keyMod: 0.9,
     },
     env: { attack: 0.1, decay: 0.7, sustain: 0.2, release: 0.8 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Harpsichord I',
@@ -361,7 +390,7 @@ export default [
       noise: 0,
       pwm: 0.3,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0.3333333333333333,
     vcf: {
@@ -371,10 +400,10 @@ export default [
       modPositive: true,
       envMod: 0.5,
       lfoMod: 0,
-      keyMod: 0.7
+      keyMod: 0.7,
     },
     env: { attack: 0, decay: 0.6, sustain: 0.3, release: 0.2 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Harpsicord II',
@@ -390,7 +419,7 @@ export default [
       noise: 0,
       pwm: 0.2,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0.3333333333333333,
     vcf: {
@@ -400,10 +429,10 @@ export default [
       modPositive: true,
       envMod: 0.3,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0, decay: 0.5, sustain: 0.1, release: 0.5 },
-    chorus: 2
+    chorus: 2,
   },
   {
     name: 'Guitar',
@@ -419,7 +448,7 @@ export default [
       noise: 0,
       pwm: 0.6,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0.6666666666666666,
     vcf: {
@@ -429,10 +458,10 @@ export default [
       modPositive: true,
       envMod: 0.4,
       lfoMod: 0.1,
-      keyMod: 0.5
+      keyMod: 0.5,
     },
     env: { attack: 0, decay: 0.5, sustain: 0.3, release: 0.6 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Synthetiser Harp',
@@ -448,7 +477,7 @@ export default [
       noise: 0,
       pwm: 0,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -458,10 +487,10 @@ export default [
       modPositive: true,
       envMod: 0.5,
       lfoMod: 0,
-      keyMod: 0.8
+      keyMod: 0.8,
     },
     env: { attack: 0, decay: 0.5, sustain: 0.3, release: 0.5 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Bass I',
@@ -477,7 +506,7 @@ export default [
       noise: 0,
       pwm: 0.5,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -487,10 +516,10 @@ export default [
       modPositive: true,
       envMod: 0.3,
       lfoMod: 0,
-      keyMod: 0
+      keyMod: 0,
     },
     env: { attack: 0, decay: 0.4, sustain: 0.1, release: 0.2 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Bass II',
@@ -506,7 +535,7 @@ export default [
       noise: 0,
       pwm: 0.5,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -516,10 +545,10 @@ export default [
       modPositive: true,
       envMod: 0.4,
       lfoMod: 0,
-      keyMod: 0.5
+      keyMod: 0.5,
     },
     env: { attack: 0, decay: 0.3, sustain: 0.3, release: 0.2 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Clavichord I',
@@ -535,7 +564,7 @@ export default [
       noise: 0,
       pwm: 0.9,
       pwmMod: 'm',
-      lfo: 0.4
+      lfo: 0.4,
     },
     hpf: 0,
     vcf: {
@@ -545,10 +574,10 @@ export default [
       modPositive: true,
       envMod: 0.8,
       lfoMod: 0,
-      keyMod: 0.6
+      keyMod: 0.6,
     },
     env: { attack: 0, decay: 0.5, sustain: 0.3, release: 0.1 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Clavichord II',
@@ -564,7 +593,7 @@ export default [
       noise: 0,
       pwm: 0.8,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0.3333333333333333,
     vcf: {
@@ -574,10 +603,10 @@ export default [
       modPositive: true,
       envMod: 0.2,
       lfoMod: 0.2,
-      keyMod: 0.7
+      keyMod: 0.7,
     },
     env: { attack: 0, decay: 0.4, sustain: 0.2, release: 0.2 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Pizzicato Sound I',
@@ -593,7 +622,7 @@ export default [
       noise: 0,
       pwm: 0.3,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -603,10 +632,10 @@ export default [
       modPositive: true,
       envMod: 0.3,
       lfoMod: 0.3,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0, decay: 0.2, sustain: 0.3, release: 0.5 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Pizzicato Sound II',
@@ -622,7 +651,7 @@ export default [
       noise: 0,
       pwm: 0.2,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -632,10 +661,10 @@ export default [
       modPositive: true,
       envMod: 0.3,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0, decay: 0.3, sustain: 0.3, release: 0.4 },
-    chorus: 2
+    chorus: 2,
   },
   {
     name: 'Xylophone',
@@ -651,7 +680,7 @@ export default [
       noise: 0,
       pwm: 0.5,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0.3333333333333333,
     vcf: {
@@ -661,10 +690,10 @@ export default [
       modPositive: true,
       envMod: 0.3,
       lfoMod: 0,
-      keyMod: 0.6
+      keyMod: 0.6,
     },
     env: { attack: 0, decay: 0.3, sustain: 0, release: 0.3 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Glockenspiel',
@@ -680,7 +709,7 @@ export default [
       noise: 0,
       pwm: 0,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0.3333333333333333,
     vcf: {
@@ -690,10 +719,10 @@ export default [
       modPositive: true,
       envMod: 0.3,
       lfoMod: 0,
-      keyMod: 0.6
+      keyMod: 0.6,
     },
     env: { attack: 0, decay: 0.3, sustain: 0.2, release: 0.5 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Violin',
@@ -709,7 +738,7 @@ export default [
       noise: 0,
       pwm: 0,
       pwmMod: 'l',
-      lfo: 0.2
+      lfo: 0.2,
     },
     hpf: 0.3333333333333333,
     vcf: {
@@ -719,10 +748,10 @@ export default [
       modPositive: true,
       envMod: 0,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0.4, decay: 0, sustain: 1, release: 0.4 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Trumpet',
@@ -738,7 +767,7 @@ export default [
       noise: 0,
       pwm: 0,
       pwmMod: 'm',
-      lfo: 0.1
+      lfo: 0.1,
     },
     hpf: 0,
     vcf: {
@@ -748,10 +777,10 @@ export default [
       modPositive: true,
       envMod: 0.8,
       lfoMod: 0,
-      keyMod: 0.4
+      keyMod: 0.4,
     },
     env: { attack: 0.2, decay: 0.4, sustain: 0.6, release: 0.2 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Horn',
@@ -767,7 +796,7 @@ export default [
       noise: 0,
       pwm: 0,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -777,10 +806,10 @@ export default [
       modPositive: true,
       envMod: 0.5,
       lfoMod: 0.2,
-      keyMod: 0.4
+      keyMod: 0.4,
     },
     env: { attack: 0.4, decay: 0.5, sustain: 0.6, release: 0.3 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Tube',
@@ -796,7 +825,7 @@ export default [
       noise: 0,
       pwm: 0,
       pwmMod: 'm',
-      lfo: 0.1
+      lfo: 0.1,
     },
     hpf: 0,
     vcf: {
@@ -806,10 +835,10 @@ export default [
       modPositive: true,
       envMod: 0.6,
       lfoMod: 0,
-      keyMod: 0.4
+      keyMod: 0.4,
     },
     env: { attack: 0.3, decay: 0.4, sustain: 0.4, release: 0.3 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Flute',
@@ -825,7 +854,7 @@ export default [
       noise: 0.1,
       pwm: 0,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0.3333333333333333,
     vcf: {
@@ -835,10 +864,10 @@ export default [
       modPositive: true,
       envMod: 0,
       lfoMod: 0.2,
-      keyMod: 0.6
+      keyMod: 0.6,
     },
     env: { attack: 0.2, decay: 0.6, sustain: 0.5, release: 0.2 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Clarinet',
@@ -854,7 +883,7 @@ export default [
       noise: 0,
       pwm: 0,
       pwmMod: 'm',
-      lfo: 0.1
+      lfo: 0.1,
     },
     hpf: 0.3333333333333333,
     vcf: {
@@ -864,10 +893,10 @@ export default [
       modPositive: true,
       envMod: 0.2,
       lfoMod: 0,
-      keyMod: 0.6
+      keyMod: 0.6,
     },
     env: { attack: 0.2, decay: 0.6, sustain: 0.6, release: 0.2 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Oboe',
@@ -883,7 +912,7 @@ export default [
       noise: 0,
       pwm: 0.6,
       pwmMod: 'm',
-      lfo: 0.1
+      lfo: 0.1,
     },
     hpf: 1,
     vcf: {
@@ -893,10 +922,10 @@ export default [
       modPositive: true,
       envMod: 0.2,
       lfoMod: 0,
-      keyMod: 0.5
+      keyMod: 0.5,
     },
     env: { attack: 0.2, decay: 0.6, sustain: 0.6, release: 0.2 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'English Horn',
@@ -912,7 +941,7 @@ export default [
       noise: 0,
       pwm: 0.6,
       pwmMod: 'm',
-      lfo: 0.2
+      lfo: 0.2,
     },
     hpf: 1,
     vcf: {
@@ -922,10 +951,10 @@ export default [
       modPositive: true,
       envMod: 0,
       lfoMod: 0.1,
-      keyMod: 0.5
+      keyMod: 0.5,
     },
     env: { attack: 0.2, decay: 0.6, sustain: 0.6, release: 0.2 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Funny Cat',
@@ -941,7 +970,7 @@ export default [
       noise: 0,
       pwm: 0,
       pwmMod: 'm',
-      lfo: 0.3
+      lfo: 0.3,
     },
     hpf: 0.3333333333333333,
     vcf: {
@@ -951,10 +980,10 @@ export default [
       modPositive: true,
       envMod: 0.5,
       lfoMod: 0.2,
-      keyMod: 0.5
+      keyMod: 0.5,
     },
     env: { attack: 0.2, decay: 0.4, sustain: 1, release: 0.1 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Wah Brass',
@@ -970,7 +999,7 @@ export default [
       noise: 0,
       pwm: 0,
       pwmMod: 'm',
-      lfo: 0.3
+      lfo: 0.3,
     },
     hpf: 0,
     vcf: {
@@ -980,10 +1009,10 @@ export default [
       modPositive: true,
       envMod: 0.4,
       lfoMod: 0,
-      keyMod: 0.6
+      keyMod: 0.6,
     },
     env: { attack: 0.3, decay: 0.3, sustain: 0.4, release: 0.2 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Phase Combination',
@@ -999,7 +1028,7 @@ export default [
       noise: 0,
       pwm: 0.8,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -1009,10 +1038,10 @@ export default [
       modPositive: true,
       envMod: 0.3,
       lfoMod: 0,
-      keyMod: 0.2
+      keyMod: 0.2,
     },
     env: { attack: 0, decay: 0.7, sustain: 0.2, release: 0.2 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Reed I',
@@ -1028,7 +1057,7 @@ export default [
       noise: 0,
       pwm: 0,
       pwmMod: 'm',
-      lfo: 0.4
+      lfo: 0.4,
     },
     hpf: 0,
     vcf: {
@@ -1038,10 +1067,10 @@ export default [
       modPositive: true,
       envMod: 0.7,
       lfoMod: 0,
-      keyMod: 0.5
+      keyMod: 0.5,
     },
     env: { attack: 0, decay: 0.8, sustain: 0.5, release: 0.1 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Popcorn',
@@ -1057,7 +1086,7 @@ export default [
       noise: 0,
       pwm: 0,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0.3333333333333333,
     vcf: {
@@ -1067,10 +1096,10 @@ export default [
       modPositive: true,
       envMod: 0.5,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0, decay: 0.3, sustain: 0.2, release: 0 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Reed II',
@@ -1086,7 +1115,7 @@ export default [
       noise: 0,
       pwm: 0,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -1096,10 +1125,10 @@ export default [
       modPositive: true,
       envMod: 0.6,
       lfoMod: 0,
-      keyMod: 0.8
+      keyMod: 0.8,
     },
     env: { attack: 0, decay: 0.5, sustain: 0.3, release: 0.6 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Reed III',
@@ -1115,7 +1144,7 @@ export default [
       noise: 0,
       pwm: 0.5,
       pwmMod: 'm',
-      lfo: 0.2
+      lfo: 0.2,
     },
     hpf: 0,
     vcf: {
@@ -1125,10 +1154,10 @@ export default [
       modPositive: true,
       envMod: 0.3,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0.2, decay: 0, sustain: 1, release: 0.2 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'PWM Chorus',
@@ -1144,7 +1173,7 @@ export default [
       noise: 0,
       pwm: 0.5,
       pwmMod: 'l',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -1154,10 +1183,10 @@ export default [
       modPositive: true,
       envMod: 0,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0.3, decay: 0, sustain: 1, release: 0.4 },
-    chorus: 2
+    chorus: 2,
   },
   {
     name: 'Synthetiser Organ',
@@ -1173,7 +1202,7 @@ export default [
       noise: 0,
       pwm: 0.6,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -1183,10 +1212,10 @@ export default [
       modPositive: true,
       envMod: 0.5,
       lfoMod: 0.2,
-      keyMod: 0.7
+      keyMod: 0.7,
     },
     env: { attack: 0, decay: 0.2, sustain: 0.5, release: 0.2 },
-    chorus: 2
+    chorus: 2,
   },
   {
     name: 'Effect Sound',
@@ -1202,7 +1231,7 @@ export default [
       noise: 0,
       pwm: 1,
       pwmMod: 'm',
-      lfo: 0.1
+      lfo: 0.1,
     },
     hpf: 0,
     vcf: {
@@ -1212,10 +1241,10 @@ export default [
       modPositive: false,
       envMod: 0.4,
       lfoMod: 0,
-      keyMod: 0.7
+      keyMod: 0.7,
     },
     env: { attack: 0, decay: 0.5, sustain: 0, release: 0.5 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Effect Sound II',
@@ -1231,7 +1260,7 @@ export default [
       noise: 0,
       pwm: 0.3,
       pwmMod: 'l',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -1241,10 +1270,10 @@ export default [
       modPositive: false,
       envMod: 0.4,
       lfoMod: 0,
-      keyMod: 0.1
+      keyMod: 0.1,
     },
     env: { attack: 0.6, decay: 0.5, sustain: 0.2, release: 0.6 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Space Harm',
@@ -1260,7 +1289,7 @@ export default [
       noise: 0,
       pwm: 0,
       pwmMod: 'e',
-      lfo: 0.2
+      lfo: 0.2,
     },
     hpf: 0,
     vcf: {
@@ -1270,10 +1299,10 @@ export default [
       modPositive: true,
       envMod: 0.5,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0, decay: 0.8, sustain: 0.8, release: 0.9 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Funk',
@@ -1289,7 +1318,7 @@ export default [
       noise: 0,
       pwm: 0.6,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -1299,10 +1328,10 @@ export default [
       modPositive: false,
       envMod: 0.5,
       lfoMod: 0,
-      keyMod: 0.4
+      keyMod: 0.4,
     },
     env: { attack: 0.6, decay: 0.5, sustain: 0, release: 0 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Space Sound I',
@@ -1318,7 +1347,7 @@ export default [
       noise: 0,
       pwm: 0.4,
       pwmMod: 'm',
-      lfo: 0.2
+      lfo: 0.2,
     },
     hpf: 0,
     vcf: {
@@ -1328,10 +1357,10 @@ export default [
       modPositive: false,
       envMod: 0.5,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 0, decay: 0.8, sustain: 0, release: 0.3 },
-    chorus: 1
+    chorus: 1,
   },
   {
     name: 'Mysterious Invention',
@@ -1347,7 +1376,7 @@ export default [
       noise: 0,
       pwm: 0.8,
       pwmMod: 'e',
-      lfo: 0.2
+      lfo: 0.2,
     },
     hpf: 0,
     vcf: {
@@ -1357,10 +1386,10 @@ export default [
       modPositive: false,
       envMod: 0.6,
       lfoMod: 0.2,
-      keyMod: 0
+      keyMod: 0,
     },
     env: { attack: 0, decay: 1, sustain: 0, release: 1 },
-    chorus: 0
+    chorus: 0,
   },
   {
     name: 'Space Sound II',
@@ -1376,7 +1405,7 @@ export default [
       noise: 0,
       pwm: 0.6,
       pwmMod: 'm',
-      lfo: 0
+      lfo: 0,
     },
     hpf: 0,
     vcf: {
@@ -1386,9 +1415,9 @@ export default [
       modPositive: true,
       envMod: 0.6,
       lfoMod: 0,
-      keyMod: 1
+      keyMod: 1,
     },
     env: { attack: 1, decay: 1, sustain: 1, release: 1 },
-    chorus: 1
-  }
+    chorus: 1,
+  },
 ]

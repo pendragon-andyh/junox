@@ -162,12 +162,14 @@ export default class Junox {
       // Apply the VCA gain.
       monoOut *= vcaGainFactor
 
+      /* TODO - Disabled for early testing.
       // Apply high-pass filter (or base boost).
       if (this.patch.hpf < 0.3) {
         monoOut += this.bassBoost.render(monoOut, 0.3)
       } else {
         monoOut = this.hpf.render(monoOut)
       }
+      */
 
       // Soft clip (to ensure that the output signal is not outside of range).
       monoOut = fastTanh(3.0 * monoOut)
