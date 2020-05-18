@@ -128,7 +128,7 @@ export default class Voice {
     if (patch.vcaType === VCA_ENV) {
       this.ampEnv.setValuesFromSliders(env.attack, env.decay, env.sustain, env.release)
     } else {
-      this.ampEnv.setValues(0.003, 0.006, 1.0, 0.006)
+      this.ampEnv.setValues(0.00247, 0.0057, 0.98, 0.0057)
     }
 
     this.patch = patch

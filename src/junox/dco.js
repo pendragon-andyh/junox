@@ -19,7 +19,7 @@ export class Juno60DCO {
     this.phaseIncrement = noteFrequency / this.sampleRate
 
     // Juno60 DCO seems to start new notes partway through cycle (I think this is so that fast-attacks can be heard for low notes).
-    this.currentPhase = 1.75
+    this.currentPhase = 1.9
   }
 
   /**
