@@ -6,6 +6,9 @@ export class Juno60DCO {
     this.currentPhase = 0.0
     this.phaseIncrement = 0.0
     this.pulseWidth = 0.5
+    this.pulsePositive = 1.0
+    this.pulseNegative = -1.0
+    this.pulseHeight = 1.0
     this.subOutput = 1.0
   }
 
@@ -25,7 +28,7 @@ export class Juno60DCO {
   /**
    * Render output for a single quantum.
    * @param {number} detuneFactor - Factor to increase note's frequency by (0.5 = octave-down, 1.0 = default, 2.0 = octave-up)
-   * @param {number} pulseWidth - Pulse width (0.5 = square - range is normally 0.05 to 0.95).
+   * @param {number} pulseWidth - Pulse width (0..1 - where 0 = square).
    * @param {number} sawLevel - Output level of the Sawtooth waveform.
    * @param {number} pulseLevel - Output level of the Pulse waveform.
    * @param {number} subLevel - Output level of the Sub waveform.
@@ -40,7 +43,10 @@ export class Juno60DCO {
       this.currentPhase -= 1.0
 
       // Only change the PWM point when the phase has wrapped (so rapid modulation doesn't cause noise).
-      this.pulseWidth = pulseWidth
+      this.pulseWidth = 0.5 - 0.45 * pulseWidth
+      this.pulsePositive = 1.0 - pulseWidth * 0.95
+      this.pulseNegative = -1.0
+      this.pulseHeight = 0.45 * (this.pulsePositive - this.pulseNegative)
     }
 
     // Phat sawtooth (mimics charging capacitor).
@@ -53,10 +59,13 @@ export class Juno60DCO {
     // Pulse uses a comparator against the current phase.
     let newPulseOutput = 0.0
     if (pulseLevel > 0.0) {
-      newPulseOutput = this.currentPhase > this.pulseWidth ? 1.0 : -1.0
-      newPulseOutput -= this.calcPolyBLEP2(this.currentPhase, phaseIncrement, 1.0)
+      newPulseOutput =
+        this.currentPhase > this.pulseWidth
+          ? (this.pulsePositive *= 0.999)
+          : (this.pulseNegative *= 0.999)
+      newPulseOutput -= this.calcPolyBLEP2(this.currentPhase, phaseIncrement, this.pulseHeight)
       const x = this.currentPhase - this.pulseWidth
-      newPulseOutput += this.calcPolyBLEP2(x < 0.0 ? x + 1.0 : x, phaseIncrement, 1.0)
+      newPulseOutput += this.calcPolyBLEP2(x < 0.0 ? x + 1.0 : x, phaseIncrement, this.pulseHeight)
     }
 
     // Sub flip-flops between -1 and +1 when the phase reaches 0.5.

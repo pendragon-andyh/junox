@@ -58,14 +58,14 @@ export default class Voice {
     const modEnvOut = this.modEnv.render()
     const ampEnvOut = this.ampEnv.render()
 
-    let pulseWidth = pwmDepth * 0.48
+    let pulseWidth = pwmDepth
     if (this.patch.dco.pwmMod === 'l') {
       pulseWidth *= lfoOut * 0.5 + 0.5
     } else if (this.patch.dco.pwmMod === 'e') {
       pulseWidth *= modEnvOut
     }
 
-    let dcoOut = this.dco.render(detuneFactor, 0.5 + pulseWidth, sawLevel, pulseLevel, subLevel)
+    let dcoOut = this.dco.render(detuneFactor, pulseWidth, sawLevel, pulseLevel, subLevel)
     if (noiseLevel > 0.0) {
       dcoOut += this.noise.render() * noiseLevel
     }
