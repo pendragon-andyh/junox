@@ -69,14 +69,14 @@ export class Juno60DCO {
     }
 
     // Sub flip-flops between -1 and +1 when the phase reaches 0.5.
-    let newSubOutput = this.subOutput
-    let y = this.currentPhase - 0.5
+    let newSubOutput = (this.subOutput *= 0.998)
+    let y = this.currentPhase - 0.1
     if (y < phaseIncrement && y > -phaseIncrement) {
       if (y < 0.0) {
         y += 1.0
       }
       const origSubOutput = newSubOutput
-      if (this.currentPhase >= 0.5 && origPhase < 0.5) {
+      if (this.currentPhase >= 0.1 && origPhase < 0.1) {
         this.subOutput = newSubOutput = newSubOutput > 0.0 ? -1.0 : +1.0
       }
       newSubOutput -= this.calcPolyBLEP2(y, phaseIncrement, origSubOutput)
