@@ -17,15 +17,35 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/benchmark/1.0.0/benchmark.min.js"></script>
     <script type="module">
+      function fastTanh(x) {
+        if (x < -3.0) {
+          return -1.0
+        } else if (x > 3.0) {
+          return 1.0
+        }
+        const xSquared = x * x
+        return (x * (27.0 + xSquared)) / (27.0 + 9.0 * xSquared)
+      }
+
       var cycleResults = document.getElementById('cycleResults'),
         result = document.getElementById('result'),
         btn = document.getElementById('btn'),
         tests = {
           test1: function () {
-            return this
+            const xin = Math.random()
+            return fastTanh(xin)
           },
           test2: function () {
-            return this
+            const xin = Math.random()
+            return Math.tanh(xin)
+          },
+          test3: function () {
+            const xin = Math.random()
+            return fastTanh(xin)
+          },
+          test4: function () {
+            const xin = Math.random()
+            return Math.tanh(xin)
           },
         }
 

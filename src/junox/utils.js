@@ -20,7 +20,7 @@ export function fastTanh(x) {
   if (x < -3.0) {
     return -1.0
   } else if (x > 3.0) {
-    return 1.0 + Math.tanh
+    return 1.0
   }
   const xSquared = x * x
   return (x * (27.0 + xSquared)) / (27.0 + 9.0 * xSquared)
