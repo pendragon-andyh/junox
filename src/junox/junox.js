@@ -22,8 +22,8 @@ export default class Junox {
 
     // Parameters that need to be "smoothed" (so we can change them in realtime without hearing stepping/zippering)
     this.parameters = [
-      (this.pitchBendParam = new SmoothMoves(0, sampleRate)),
-      (this.pitchBendDepthParam = new SmoothMoves(1, sampleRate)),
+      (this.bendAmountParam = new SmoothMoves(0, sampleRate)),
+      (this.dcoBendDepthParam = new SmoothMoves(1, sampleRate)),
       (this.pitchLfoModDepthParam = new SmoothMoves(0, sampleRate)),
       (this.pwmDepthParam = new SmoothMoves(0, sampleRate)),
       (this.sawLevelParam = new SmoothMoves(0, sampleRate)),
@@ -32,6 +32,7 @@ export default class Junox {
       (this.noiseLevelParam = new SmoothMoves(0, sampleRate)),
       (this.filterCutoffParam = new SmoothMoves(0, sampleRate)),
       (this.filterResonanceParam = new SmoothMoves(0, sampleRate)),
+      (this.filterBendDepthParam = new SmoothMoves(1, sampleRate)),
       (this.filterEnvModParam = new SmoothMoves(0, sampleRate)),
       (this.filterLfoModParam = new SmoothMoves(0, sampleRate)),
       (this.filterKeyModParam = new SmoothMoves(0, sampleRate)),
@@ -105,8 +106,8 @@ export default class Junox {
 
     // Render contents of buffer.
     for (let i = 0; i < outL.length; i++) {
-      const pitchBend = this.pitchBendParam.getNextValue()
-      const pitchBendDepth = this.pitchBendDepthParam.getNextValue()
+      const bendAmount = this.bendAmountParam.getNextValue()
+      const dcoBendDepth = this.dcoBendDepthParam.getNextValue()
       const pwmDepth = this.pwmDepthParam.getNextValue()
       const pitchLfoModDepth = this.pitchLfoModDepthParam.getNextValue()
       const sawLevel = this.sawLevelParam.getNextValue()
@@ -115,6 +116,7 @@ export default class Junox {
       const noiseLevel = this.noiseLevelParam.getNextValue()
       const filterCutoff = this.filterCutoffParam.getNextValue()
       const filterResonance = this.filterResonanceParam.getNextValue()
+      const filterBendDepth = this.filterBendDepthParam.getNextValue()
       const filterEnvMod = this.filterEnvModParam.getNextValue()
       const filterLfoMod = this.filterLfoModParam.getNextValue()
       const filterKeyMod = this.filterKeyModParam.getNextValue()
@@ -127,12 +129,18 @@ export default class Junox {
 
       const lfoOut = this.lfo.render()
 
-      // All voices are detuned by the same relative-amount.
-      const detuneOctaves = lfoOut * pitchLfoModDepth + pitchBend * pitchBendDepth
-      let detuneFactor = this.patch.dco.range
-      if (detuneOctaves !== 0.0) {
-        detuneFactor *= Math.pow(2, detuneOctaves)
+      // All voices are detuned by the same relative-amount (from LFO and pitch-bend lever).
+      // Calcaultions come from the Juno 60 service manual.
+      const dcoDetuneOctaves =
+        lfoOut * pitchLfoModDepth * 0.25 + // +-300 cents (page 14).
+        (bendAmount * dcoBendDepth * 7) / 12 // +-700 cents (page 14).
+      let dcoDetuneFactor = this.patch.dco.range
+      if (dcoDetuneOctaves !== 0.0) {
+        dcoDetuneFactor *= Math.pow(2, dcoDetuneOctaves)
       }
+      const filterDetuneOctaves =
+        bendAmount * filterBendDepth * 4 + // +- 4 octaves
+        filterLfoMod * lfoOut * 3.0 // +- 6 octaves (section 8.7 - VCF LFO Gain)
 
       // Gather the outputs from each voice.
       let monoOut = 0.0
@@ -141,7 +149,7 @@ export default class Junox {
         if (!voice.isFinished()) {
           monoOut += voice.render(
             lfoOut,
-            detuneFactor,
+            dcoDetuneFactor,
             pwmDepth,
             sawLevel,
             pulseLevel,
@@ -150,7 +158,7 @@ export default class Junox {
             filterCutoff,
             filterResonance,
             filterEnvMod,
-            filterLfoMod,
+            filterDetuneOctaves,
             filterKeyMod
           )
         }

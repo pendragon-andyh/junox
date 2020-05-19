@@ -38,7 +38,7 @@ export default class Voice {
    * @param {number} filterCutoff - Current value of the filter's cutoff slider (between 0 and 1).
    * @param {number} filterResonance - Current value of the filter's resonance slider (between 0 and 1).
    * @param {number} filterEnvMod - Current value of the filter's envelope modulation slider (between -1 (for negative) and +1 (for positive)).
-   * @param {number} filterLfoMod - Current value of the filter's LFO modulation slider (between 0 and 1).
+   * @param {number} lfoDetuneOctaves - Number of octaves that the filter is detuned-by (for LFO and bend-lever).
    * @param {number} filterKeyMod - Current value of the filter's keyboard modulation slider (between 0 and 1).
    */
   render(
@@ -52,7 +52,7 @@ export default class Voice {
     filterCutoff,
     filterResonance,
     filterEnvMod,
-    filterLfoMod,
+    lfoDetuneOctaves,
     filterKeyMod
   ) {
     const modEnvOut = this.modEnv.render()
@@ -71,11 +71,11 @@ export default class Voice {
     }
 
     const vcfCutoffValue =
-      filterCutoff * 11.0 +
-      lfoOut * filterLfoMod * 3.5 +
+      (filterCutoff * 200) / 12 +
+      lfoDetuneOctaves +
       filterKeyMod * this.filterNoteFactor +
-      modEnvOut * filterEnvMod * 14
-    const cutoffFrequency = 60.0 * Math.pow(2.0, vcfCutoffValue)
+      modEnvOut * filterEnvMod * 12
+    const cutoffFrequency = 7.8 * Math.pow(2.0, vcfCutoffValue)
 
     let vcfOut
     if (this.patch.vcf.type === VCF_DIODELADDER) {
