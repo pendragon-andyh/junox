@@ -1,5 +1,3 @@
-import { fastTanh } from './utils.js'
-
 export class Juno60DCO {
   constructor(sampleRate) {
     this.sampleRate = sampleRate
@@ -22,7 +20,7 @@ export class Juno60DCO {
     this.phaseIncrement = noteFrequency / this.sampleRate
 
     // Juno60 DCO seems to start new notes partway through cycle (I think this is so that fast-attacks can be heard for low notes).
-    this.currentPhase = 1.9
+    this.currentPhase = 1.1
   }
 
   /**
@@ -39,7 +37,7 @@ export class Juno60DCO {
     const phaseIncrement = this.phaseIncrement * detuneFactor
     const origPhase = this.currentPhase
     this.currentPhase += phaseIncrement
-    while (this.currentPhase > 1.0) {
+    if (this.currentPhase > 1.0) {
       this.currentPhase -= 1.0
 
       // Only change the PWM point when the phase has wrapped (so rapid modulation doesn't cause noise).
@@ -52,7 +50,7 @@ export class Juno60DCO {
     // Phat sawtooth (mimics charging capacitor).
     let newSawOutput = 0.0
     if (sawLevel > 0.0) {
-      newSawOutput = fastTanh(this.currentPhase) * 2.626 - 1.0
+      newSawOutput = this.currentPhase + this.currentPhase - 1.0
       newSawOutput -= this.calcPolyBLEP2(this.currentPhase, phaseIncrement, 1.0)
     }
 
@@ -61,8 +59,8 @@ export class Juno60DCO {
     if (pulseLevel > 0.0) {
       newPulseOutput =
         this.currentPhase > this.pulseWidth
-          ? (this.pulsePositive *= 0.999)
-          : (this.pulseNegative *= 0.999)
+          ? (this.pulsePositive *= 0.998)
+          : (this.pulseNegative *= 0.998)
       newPulseOutput -= this.calcPolyBLEP2(this.currentPhase, phaseIncrement, this.pulseHeight)
       const x = this.currentPhase - this.pulseWidth
       newPulseOutput += this.calcPolyBLEP2(x < 0.0 ? x + 1.0 : x, phaseIncrement, this.pulseHeight)
@@ -70,13 +68,13 @@ export class Juno60DCO {
 
     // Sub flip-flops between -1 and +1 when the phase reaches 0.5.
     let newSubOutput = (this.subOutput *= 0.998)
-    let y = this.currentPhase - 0.1
+    let y = this.currentPhase - 0.5
     if (y < phaseIncrement && y > -phaseIncrement) {
       if (y < 0.0) {
         y += 1.0
       }
       const origSubOutput = newSubOutput
-      if (this.currentPhase >= 0.1 && origPhase < 0.1) {
+      if (this.currentPhase >= 0.5 && origPhase < 0.5) {
         this.subOutput = newSubOutput = newSubOutput > 0.0 ? -1.0 : +1.0
       }
       newSubOutput -= this.calcPolyBLEP2(y, phaseIncrement, origSubOutput)

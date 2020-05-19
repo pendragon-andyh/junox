@@ -220,23 +220,25 @@ export default class Junox {
     }
 
     // Relative volumes of each source.
-    const sawLevel = this.patch.dco.saw ? 0.2 : 0.0
-    const pulseLevel = this.patch.dco.pulse ? 0.2 : 0.0
-    const subLevel = this.patch.dco.sub ? this.patch.dco.subAmount * 0.195 : 0.0
-    const noiseLevel = this.patch.dco.noise * 0.21
+    let sawLevel = this.patch.dco.saw ? 0.2 : 0.0
+    let pulseLevel = this.patch.dco.pulse ? 0.2 : 0.0
+    let subLevel = this.patch.dco.sub ? this.patch.dco.subAmount * 0.195 : 0.0
+    let noiseLevel = this.patch.dco.noise * 0.21
 
-    // If multiple sources at same time then volume is reduced (max is 0.5).
+    // If multiple waveforms at same time then the overall level is reduced.
     let mixFactor = sawLevel + pulseLevel + subLevel + noiseLevel
-    if (mixFactor > 0.3) {
-      mixFactor = 2.0 - (mixFactor - 0.3) * 1.5
-    } else {
-      mixFactor = 2.0
+    if (mixFactor > 0.26) {
+      mixFactor = 0.26 / (0.26 + (mixFactor - 0.26) * 0.3)
+      pulseLevel *= mixFactor
+      sawLevel *= mixFactor
+      subLevel *= mixFactor
+      noiseLevel *= mixFactor
     }
 
-    this.sawLevelParam.setValue(sawLevel * mixFactor, isActive)
-    this.pulseLevelParam.setValue(pulseLevel * mixFactor, isActive)
-    this.subLevelParam.setValue(subLevel * mixFactor, isActive)
-    this.noiseLevelParam.setValue(noiseLevel * mixFactor, isActive)
+    this.sawLevelParam.setValue(sawLevel, isActive)
+    this.pulseLevelParam.setValue(pulseLevel, isActive)
+    this.subLevelParam.setValue(subLevel, isActive)
+    this.noiseLevelParam.setValue(noiseLevel, isActive)
     this.pitchLfoModDepthParam.setValue(this.patch.dco.lfo, isActive)
     this.pwmDepthParam.setValue(this.patch.dco.pwm, isActive)
 

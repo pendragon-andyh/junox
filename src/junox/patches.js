@@ -1,7 +1,7 @@
 export default [
   {
     name: 'Test baseline',
-    vca: 1.0,
+    vca: 0.5,
     vcaType: 'gate',
     lfo: { autoTrigger: true, frequency: 0.0, delay: 0.0 },
     dco: {
