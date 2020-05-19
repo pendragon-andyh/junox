@@ -3,7 +3,6 @@ import { SmoothMoves } from './smoothMoves'
 import Voice from './voice'
 import { Chorus } from './chorus'
 import { LFOWithEnvelope } from './lfoWithEnvelope'
-import BassBoost from './bassboost'
 import HighPassFilter from './hpf'
 import { fastTanh, interpolatedLookup } from './utils'
 
@@ -41,11 +40,9 @@ export default class Junox {
 
     this.lfo = new LFOWithEnvelope(sampleRate)
 
-    this.bassBoost = new BassBoost({ frequency: 75 })
-
     this.hpf = new HighPassFilter({
       cutoff: 0,
-      resonance: 1,
+      resonance: 0.707,
       sampleRate,
     })
 
@@ -125,7 +122,7 @@ export default class Junox {
 
       // Calculate "k-rate" values (trading smoothness/accuracy against performance).
       if (i === 0) {
-        // TODO
+        // TODO?
       }
 
       const lfoOut = this.lfo.render()
@@ -159,17 +156,13 @@ export default class Junox {
         }
       }
 
-      // Apply the VCA gain.
-      monoOut *= vcaGainFactor
-
-      /* TODO - Disabled for early testing.
-      // Apply high-pass filter (or base boost).
-      if (this.patch.hpf < 0.3) {
-        monoOut += this.bassBoost.render(monoOut, 0.3)
-      } else {
+      // Apply high pass filter.
+      if (this.patch.hpf > 0.1) {
         monoOut = this.hpf.render(monoOut)
       }
-      */
+
+      // Apply the VCA gain.
+      monoOut *= vcaGainFactor
 
       // Soft clip (to ensure that the output signal is not outside of range).
       monoOut = fastTanh(3.0 * monoOut)
@@ -195,7 +188,6 @@ export default class Junox {
       if (this.patch.lfo.autoTrigger) {
         this.lfo.reset()
       }
-      this.bassBoost.reset()
       this.hpf.reset()
       this.chorus.reset()
 
