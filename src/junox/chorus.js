@@ -85,24 +85,24 @@ export class Chorus {
   update(chorusMode) {
     switch (chorusMode) {
       case 1: // Mode I.
-        this.lfo.setRate(0.513)
-        this.wet.setValue(0.5)
+        this.lfo.setRate(0.594)
+        this.wet.setValue(0.48)
         this.maxDelayOffset.setValue(0.00185 * this.sampleRate)
         break
       case 2: // Mode II.
         this.lfo.setRate(0.863)
-        this.wet.setValue(0.5)
+        this.wet.setValue(0.48)
         this.maxDelayOffset.setValue(0.00185 * this.sampleRate)
         break
       case 3: // Mode I+II.
-        this.lfo.setRate(9.75)
-        this.wet.setValue(0.5)
+        this.lfo.setRate(9.24)
+        this.wet.setValue(0.48)
         this.maxDelayOffset.setValue(-0.0002 * this.sampleRate)
         break
       default:
         // Off
-        this.lfo.setRate(0.513)
-        this.wet.setValue(0.0)
+        this.lfo.setRate(0.594)
+        this.wet.setValue(0.48)
         this.maxDelayOffset.setValue(0.00185 * this.sampleRate)
         break
     }
