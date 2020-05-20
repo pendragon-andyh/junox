@@ -99,11 +99,12 @@
 
         const layout = {
           xaxis: { range: [0.0, 4.0], title: 'Time (seconds)' },
-          yaxis: { range: [-1.0, 1.0], title: 'Output' },
+          yaxis: { range: [-1.4, 1.4], title: 'Output' },
         }
 
         Plotly.purge(document.getElementById('graphLeft'))
         Plotly.plot(document.getElementById('graphLeft'), [dataLeft], layout, { responsive: true })
+
         Plotly.purge(document.getElementById('graphRight'))
         Plotly.plot(document.getElementById('graphRight'), [dataRight], layout, {
           responsive: true,
