@@ -102,7 +102,7 @@ export class Chorus {
       default:
         // Off
         this.lfo.setRate(0.594)
-        this.wet.setValue(0.48)
+        this.wet.setValue(0)
         this.maxDelayOffset.setValue(0.00185 * this.sampleRate)
         break
     }

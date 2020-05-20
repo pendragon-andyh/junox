@@ -24,12 +24,21 @@
           <option value="3">Chorus I+II (leslie rotary speaker effect)</option>
         </select>
       </div>
+      <div>
+        <label style="width: 150px; display: inline-block;">Source:</label>
+        <select id="waveSource">
+          <option value="pulse">Pulse</option>
+          <option value="saw">Sawtooth</option>
+        </select>
+      </div>
     </fieldset>
 
+    <h3>Left</h3>
     <div
       id="graphLeft"
       style="height: 250px; max-width: 100%; border: 1px blue solid; margin-top: 10px;"
     ></div>
+    <h3>Right</h3>
     <div
       id="graphRight"
       style="height: 250px; max-width: 100%; border: 1px blue solid; margin-top: 10px;"
@@ -44,22 +53,24 @@
       import { Chorus } from '../src/junox/chorus.js'
 
       $(function () {
-        onSliderChange()
-        $('#chorusMode').on('input', onSliderChange)
+        onChange()
+        $('#chorusMode').on('input', onChange)
+        $('#waveSource').on('input', onChange)
       })
 
       let drawHandle = null
-      function onSliderChange() {
-        const chorusMode = $('#chorusMode').val() | 0
+      function onChange() {
+        const chorusMode = parseInt($('#chorusMode').val(), 10)
+        const waveSource = $('#waveSource').val()
 
         // Plotting graph is slow - so debounce rapid requests.
         clearTimeout(drawHandle)
         drawHandle = setTimeout(function () {
-          drawOutput(chorusMode)
+          drawOutput(chorusMode, waveSource)
         }, 0)
       }
 
-      function drawOutput(chorusMode) {
+      function drawOutput(chorusMode, waveSource) {
         const dataInput = { x: [], y: [], fill: 'tonexty', type: 'Input', name: 'Input' }
         const dataLeft = { x: [], y: [], mode: 'line', name: 'Out left' }
         const dataRight = { x: [], y: [], mode: 'line', name: 'Out right' }
@@ -67,10 +78,13 @@
         const chorus = new Chorus(48000)
         chorus.update(chorusMode)
 
-        for (let i = 0; i < 60; i++) {
+        for (let i = 0; i < 480; i++) {
           for (let j = 0; j < 400; j++) {
             const t = (j + i * 400) / 48000
-            const input = j / 199.5 - 1.0
+            let input = j / 199.5 - 1.0
+            if (waveSource == 'pulse') {
+              input = input > 0 ? 1 : -1
+            }
 
             chorus.render(input)
 
@@ -84,8 +98,8 @@
         }
 
         const layout = {
-          xaxis: { range: [0.0, 0.5], title: 'Time (seconds)' },
-          yaxis: { range: [-1.1, 1.1], title: 'Output' },
+          xaxis: { range: [0.0, 4.0], title: 'Time (seconds)' },
+          yaxis: { range: [-1.0, 1.0], title: 'Output' },
         }
 
         Plotly.purge(document.getElementById('graphLeft'))
