@@ -10,6 +10,7 @@ export class LFO {
    */
   constructor(sampleRate) {
     this._oneOverSampleRate = 1.0 / sampleRate
+    this._phaseIncrement = 0.0
   }
 
   /** Current phase of the LFO (0.0 to 1.0) */
