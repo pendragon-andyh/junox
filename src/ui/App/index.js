@@ -18,7 +18,7 @@ import SharePatch from '../SharePatch'
 import { BlackRow, Container, Copyright } from './elements'
 
 export default function App({ synth, audioContext }) {
-  const [octave, setOctave] = useState(-12)
+  const [octave, setOctave] = useState(0)
   const [lastNoteOn, setLastNoteOn] = useState(69)
 
   const {
@@ -93,19 +93,14 @@ export default function App({ synth, audioContext }) {
       <Row>
         <Column style={{ height: 175 }}>
           <OctaveSelector octave={octave} setOctave={setOctave} />
-          <Button
-            style={{ marginTop: 10 }}
-            onClick={() => console.log(JSON.stringify(patch))}
-          >
+          <Button style={{ marginTop: 10 }} onClick={() => console.log(JSON.stringify(patch))}>
             dump
           </Button>
           <SharePatch patch={patch} />
         </Column>
         <Piano octave={octave} noteOn={noteOn} noteOff={noteOff} />
       </Row>
-      <Copyright>
-        Chrome 66+ ONLY - Copyright d.zannotti@me.com - 2019
-      </Copyright>
+      <Copyright>Chrome 66+ ONLY - Copyright d.zannotti@me.com - 2019</Copyright>
     </Container>
   )
 }
