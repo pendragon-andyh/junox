@@ -102,7 +102,10 @@ export default class Voice {
       this.ampEnv.reset()
       this.moogVCF.reset()
       this.diodeLadderVCF.reset()
-      this.filterNoteFactor = 5 * ((this.note - 36) / 60 - 0.4)
+
+      const c4 = 60
+      const fiveOctaves = 5 * 12
+      this.filterNoteFactor = 5 * ((this.note - c4) / fiveOctaves)
     }
 
     this.velocity = velocity

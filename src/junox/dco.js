@@ -16,7 +16,7 @@ export class Juno60DCO {
    */
   noteOn(noteNumber) {
     // Convert MIDI not number into a frequency, and then calculate the phase-increment for each sample-quantum.
-    const noteFrequency = Math.pow(2, (noteNumber - 81) / 12) * 440
+    const noteFrequency = Math.pow(2, (noteNumber - 69) / 12) * 440
     this.phaseIncrement = noteFrequency / this.sampleRate
 
     // Juno60 DCO seems to start new notes partway through cycle (I think this is so that fast-attacks can be heard for low notes).
