@@ -4,68 +4,67 @@ const results = []
 
 fs.createReadStream('patches/Juno60.csv')
   .pipe(csv())
-  .on('data', data => results.push(data))
+  .on('data', (data) => results.push(data))
   .on('end', () => {
     toJSON(results)
   })
 
-function toSlider(index, value) {
-  return parseInt(results[index][value]) / 10
+function toSlider(value) {
+  return Math.round(2 * parseFloat(value)) / 20
 }
 
-function toInteger(index, value) {
-  return parseInt(results[index][value])
+function toInteger(value) {
+  return parseInt(value)
 }
 
-function toBoolean(index, value) {
-  return Boolean(parseInt(results[index][value]))
+function toBoolean(value) {
+  return Boolean(parseInt(value))
 }
 
 function toJSON(results) {
   const formatted = results
-    .filter(patch => parseInt(patch['Number']) < 71)
-    .map((result, i) => ({
-      name: result['Name'],
-      // this is a bit fudged, unsure what negative values do?
-      vca: Math.max(0.7, Math.abs(toSlider(i, 'VCA Value')) + 0.35),
-      vcaType: result['VCA Dir'] === 'G' ? 'gate' : 'env',
-      lfo: {
-        autoTrigger: result['LFO Trigger'] === 'A',
-        frequency: toSlider(i, 'LFO Rate'),
-        delay: toSlider(i, 'LFO Delay')
-      },
-      dco: {
-        range: 1,
-        saw: toBoolean(i, 'DCO Saw'),
-        pulse: toBoolean(i, 'DCO Pulse'),
-        sub: toBoolean(i, 'DCO Sub Enabled'),
-        subAmount: toSlider(i, 'DCO Sub'),
-        noise: toSlider(i, 'DCO Noise'),
-        pwm: toSlider(i, 'DCO PWM'),
-        pwmMod: result['DCO Lfo Mod'].toLowerCase(),
-        lfo: toSlider(i, 'DCO Lfo')
-      },
-      hpf: toInteger(i, 'HPF') / 3,
-      vcf: {
-        type: 'diode-ladder',
-        frequency: toSlider(i, 'VCF Freq'),
-        resonance: toSlider(i, 'VCF Res'),
-        modPositive: result['VCF Dir'] === 'N',
-        envMod: toSlider(i, 'VCF Env'),
-        lfoMod: toSlider(i, 'VCF LFO'),
-        keyMod: toSlider(i, 'VCF Key')
-      },
-      env: {
-        attack: toSlider(i, 'ENV Attack'),
-        decay: toSlider(i, 'ENV Decay'),
-        sustain: toSlider(i, 'ENV Sustain'),
-        release: toSlider(i, 'ENV Release')
-      },
-      chorus: toInteger(i, 'Chorus')
-    }))
-  console.log(formatted[0])
-  fs.writeFileSync(
-    'src/junox/patches.js',
-    `export default ${JSON.stringify(formatted)}`
-  )
+    .filter((patch) => parseInt(patch['Number']) < 71)
+    .map((patch, i) => {
+      return {
+        name: patch['Name'],
+        // this is a bit fudged, unsure what negative values do?
+        vca: Math.max(0.7, Math.abs(toSlider(patch['VCA Value'])) + 0.35),
+        vcaType: patch['VCA Dir'] === 'G' ? 'gate' : 'env',
+        lfo: {
+          autoTrigger: patch['LFO Trigger'] === 'A',
+          frequency: toSlider(patch['LFO Rate']),
+          delay: toSlider(patch['LFO Delay']),
+        },
+        dco: {
+          range: 1,
+          saw: toBoolean(patch['DCO Saw']),
+          pulse: toBoolean(patch['DCO Pulse']),
+          sub: toBoolean(patch['DCO Sub Enabled']),
+          subAmount: toSlider(patch['DCO Sub']),
+          noise: toSlider(patch['DCO Noise']),
+          pwm: toSlider(patch['DCO PWM']),
+          pwmMod: patch['DCO Lfo Mod'].toLowerCase(),
+          lfo: toSlider(patch['DCO Lfo']),
+        },
+        hpf: toSlider(toSlider(patch['HPF']) * 33.333),
+        vcf: {
+          type: 'moog',
+          frequency: toSlider(patch['VCF Freq']),
+          resonance: toSlider(patch['VCF Res']),
+          modPositive: patch['VCF Dir'] === 'N',
+          envMod: toSlider(patch['VCF Env']),
+          lfoMod: toSlider(patch['VCF LFO']),
+          keyMod: toSlider(patch['VCF Key']),
+        },
+        env: {
+          attack: toSlider(patch['ENV Attack']),
+          decay: toSlider(patch['ENV Decay']),
+          sustain: toSlider(patch['ENV Sustain']),
+          release: toSlider(patch['ENV Release']),
+        },
+        chorus: toInteger(patch['Chorus']),
+      }
+    })
+  console.log(formatted)
+  fs.writeFileSync('src/junox/patches.js', `export default ${JSON.stringify(formatted)}`)
 }
