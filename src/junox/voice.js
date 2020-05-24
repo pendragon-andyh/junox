@@ -4,6 +4,7 @@ import { DiodeLadder } from './diodeladder'
 import { Juno60Envelope } from './juno60Envelope'
 import { MoogLowPassFilter } from './mooglpf'
 import { Noise } from './noise'
+import { interpolatedLookup } from './utils'
 
 export default class Voice {
   constructor({ patch, sampleRate }) {
@@ -70,12 +71,29 @@ export default class Voice {
       dcoOut += this.noise.render() * noiseLevel
     }
 
-    const vcfCutoffValue =
-      (filterCutoff * 200) / 12 +
+    // The VCF is voltage controller (1 volt per octave). Calculate how much each of the
+    // modulators contribute to the control voltage.
+    const cutoffDetuneOctave = (filterCutoff * 200) / 12
+    const envDetineOctaves = modEnvOut * filterEnvMod * 12 // Envelope changes cutoff by upto +-12 octaves.
+    const keyboardDetuneOctaves = filterKeyMod * this.filterNoteFactor
+    const resonanceDetuneOctaves = this.patch.vcf.resonance // Resonance changes cutoff by upto an octave.
+    let vcfCutoffValue =
+      cutoffDetuneOctave +
       lfoDetuneOctaves +
-      filterKeyMod * this.filterNoteFactor +
-      modEnvOut * filterEnvMod * 12
-    const cutoffFrequency = 7.8 * Math.pow(2.0, vcfCutoffValue)
+      keyboardDetuneOctaves +
+      envDetineOctaves +
+      resonanceDetuneOctaves
+
+    // Increase gain when the LPF cutoff frequency is low (the Moog LPF attenuates low
+    // frequencies a lot more than the Juno-60 LPF does).
+    if (vcfCutoffValue < 8.0) {
+      let vcfGainBodge = (8.0 - vcfCutoffValue) * 0.125
+      dcoOut *= 1.0 + vcfGainBodge * 3.0
+    }
+
+    // Convert the resulting control-voltage to the cutoff frequency.
+    let cutoffFrequency = 7.8 * Math.pow(2.0, vcfCutoffValue)
+    cutoffFrequency = fixLpfCutoff(cutoffFrequency)
 
     let vcfOut
     if (this.patch.vcf.type === VCF_DIODELADDER) {
@@ -85,10 +103,6 @@ export default class Voice {
     } else {
       this.moogVCF.resonance = filterResonance * 3.99
       vcfOut = this.moogVCF.render(dcoOut, cutoffFrequency)
-    }
-    if (isNaN(vcfOut) || Math.abs(vcfOut) >= 2.0) {
-      // TODO - Remove this (only used for exposing exploding filters).
-      vcfOut = 0
     }
 
     return this.velocity * vcfOut * ampEnvOut
@@ -137,3 +151,38 @@ export default class Voice {
     this.patch = patch
   }
 }
+
+/**
+ * The Moog filter does not have a linear response so we need to correct the cutoff frequency.
+ */
+function fixLpfCutoff(fc) {
+  if (fc < 10000) {
+    return fc * interpolatedLookup(0.002 * fc, lpfCutoffCorrections)
+  }
+  return fc
+}
+
+const lpfCutoffCorrections = [
+  1,
+  4,
+  1.364446108,
+  1.30021398,
+  1.291615494,
+  1.288268551,
+  1.264147018,
+  1.225067204,
+  1.207675563,
+  1.214457029,
+  1.197350752,
+  1.170175889,
+  1.165266155,
+  1.147560592,
+  1.125353785,
+  1.111233998,
+  1.0918184,
+  1.067975101,
+  1.04060779,
+  1.026150863,
+  1.022347836,
+  1,
+]
