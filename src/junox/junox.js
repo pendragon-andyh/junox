@@ -40,6 +40,7 @@ export default class Junox {
     ]
 
     this.lfo = new LFOWithEnvelope(sampleRate)
+    this.lfo.waveform = 'sine'
 
     this.hpf = new HighPassFilter({
       cutoff: 0,
