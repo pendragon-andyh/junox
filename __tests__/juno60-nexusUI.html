@@ -108,10 +108,28 @@
       }
       #patch-list a {
         padding: 5px;
+        display: block;
+        border: 1px dotted silver;
+        border-radius: 12px;
+        background-color: whitesmoke;
+        text-decoration: none;
+      }
+      #patch-list a:hover {
+        border: 1px dotted #999;
+        background-color: rgb(192, 192, 225);
+      }
+      #patch-list a.active {
+        border: 1px dotted #999;
+        background-color: rgb(192, 192, 245);
+      }
+
+      #perf-controls {
+        display: inline-block;
       }
 
       #piano {
         margin-top: 10px;
+        display: inline-block;
       }
     </style>
 
@@ -130,7 +148,7 @@
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
       crossorigin="anonymous"
     ></script>
-    <script src="https://cdn.jsdelivr.net/npm/nexusui@2.0.13/dist/NexusUI.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nexusui@2.0.13/dist/NexusUI.js"></script>
   </head>
   <body class="show-synth-controls">
     <div id="synth-container">
@@ -325,9 +343,26 @@
       </div>
     </div>
 
-    <div id="piano"></div>
+    <div id="synth-performance">
+      <div id="perf-controls">
+        <div class="control control-slider" title="How much pitch-bend to apply to the DCO pitch">
+          <label class="control-label">DCO</label>
+          <div id="dco-bend-depth"></div>
+        </div>
+        <div class="control control-slider" title="How much pitch-bend to apply to the VCF cutoff">
+          <label class="control-label">VCF</label>
+          <div id="vcf-bend-depth"></div>
+        </div>
+
+        <div id="pitchBend"></div>
+      </div>
+
+      <div id="piano"></div>
+    </div>
 
     <script type="module">
+      import { MidiAdapter, MidiConsumer } from '../src/midiAdapter.js'
+
       const lfoRate = createSlider('#lfo-rate')
       const lfoDelay = createSlider('#lfo-delay')
       const lfoTriggerMode = createCheckButtons({
@@ -376,11 +411,15 @@
         3: '#chorus-mode-3',
       })
 
+      const dcoBendDepth = createSlider('#dco-bend-depth')
+      const vcfBendDepth = createSlider('#vcf-bend-depth')
+      const pitchBend = createPan('#pitchBend')
+
       const piano = new Nexus.Piano('#piano', {
-        lowNote: 24,
-        highNote: 60,
+        lowNote: 36,
+        highNote: 72,
         mode: 'button',
-        size: [1000, 200],
+        size: [1000, 250],
       })
 
       function createCheckButtons(keyToIdMap) {
@@ -441,6 +480,17 @@
         return control
       }
 
+      function createPan(id) {
+        const control = new Nexus.Pan(id, { size: [150, 40], min: -1, max: 1, step: 0.01 }).on(
+          'change',
+          (v) => {
+            onControlChange()
+          }
+        )
+
+        return control
+      }
+
       function onControlChange() {
         const patch = {
           lfo: {
@@ -449,6 +499,50 @@
           },
         }
         console.log(patch)
+      }
+
+      let isNexusChanging = false
+
+      const consumer = new MidiConsumer()
+      consumer.onNoteOn = (noteNumber, velocity) => {
+        if (!isNexusChanging) {
+          console.log(`NoteOn - note=${noteNumber}`)
+          if (noteNumber >= piano.range.low && noteNumber <= piano.range.high) {
+            piano.toggleKey(noteNumber, true)
+          }
+        }
+      }
+      consumer.onNoteOff = (noteNumber, velocity) => {
+        if (!isNexusChanging) {
+          console.log(`NoteOff - note=${noteNumber}`)
+          if (noteNumber >= piano.range.low && noteNumber <= piano.range.high) {
+            piano.toggleKey(noteNumber, false)
+          }
+        }
+      }
+      consumer.onPitchBend = (bendValue) => {
+        if (!isNexusChanging) {
+          console.log(`PitchBend - value=${bendValue}`)
+          pitchBend.value = bendValue
+        }
+      }
+
+      piano.on('change', (v) => {
+        isNexusChanging = true
+        if (v.state) {
+          consumer.noteOn(v.note)
+        } else {
+          consumer.noteOff(v.note)
+        }
+        isNexusChanging = false
+      })
+
+      if (navigator.requestMIDIAccess) {
+        const midiAdapter = new MidiAdapter()
+        midiAdapter.start().then(() => {
+          const inputs = midiAdapter.listInputs()
+          midiAdapter.connectFromInput(inputs[0].id, consumer)
+        })
       }
     </script>
   </body>
