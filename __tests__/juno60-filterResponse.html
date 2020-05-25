@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Filter gain | Juno60</title>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"
+      integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <h1>Emulating the Filter Gain for the Juno60</h1>
+
+    <fieldset>
+      <legend>Parameters</legend>
+      <div>
+        <label style="width: 150px; display: inline-block;">Cutoff:</label>
+        <input id="cutoff" value="1000" style="width: 400px;" />
+      </div>
+      <div>
+        <label style="width: 150px; display: inline-block;">Resonance:</label>
+        <input id="resonance" type="range" min="0" max="100" value="0" style="width: 400px;" />
+      </div>
+    </fieldset>
+
+    <div
+      id="graph"
+      style="height: 250px; max-width: 100%; border: 1px blue solid; margin-top: 10px;"
+    ></div>
+    <span id="peekFreq"></span>
+
+    <p>
+      See
+      <a href="https://github.com/pendragon-andyh/Juno60/blob/master/Chorus/README.md">analysis</a>.
+    </p>
+
+    <script type="module">
+      import { MoogLowPassFilter } from '../src/junox/mooglpf.js'
+
+      $(function () {
+        onChange()
+        $('#resonance').on('input', onChange)
+        $('#cutoff').on('input', onChange)
+      })
+
+      let drawHandle = null
+      function onChange() {
+        const cutoff = ($('#cutoff').val() | 0) * 1
+        const resonance = ($('#resonance').val() | 0) / 100
+
+        // Plotting graph is slow - so debounce rapid requests.
+        clearTimeout(drawHandle)
+        drawHandle = setTimeout(function () {
+          drawOutput(cutoff, resonance)
+        }, 0)
+      }
+
+      function drawOutput(cutoff, resonance) {
+        const dataOut = { x: [], y: [], mode: 'line', name: 'Out' }
+
+        const lpf = new MoogLowPassFilter(48000)
+        lpf.resonance = resonance * 3.99
+        let peekOut = 0
+        let peekFreq = cutoff / 4
+
+        let freq = 7.8
+        while (freq <= 21000) {
+          const phaseIncrement = freq / 48000
+          let maxOut = 0.0
+
+          lpf.reset()
+          for (let phase = 0.0; phase <= 2; phase += phaseIncrement) {
+            const xin = phase <= 0.5 || (phase > 1 && phase <= 1.5) ? 1 : -1
+            const xout = lpf.render(xin, cutoff)
+
+            if (Math.abs(xout) > maxOut) {
+              maxOut = Math.abs(xout)
+            }
+          }
+
+          if (peekOut < maxOut && peekFreq < freq) {
+            peekOut = maxOut
+            peekFreq = freq
+          }
+
+          dataOut.x.push(freq)
+          dataOut.y.push(maxOut)
+
+          freq *= 1.005792941
+        }
+
+        $('#peekFreq').text(peekFreq)
+
+        const layout = {
+          xaxis: { range: [0.0, 24000.0], title: 'Freq' },
+          yaxis: { range: [0, 5], title: 'Output' },
+        }
+
+        Plotly.purge(document.getElementById('graph'))
+        Plotly.plot(document.getElementById('graph'), [dataOut], layout, { responsive: true })
+      }
+    </script>
+  </body>
+</html>
