@@ -1,5 +1,3 @@
-export const START_SAMPLE_TIME = 'start-sample-time'
-export const STOP_SAMPLE_TIME = 'stop-sample-time'
 export const NOTE_ON = 'note-on'
 export const NOTE_OFF = 'note-off'
 export const SET_PARAM = 'set-param'

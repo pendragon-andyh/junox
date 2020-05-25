@@ -3,7 +3,7 @@ import Select from 'react-select'
 import PropTypes from 'prop-types'
 
 const customStyles = {
-  control: provided => ({
+  control: (provided) => ({
     ...provided,
     backgroundColor: 'transparent',
     borderColor: 'transparent',
@@ -12,44 +12,44 @@ const customStyles = {
     fontFamily: 'Orbitron',
     fontWeight: 600,
     marginRight: '1rem',
-    width: 200,
+    width: 400,
     ':hover': {
-      borderColor: 'transparent'
+      borderColor: 'transparent',
     },
     ':active': {
-      borderColor: 'transparent'
-    }
+      borderColor: 'transparent',
+    },
   }),
-  input: provided => ({ ...provided, color: '#2f3409' }),
-  placeholder: provided => ({
+  input: (provided) => ({ ...provided, color: '#2f3409' }),
+  placeholder: (provided) => ({
     ...provided,
     color: '#2f3409',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
   }),
-  dropdownIndicator: provided => ({
+  dropdownIndicator: (provided) => ({
     ...provided,
     color: '#2f3409',
-    ':hover': { color: 'inerhit' }
+    ':hover': { color: 'inerhit' },
   }),
-  indicatorContainer: provided => ({ ...provided, color: '#2f3409' }),
-  indicatorSeparator: provided => ({
+  indicatorContainer: (provided) => ({ ...provided, color: '#2f3409' }),
+  indicatorSeparator: (provided) => ({
     ...provided,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   }),
-  menu: provided => ({
+  menu: (provided) => ({
     ...provided,
     borderRadius: 0,
-    backgroundColor: '#cee048'
+    backgroundColor: '#cee048',
   }),
-  menuList: provided => ({
+  menuList: (provided) => ({
     ...provided,
     textTransform: 'uppercase',
-    fontFamily: 'Orbitron'
+    fontFamily: 'Orbitron',
   }),
-  singleValue: provided => ({
+  singleValue: (provided) => ({
     ...provided,
     color: '#2f3409',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
   }),
   option: (provided, { isSelected }) => ({
     ...provided,
@@ -57,18 +57,18 @@ const customStyles = {
     color: isSelected ? '#c0cf35' : 'inherit',
     ':hover': {
       backgroundColor: '#2f3409',
-      color: '#c0cf35'
+      color: '#c0cf35',
     },
     ':active': {
       backgroundColor: '#2f3409',
-      color: '#c0cf35'
-    }
-  })
+      color: '#c0cf35',
+    },
+  }),
 }
 
 PatchSelector.propTypes = {
   patches: PropTypes.arrayOf(PropTypes.object).isRequired,
-  setPatch: PropTypes.func.isRequired
+  setPatch: PropTypes.func.isRequired,
 }
 
 export default function PatchSelector({ patches, setPatch }) {

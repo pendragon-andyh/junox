@@ -23,19 +23,6 @@ class JunoxWorker extends AudioWorkletProcessor {
     this.port.onmessage = this.handleMessage.bind(this)
   }
 
-  sendStartTime(samples) {
-    this.port.postMessage({
-      type: START_SAMPLE_TIME,
-      samples,
-    })
-  }
-
-  sendStopTime() {
-    this.port.postMessage({
-      type: STOP_SAMPLE_TIME,
-    })
-  }
-
   handleMessage(event) {
     if (event.data.action === NOTE_ON) {
       this.synth.noteOn(event.data.note, event.data.velocity)
@@ -59,9 +46,7 @@ class JunoxWorker extends AudioWorkletProcessor {
 
   process(inputs, outputs) {
     const output = outputs[0]
-    this.sendStartTime(output[0].length)
     this.synth.render(output[0], output[1])
-    this.sendStopTime()
     return true
   }
 }
