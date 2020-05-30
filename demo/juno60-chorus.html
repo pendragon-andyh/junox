@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chorus | Juno60</title>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"
+      integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <h1>Emulating the Chorus for the Juno60</h1>
+
+    <fieldset>
+      <legend>Parameters</legend>
+      <div>
+        <label style="width: 150px; display: inline-block;">Mode:</label>
+        <select id="chorusMode">
+          <option value="0">None</option>
+          <option value="1">Chorus I (mild chorus effect)</option>
+          <option value="2">Chorus II (richer deeper chorus effect)</option>
+          <option value="3">Chorus I+II (leslie rotary speaker effect)</option>
+        </select>
+      </div>
+      <div>
+        <label style="width: 150px; display: inline-block;">Source:</label>
+        <select id="waveSource">
+          <option value="pulse">Pulse</option>
+          <option value="saw">Sawtooth</option>
+        </select>
+      </div>
+    </fieldset>
+
+    <h3>Left</h3>
+    <div
+      id="graphLeft"
+      style="height: 250px; max-width: 100%; border: 1px blue solid; margin-top: 10px;"
+    ></div>
+    <h3>Right</h3>
+    <div
+      id="graphRight"
+      style="height: 250px; max-width: 100%; border: 1px blue solid; margin-top: 10px;"
+    ></div>
+
+    <p>
+      See
+      <a href="https://github.com/pendragon-andyh/Juno60/blob/master/Chorus/README.md">analysis</a>.
+    </p>
+
+    <script type="module">
+      import { Chorus } from '../src/junox/chorus.js'
+
+      $(function () {
+        onChange()
+        $('#chorusMode').on('input', onChange)
+        $('#waveSource').on('input', onChange)
+      })
+
+      let drawHandle = null
+      function onChange() {
+        const chorusMode = parseInt($('#chorusMode').val(), 10)
+        const waveSource = $('#waveSource').val()
+
+        // Plotting graph is slow - so debounce rapid requests.
+        clearTimeout(drawHandle)
+        drawHandle = setTimeout(function () {
+          drawOutput(chorusMode, waveSource)
+        }, 0)
+      }
+
+      function drawOutput(chorusMode, waveSource) {
+        const dataInput = { x: [], y: [], fill: 'tonexty', type: 'Input', name: 'Input' }
+        const dataLeft = { x: [], y: [], mode: 'line', name: 'Out left' }
+        const dataRight = { x: [], y: [], mode: 'line', name: 'Out right' }
+
+        const chorus = new Chorus(48000)
+        chorus.update(chorusMode)
+
+        for (let i = 0; i < 480; i++) {
+          for (let j = 0; j < 400; j++) {
+            const t = (j + i * 400) / 48000
+            let input = j / 199.5 - 1.0
+            if (waveSource == 'pulse') {
+              input = input > 0 ? 1 : -1
+            }
+
+            chorus.render(input)
+
+            dataInput.x.push(t)
+            dataInput.y.push(input)
+            dataLeft.x.push(t)
+            dataLeft.y.push(chorus.leftOutput)
+            dataRight.x.push(t)
+            dataRight.y.push(chorus.rightOutput)
+          }
+        }
+
+        const layout = {
+          xaxis: { range: [0.0, 4.0], title: 'Time (seconds)' },
+          yaxis: { range: [-1.4, 1.4], title: 'Output' },
+        }
+
+        Plotly.purge(document.getElementById('graphLeft'))
+        Plotly.plot(document.getElementById('graphLeft'), [dataLeft], layout, { responsive: true })
+
+        Plotly.purge(document.getElementById('graphRight'))
+        Plotly.plot(document.getElementById('graphRight'), [dataRight], layout, {
+          responsive: true,
+        })
+      }
+    </script>
+  </body>
+</html>

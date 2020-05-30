@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DCO | Juno60</title>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"
+      integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <h1>Emulating the DCO for the Juno60</h1>
+
+    <fieldset>
+      <legend>Parameters</legend>
+      <div>
+        <label style="width: 150px; display: inline-block;">Depth:</label>
+        <input id="pwmWidth" type="range" min="0" max="100" value="0" style="width: 400px;" />
+      </div>
+
+      <div>
+        <label style="width: 150px; display: inline-block;">Sawtooth:</label>
+        <input id="sawLevel" type="range" min="0" max="100" value="100" style="width: 400px;" />
+      </div>
+      <div>
+        <label style="width: 150px; display: inline-block;">Pulse:</label>
+        <input id="pulseLevel" type="range" min="0" max="100" value="0" style="width: 400px;" />
+      </div>
+      <div>
+        <label style="width: 150px; display: inline-block;">Sub:</label>
+        <input id="subLevel" type="range" min="0" max="100" value="0" style="width: 400px;" />
+      </div>
+      <div>
+        <label style="width: 150px; display: inline-block;">Noise:</label>
+        <input id="noiseLevel" type="range" min="0" max="100" value="0" style="width: 400px;" />
+      </div>
+    </fieldset>
+
+    <div
+      id="graph"
+      style="height: 370px; max-width: 100%; border: 1px blue solid; margin-top: 10px;"
+    ></div>
+
+    <p>
+      See
+      <a href="https://github.com/pendragon-andyh/Juno60/blob/master/DCO/README.md">analysis</a>.
+    </p>
+
+    <script type="module">
+      import { Juno60DCO } from '../src/junox/Dco.js'
+      import { Noise } from '../src/junox/noise.js'
+
+      $(function () {
+        onSliderChange()
+        $('#pwmWidth, #sawLevel, #pulseLevel, #subLevel, #noiseLevel').on('input', onSliderChange)
+      })
+
+      let drawHandle = null
+      function onSliderChange() {
+        const pwmWidth = ($('#pwmWidth').val() | 0) / 100
+        const sawLevel = ($('#sawLevel').val() | 0) / 100
+        const pulseLevel = ($('#pulseLevel').val() | 0) / 100
+        const subLevel = ($('#subLevel').val() | 0) / 100
+        const noiseLevel = ($('#noiseLevel').val() | 0) / 100
+
+        // Plotting graph is slow - so debounce rapid requests.
+        clearTimeout(drawHandle)
+        drawHandle = setTimeout(function () {
+          drawOutput(
+            pwmWidth,
+            sawLevel * 0.2,
+            pulseLevel * 0.2,
+            subLevel * 0.195,
+            noiseLevel * 0.21
+          )
+        }, 0)
+      }
+
+      function drawOutput(pwmWidth, sawLevel, pulseLevel, subLevel, noiseLevel) {
+        const dataOutput = { x: [], y: [], fill: 'tonexty', type: 'scatter', name: 'Output' }
+
+        // If multiple waveforms at same time then the overall level is reduced.
+        let mixFactor = sawLevel + pulseLevel + subLevel + noiseLevel
+        if (mixFactor > 0.26) {
+          mixFactor = 0.26 / (0.26 + (mixFactor - 0.26) * 0.3)
+          pulseLevel *= mixFactor
+          sawLevel *= mixFactor
+          subLevel *= mixFactor
+          noiseLevel *= mixFactor
+        }
+
+        const dco = new Juno60DCO(48000)
+        dco.noteOn(69)
+        const noise = new Noise(48000, 5000)
+
+        for (let i = 0; i < 1000; i++) {
+          const dcoValue = dco.render(1, pwmWidth, sawLevel, pulseLevel, subLevel)
+          const noiseValue = noise.render() * noiseLevel
+
+          dataOutput.x.push(i)
+          dataOutput.y.push(dcoValue + noiseValue)
+        }
+
+        const layout = {
+          xaxis: { range: [0, 1000], title: 'Time (samples)' },
+          yaxis: { range: [-1.1, 1.1], title: 'Output' },
+        }
+
+        Plotly.purge(document.getElementById('graph'))
+        Plotly.plot(document.getElementById('graph'), [dataOutput], layout, { responsive: true })
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,247 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  border-bottom: 10px solid #007bff;
+  height: 100vh;
+  position: relative;
+  font-size: 0.8rem;
+}
+.btn {
+  font-size: 0.9rem;
+}
+header {
+  box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.3);
+}
+
+.control-block {
+  display: inline-block;
+  border: 1px solid #333;
+  padding: 3px;
+  position: relative;
+  margin-bottom: 5px;
+  vertical-align: top;
+  background-color: #efe;
+  border-radius: 5px;
+  margin-right: -1px;
+}
+.tab-content .control-block:last-child {
+  margin-right: 5px;
+}
+.control-block h2 {
+  padding: 3px 8px 1px;
+  background-color: #ff0700;
+  color: white;
+  margin: -3px -3px 5px -3px;
+  text-shadow: -1px -1px black;
+  border-bottom: 1px solid #669;
+  font-size: 1.4em;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.control > * {
+  display: block;
+  margin: 0 auto 5px;
+}
+.control,
+.control-group {
+  display: inline-block;
+  border: 1px solid #669;
+  min-width: 40px;
+  padding: 3px 3px 3px 3px;
+  height: 210px;
+  position: relative;
+  text-align: center;
+  vertical-align: top;
+}
+.control-group .control {
+  border-width: 0;
+  padding: 0;
+  height: 204px;
+}
+
+.control > .control-label {
+  font-weight: bold;
+  height: 18px;
+}
+
+.control-slider > span {
+  border: 1px solid #99c;
+  width: 34px;
+  height: 18px;
+  color: #99c;
+  padding: 3px 0;
+  line-height: 1;
+}
+.control-slider > div {
+  width: 20px;
+}
+
+.radio-buttons {
+  text-align: left;
+  margin-top: 31px;
+  padding: 0 3px;
+  line-height: 30px;
+}
+.radio-buttons div {
+  border: 1px solid #669;
+  margin-bottom: 3px;
+  border-radius: 15px;
+  padding-right: 6px;
+}
+.radio-buttons div:hover {
+  background-color: rgba(0, 123, 255, 0.4);
+  cursor: pointer;
+}
+.radio-buttons span {
+  margin-right: 4px;
+  float: left;
+  margin-left: -2px;
+}
+
+#lfo-manual-trigger-wrapper {
+  margin-top: 23px;
+  display: none;
+}
+
+.hpf-width {
+  min-width: 58px;
+}
+.chorus-width {
+  min-width: 89px;
+}
+
+#synth-sequencer .control {
+  min-width: 300px;
+  padding: 5px;
+  text-align: left;
+}
+
+#synth-analyse .control {
+  min-width: 300px;
+  padding: 5px;
+  text-align: left;
+}
+
+.patch-list {
+  min-width: 250px;
+  padding: 5px;
+  text-align: left;
+}
+.patch-list ul {
+  list-style-type: none;
+  float: left;
+  padding: 0 0 0 5px;
+}
+.patch-list ul a {
+  padding: 4px 3px;
+  text-align: left;
+  margin-bottom: 1.1px;
+  width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#perf-block {
+  float: left;
+  margin-right: 4px;
+}
+
+#piano-block {
+  overflow: hidden;
+  display: block;
+}
+#piano-wrapper {
+  overflow: hidden;
+  border-left: 1px solid #669;
+  border-right: 1px solid #669;
+}
+#piano-change-octave {
+  position: absolute;
+  top: 1px;
+  right: 5px;
+}
+#piano-change-octave a {
+  width: 30px;
+  padding: 0;
+}
+#piano {
+  position: relative;
+  transition: margin-left 0.5s;
+}
+.piano-key-name {
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #bbb;
+  pointer-events: none;
+  touch-action: none;
+}
+
+#synth-container {
+  position: absolute;
+  top: 80px;
+  left: 2%;
+  right: 2%;
+  border: 3px solid #ff0700;
+  border-radius: 10px;
+  padding: 5px;
+  box-shadow: 0px 0px 10px 1px rgba(0, 123, 255, 0.5);
+  background-color: #ccf;
+  zoom: 0.9;
+}
+#synth-container .nav-tabs {
+  border-bottom: none;
+  padding: 0 20px;
+  position: relative;
+}
+#synth-container .nav-link {
+  border: 1px solid #669;
+  margin-right: 5px;
+  border-bottom-color: transparent;
+  font-size: 0.9rem;
+}
+#synth-container .nav-link:focus,
+#synth-container .nav-link:hover {
+  border-color: #336;
+  background-color: #ddf;
+}
+#synth-container .nav-link.active {
+  border-color: #336;
+  background-color: #ddf;
+  border-bottom-color: #ddf;
+}
+#synth-container .tab-content {
+  background-color: #ddf;
+  padding: 5px;
+  border: 1px solid #336;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 280px;
+}
+#synth-performance {
+  position: relative;
+  margin-top: 5px;
+}
+
+.modal-content {
+  border: 2px solid 007bff;
+  border-radius: 5px;
+}
+.modal-header {
+  background-color: #007bff;
+  color: white;
+}
+.modal-footer {
+  background-color: #007bff;
+  color: white;
+  justify-content: flex-start;
+}
+.modal-body {
+  background-color: #ccf;
+}

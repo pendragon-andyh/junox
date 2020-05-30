@@ -1,0 +1,7 @@
+export const NOTE_ON = 'note-on'
+export const NOTE_OFF = 'note-off'
+export const SET_PARAM = 'set-param'
+export const SET_PATCH = 'set-patch'
+export const LFO_TRIGGER_ON = 'lfo-trigger-on'
+export const LFO_TRIGGER_OFF = 'lfo-trigger-off'
+export const PANIC = 'panic'
