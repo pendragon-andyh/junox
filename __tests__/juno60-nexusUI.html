@@ -11,127 +11,7 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
-
-    <style>
-      body {
-        font-family: Arial, Helvetica, sans-serif;
-        background-color: #ddd;
-      }
-
-      .control-block {
-        display: inline-block;
-        border: 1px solid silver;
-        padding: 3px;
-        border-bottom: 5px solid red;
-        position: relative;
-        margin-bottom: 5px;
-        vertical-align: top;
-        background-color: #efe;
-      }
-      .control-block h2 {
-        padding: 3px 8px 1px;
-        background-color: #f33;
-        color: white;
-        text-align: center;
-        margin: -3px -3px 5px -3px;
-        text-shadow: -1px -1px black;
-        border-bottom: 1px solid silver;
-        font-size: 1.5em;
-      }
-
-      .control > * {
-        display: block;
-        margin: 0 auto 5px;
-      }
-      .control,
-      .control-group {
-        display: inline-block;
-        border: 1px solid silver;
-        min-width: 40px;
-        padding: 3px 3px 3px 3px;
-        height: 210px;
-        position: relative;
-        text-align: center;
-        vertical-align: top;
-      }
-      .control-group .control {
-        border-width: 0;
-        padding: 0;
-        height: 204px;
-      }
-
-      .control > .control-label {
-        font-weight: bold;
-        height: 18px;
-      }
-
-      .control-slider > span {
-        border: 1px solid silver;
-        width: 34px;
-        height: 20px;
-        color: silver;
-        padding: 3px 0;
-        line-height: 1;
-      }
-      .control-slider > div {
-        width: 20px;
-      }
-
-      .radio-buttons {
-        text-align: left;
-        margin-top: 30px;
-        padding: 0 3px;
-        line-height: 30px;
-      }
-      .radio-buttons div {
-        border: 1px dotted silver;
-        margin-bottom: 3px;
-        border-radius: 12px;
-        padding-right: 3px;
-      }
-      .radio-buttons span {
-        margin-right: 5px;
-        float: left;
-      }
-
-      .hpf-width {
-        min-width: 58px;
-      }
-      .chorus-width {
-        min-width: 89px;
-      }
-
-      #patch-list {
-        list-style-type: none;
-        padding: 5px;
-        column-width: 140px;
-      }
-      #patch-list a {
-        padding: 5px;
-        display: block;
-        border: 1px dotted silver;
-        border-radius: 12px;
-        background-color: whitesmoke;
-        text-decoration: none;
-      }
-      #patch-list a:hover {
-        border: 1px dotted #999;
-        background-color: rgb(192, 192, 225);
-      }
-      #patch-list a.active {
-        border: 1px dotted #999;
-        background-color: rgb(192, 192, 245);
-      }
-
-      #perf-controls {
-        display: inline-block;
-      }
-
-      #piano {
-        margin-top: 10px;
-        display: inline-block;
-      }
-    </style>
+    <link rel="stylesheet" href="juno60-nexusUI.css" />
 
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -150,345 +30,652 @@
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/nexusui@2.0.13/dist/NexusUI.js"></script>
   </head>
-  <body class="show-synth-controls">
-    <div id="synth-container">
-      <div id="synth-controls">
-        <h1>Controls</h1>
 
-        <div class="control-block">
-          <h2>LFO</h2>
-          <div class="control control-slider">
-            <label class="control-label" title="Speed of the LFO (between 0.3 and 20 Hz)"
-              >Rate</label
-            >
-            <div id="lfo-rate"></div>
-          </div>
-          <div class="control control-slider">
-            <label class="control-label">Delay</label>
-            <div id="lfo-delay"></div>
-          </div>
-          <div class="control control-radio-group">
-            <label class="control-label">Trig mode</label>
-            <div class="radio-buttons">
-              <div><span id="lfo-trigger-mode-auto"></span>Auto</div>
-              <div><span id="lfo-trigger-mode-manual"></span>Man</div>
-            </div>
-          </div>
-        </div>
+  <body>
+    <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bg-primary">
+      <span class="navbar-brand mb-0 h1">JUNOX</span> -
+      <span class="navbar-text">
+        Patch name
+      </span>
 
-        <div class="control-block">
-          <h2>DCO</h2>
-          <div class="control control-slider">
-            <label class="control-label">LFO</label>
-            <div id="dco-lfo-depth"></div>
-          </div>
-          <div class="control control-group">
-            <div class="control control-slider">
-              <label class="control-label">PWM</label>
-              <div id="dco-pwm-depth"></div>
-            </div>
-            <div class="control control-radio-group">
-              <label class="control-label"></label>
-              <div class="radio-buttons">
-                <div><span id="dco-pwm-source-lfo"></span>LFO</div>
-                <div><span id="dco-pwm-source-manual"></span>Man</div>
-                <div><span id="dco-pwm-source-env"></span>Env</div>
-              </div>
-            </div>
-            <div class="control control-slider">
-              <label class="control-label">Pulse</label>
-              <div id="dco-pulse-level"></div>
-            </div>
-          </div>
-          <div class="control control-slider">
-            <label class="control-label">Saw</label>
-            <div id="dco-saw-level"></div>
-          </div>
-          <div class="control control-slider">
-            <label class="control-label">Sub</label>
-            <div id="dco-sub-level"></div>
-          </div>
-          <div class="control control-slider">
-            <label class="control-label">Noise</label>
-            <div id="dco-noise-level"></div>
-          </div>
-        </div>
-
-        <div class="control-block">
-          <h2>HPF</h2>
-          <div class="control control-slider hpf-width">
-            <label class="control-label">Freq</label>
-            <div id="hpf-freq"></div>
-          </div>
-        </div>
-
-        <div class="control-block">
-          <h2>VCF</h2>
-          <div class="control control-slider">
-            <label class="control-label">Freq</label>
-            <div id="vcf-freq"></div>
-          </div>
-          <div class="control control-slider">
-            <label class="control-label">Res</label>
-            <div id="vcf-resonance"></div>
-          </div>
-          <div class="control control-group">
-            <div class="control control-radio-group">
-              <label class="control-label"></label>
-              <div class="radio-buttons">
-                <div><span id="vcf-polarity-positive"></span>+</div>
-                <div><span id="vcf-polarity-negative"></span>-</div>
-              </div>
-            </div>
-            <div
-              class="control control-slider"
-              title="Amount of Envelope modulation for filter cutoff frequency"
-            >
-              <label class="control-label">Env</label>
-              <div id="vcf-env"></div>
-            </div>
-          </div>
-          <div
-            class="control control-slider"
-            title="Amount of LFO modulation for filter cutoff frequency"
+      <ul class="navbar-nav ml-md-auto pull-right">
+        <li class="nav-item">
+          <a
+            class="btn btn-secondary"
+            href="https://github.com/"
+            target="_blank"
+            aria-label="GitHub"
+            >Github</a
           >
-            <label class="control-label">LFO</label>
-            <div id="vcf-lfo"></div>
-          </div>
-          <div
-            class="control control-slider"
-            title="Amount of keyboard-tracking for filter cutoff frequency"
+        </li>
+      </ul>
+    </header>
+
+    <div class="container-fluid">
+      <div id="synth-container">
+        <a class="btn btn-secondary float-right" id="btnMidi" tabindex="-1">MIDI &hellip;</a>
+        <div class="dropdown float-right d-none" id="menuMidiOptions">
+          <button
+            class="btn btn-secondary dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
           >
-            <label class="control-label">Key</label>
-            <div id="vcf-key"></div>
+            MIDI Options
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
           </div>
         </div>
 
-        <div class="control-block">
-          <h2>VCA</h2>
-          <div class="control control-group">
-            <div class="control control-radio-group">
-              <label class="control-label"></label>
-              <div class="radio-buttons">
-                <div><span id="vca-source-env"></span>Env</div>
-                <div><span id="vca-source-gate"></span>Gate</div>
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              id="synth-controls-tab"
+              data-toggle="tab"
+              href="#synth-controls"
+              >Control panel</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="synth-patches-tab" data-toggle="tab" href="#synth-patches"
+              >Patch manager</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="synth-sequencer-tab" data-toggle="tab" href="#synth-sequencer"
+              >Sequencer</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="synth-analyse-tab" data-toggle="tab" href="#synth-analyse"
+              >Analyse</a
+            >
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div
+            id="synth-controls"
+            class="tab-pane active"
+            id="home"
+            role="tabpanel"
+            aria-labelledby="synth-controls-tab"
+          >
+            <div class="control-block">
+              <h2>LFO</h2>
+              <div class="control control-slider" title="Speed of the LFO (between 0.3 and 20 Hz)">
+                <label class="control-label">Rate</label>
+                <div id="lfo-rate"></div>
+              </div>
+              <div class="control control-slider" title="Delay before the start of the LFO">
+                <label class="control-label">Delay</label>
+                <div id="lfo-delay"></div>
+              </div>
+              <div class="control control-radio-group">
+                <label class="control-label">Trig mode</label>
+                <div class="radio-buttons">
+                  <div title="Trigger the LFO when a note is played">
+                    <span id="lfo-trigger-mode-auto"></span>Auto
+                  </div>
+                  <div title="Trigger the LFO manually">
+                    <span id="lfo-trigger-mode-manual"></span>Man
+                  </div>
+                </div>
+                <div id="lfo-manual-trigger-wrapper" title="Manually trigger the LFO">
+                  <span id="lfo-manual-trigger"></span>
+                </div>
               </div>
             </div>
-            <div class="control control-slider" title="Amplitude level">
-              <label class="control-label">Level</label>
-              <div id="vca-level"></div>
+
+            <div class="control-block">
+              <h2>DCO</h2>
+              <div class="control control-radio-group" title="Range of operation for the DCO">
+                <label class="control-label">Range</label>
+                <div class="radio-buttons">
+                  <div><span id="dco-range-16"></span>16'</div>
+                  <div><span id="dco-range-8"></span>8'</div>
+                  <div><span id="dco-range-4"></span>4'</div>
+                </div>
+              </div>
+              <div
+                class="control control-slider"
+                title="Depth of LFO modulation of the DCO's pitch"
+              >
+                <label class="control-label">LFO</label>
+                <div id="dco-lfo-depth"></div>
+              </div>
+              <div class="control control-group">
+                <div class="control control-slider" title="Width of the pulse wave">
+                  <label class="control-label">PWM</label>
+                  <div id="dco-pwm-depth"></div>
+                </div>
+                <div class="control control-radio-group">
+                  <label class="control-label"></label>
+                  <div class="radio-buttons">
+                    <div title="Modulate the pulse wave's width from the LFO">
+                      <span id="dco-pwm-source-lfo"></span>LFO
+                    </div>
+                    <div title="Manually set the pulse wave's width">
+                      <span id="dco-pwm-source-manual"></span>Man
+                    </div>
+                    <div title="Modulate the pulse wave's width from the envelope">
+                      <span id="dco-pwm-source-env"></span>Env
+                    </div>
+                  </div>
+                </div>
+                <div class="control control-slider" title="Volume of pulse wave">
+                  <label class="control-label">Pulse</label>
+                  <div id="dco-pulse-level"></div>
+                </div>
+              </div>
+              <div class="control control-slider" title="Volume of saw wave">
+                <label class="control-label">Saw</label>
+                <div id="dco-saw-level"></div>
+              </div>
+              <div class="control control-slider" title="Volume of sub-oscillator">
+                <label class="control-label">Sub</label>
+                <div id="dco-sub-level"></div>
+              </div>
+              <div class="control control-slider" title="Volume of noise">
+                <label class="control-label">Noise</label>
+                <div id="dco-noise-level"></div>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h2>HPF</h2>
+              <div
+                class="control control-slider hpf-width"
+                title="Cutoff frequency for the high pass filter"
+              >
+                <label class="control-label">Freq</label>
+                <div id="hpf-freq"></div>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h2>VCF</h2>
+              <div class="control control-slider" title="Cutoff frequency of the VCF">
+                <label class="control-label">Freq</label>
+                <div id="vcf-freq"></div>
+              </div>
+              <div class="control control-slider" title="Resonance of the VCF">
+                <label class="control-label">Res</label>
+                <div id="vcf-resonance"></div>
+              </div>
+              <div class="control control-group">
+                <div
+                  class="control control-radio-group"
+                  title="Polarity of the envelope's modulation"
+                >
+                  <label class="control-label"></label>
+                  <div class="radio-buttons">
+                    <div><span id="vcf-polarity-positive"></span>+</div>
+                    <div><span id="vcf-polarity-negative"></span>-</div>
+                  </div>
+                </div>
+                <div
+                  class="control control-slider"
+                  title="Amount of Envelope modulation for cutoff frequency"
+                >
+                  <label class="control-label">Env</label>
+                  <div id="vcf-env"></div>
+                </div>
+              </div>
+              <div
+                class="control control-slider"
+                title="Amount of LFO modulation for cutoff frequency"
+              >
+                <label class="control-label">LFO</label>
+                <div id="vcf-lfo"></div>
+              </div>
+              <div
+                class="control control-slider"
+                title="Amount of keyboard-tracking for cutoff frequency"
+              >
+                <label class="control-label">Key</label>
+                <div id="vcf-key"></div>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h2>VCA</h2>
+              <div class="control control-group">
+                <div class="control control-radio-group">
+                  <label class="control-label"></label>
+                  <div class="radio-buttons">
+                    <div title="Control each note's amplitude from the envelope">
+                      <span id="vca-source-env"></span>Env
+                    </div>
+                    <div title="Control each note's amplitude from its gate signal">
+                      <span id="vca-source-gate"></span>Gate
+                    </div>
+                  </div>
+                </div>
+                <div class="control control-slider" title="Amplitude level">
+                  <label class="control-label">Level</label>
+                  <div id="vca-level"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h2>ENV</h2>
+              <div class="control control-slider" title="Attack rate (0=fast, 10=slooow)">
+                <label class="control-label">A</label>
+                <div id="env-attack"></div>
+              </div>
+              <div class="control control-slider" title="Decay rate (0=fast, 10=slooow)">
+                <label class="control-label">D</label>
+                <div id="env-decay"></div>
+              </div>
+              <div class="control control-slider" title="Sustain level (until note is released)">
+                <label class="control-label">S</label>
+                <div id="env-sustain"></div>
+              </div>
+              <div class="control control-slider" title="Release rate (0=fast, 10=slooow)">
+                <label class="control-label">R</label>
+                <div id="env-release"></div>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h2>Chorus</h2>
+              <div class="control control-radio-group chorus-width">
+                <label class="control-label">Mode</label>
+                <div class="radio-buttons">
+                  <div title="Chorus effect off"><span id="chorus-mode-0"></span>Off</div>
+                  <div title="Slow chorus effect"><span id="chorus-mode-1"></span>I</div>
+                  <div title="Stronger chorus effect"><span id="chorus-mode-2"></span>II</div>
+                  <div title="Sea-sick chorus effect"><span id="chorus-mode-3"></span>I+II</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            id="synth-patches"
+            class="tab-pane"
+            id="home"
+            role="tabpanel"
+            aria-labelledby="synth-patches-tab"
+          >
+            <div class="control-block">
+              <h2>My patches</h2>
+              <div class="control patch-list" id="patch-list-mine">
+                <div class="alert alert-info" role="alert">
+                  Coming soon!
+                </div>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h2>Juno 60 - Factory Bank A</h2>
+              <div class="control patch-list" id="patch-list-juno60-factoryA">
+                <ul>
+                  <li><a class="btn btn-outline-primary">Strings I</a></li>
+                  <li><a class="btn btn-outline-primary">Strings II</a></li>
+                  <li><a class="btn btn-outline-primary">Strings III</a></li>
+                  <li><a class="btn btn-outline-primary">Organ I</a></li>
+                  <li><a class="btn btn-outline-primary">Organ II</a></li>
+                </ul>
+                <ul>
+                  <li><a class="btn btn-outline-primary">Organ III</a></li>
+                  <li><a class="btn btn-outline-primary">Brass</a></li>
+                  <li><a class="btn btn-outline-primary">Phase Brass</a></li>
+                  <li><a class="btn btn-outline-primary">Piano I</a></li>
+                  <li><a class="btn btn-outline-primary">Piano II</a></li>
+                </ul>
+                <ul>
+                  <li><a class="btn btn-outline-primary">Celesta</a></li>
+                  <li><a class="btn btn-outline-primary">Mellow Piano</a></li>
+                  <li><a class="btn btn-outline-primary">Harpsichord I</a></li>
+                  <li><a class="btn btn-outline-primary">Harpsichord II</a></li>
+                  <li><a class="btn btn-outline-primary">Synthetiser Harp</a></li>
+                </ul>
+                <ul>
+                  <li><a class="btn btn-outline-primary">Bass I</a></li>
+                  <li><a class="btn btn-outline-primary">Bass II</a></li>
+                  <li><a class="btn btn-outline-primary">Clavichord I</a></li>
+                  <li><a class="btn btn-outline-primary">Clavichord II</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h2>Juno 60 - Factory Bank B</h2>
+              <div class="control patch-list" id="patch-list-mine">
+                <div class="alert alert-info" role="alert">
+                  Coming soon!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            id="synth-sequencer"
+            class="tab-pane"
+            id="home"
+            role="tabpanel"
+            aria-labelledby="synth-sequencer-tab"
+          >
+            <div class="control-block">
+              <h2>Sequencer stuff</h2>
+              <div class="control">
+                <div class="alert alert-info" role="alert">
+                  Coming soon!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            id="synth-analyse"
+            class="tab-pane"
+            id="home"
+            role="tabpanel"
+            aria-labelledby="synth-analyse-tab"
+          >
+            <div class="control-block">
+              <h2>Oscilloscope</h2>
+              <div class="control">
+                <div class="alert alert-info" role="alert">
+                  Coming soon!
+                </div>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h2>Spectragram</h2>
+              <div class="control">
+                <div class="alert alert-info" role="alert">
+                  Coming soon!
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="control-block">
-          <h2>ENV</h2>
-          <div class="control control-slider" title="Attack rate (0=fast, 10=slooow)">
-            <label class="control-label">A</label>
-            <div id="env-attack"></div>
+        <div id="synth-performance">
+          <div class="control-block" id="perf-block">
+            <h2>Bend</h2>
+            <div>
+              <div class="control control-slider" title="Bend the note's pitch">
+                <div id="pitchBend"></div>
+              </div>
+              <div
+                class="control control-slider"
+                title="How much pitch-bend to apply to the DCO pitch"
+              >
+                <label class="control-label">DCO</label>
+                <div id="dco-bend-depth"></div>
+              </div>
+              <div
+                class="control control-slider"
+                title="How much pitch-bend to apply to the VCF cutoff"
+              >
+                <label class="control-label">VCF</label>
+                <div id="vcf-bend-depth"></div>
+              </div>
+            </div>
           </div>
-          <div class="control control-slider" title="Decay rate (0=fast, 10=slooow)">
-            <label class="control-label">D</label>
-            <div id="env-decay"></div>
-          </div>
-          <div class="control control-slider" title="Sustain level (until note is released)">
-            <label class="control-label">S</label>
-            <div id="env-sustain"></div>
-          </div>
-          <div class="control control-slider" title="Release rate (0=fast, 10=slooow)">
-            <label class="control-label">R</label>
-            <div id="env-release"></div>
-          </div>
-        </div>
-
-        <div class="control-block">
-          <h2>Chorus</h2>
-          <div class="control control-radio-group chorus-width">
-            <label class="control-label">Mode</label>
-            <div class="radio-buttons">
-              <div><span id="chorus-mode-0"></span>Off</div>
-              <div><span id="chorus-mode-1"></span>I</div>
-              <div><span id="chorus-mode-2"></span>II</div>
-              <div><span id="chorus-mode-3"></span>I+II</div>
+          <div class="control-block" id="piano-block">
+            <h2>&nbsp;</h2>
+            <div class="btn-group" id="piano-change-octave" title="Visible range for the keyboard">
+              <a class="btn btn-outline-secondary btn-sm" tabindex="-1">o</a>
+              <a class="btn btn-outline-secondary btn-sm" tabindex="-1">o</a>
+              <a class="btn btn-outline-secondary btn-sm active" tabindex="-1">o</a>
+              <a class="btn btn-outline-secondary btn-sm" tabindex="-1">o</a>
+              <a class="btn btn-outline-secondary btn-sm" tabindex="-1">o</a>
+            </div>
+            <div id="piano-wrapper">
+              <div id="piano"></div>
             </div>
           </div>
         </div>
       </div>
 
-      <div id="synth-patches">
-        <h1>Patches</h1>
-        <div>
-          <ul id="patch-list">
-            <li><a href="javascript:">Strings I</a></li>
-            <li><a href="javascript:">Strings II</a></li>
-            <li><a href="javascript:">Strings III</a></li>
-            <li><a href="javascript:">Organ I</a></li>
-            <li><a href="javascript:">Organ II</a></li>
-            <li><a href="javascript:">Organ III</a></li>
-            <li><a href="javascript:">Brass</a></li>
-            <li><a href="javascript:">Phase Brass</a></li>
-            <li><a href="javascript:">Piano I</a></li>
-            <li><a href="javascript:">Piano II</a></li>
-            <li><a href="javascript:">Celesta</a></li>
-            <li><a href="javascript:">Mellow Piano</a></li>
-            <li><a href="javascript:">Harpsichord I</a></li>
-            <li><a href="javascript:">Harpsichord II</a></li>
-            <li><a href="javascript:">Synthetiser Harp</a></li>
-            <li><a href="javascript:">Bass I</a></li>
-            <li><a href="javascript:">Bass II</a></li>
-            <li><a href="javascript:">Clavichord I</a></li>
-            <li><a href="javascript:">Clavichord II</a></li>
-          </ul>
+      <div
+        class="modal"
+        id="modal-midi-port-selector"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="modal-midi-port-selector-Label"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modal-midi-port-selector-Label">
+                Connect to MIDI input device
+              </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Select MIDI input device:</p>
+              <div class="list-group" id="midi-port-list"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div id="synth-performance">
-      <div id="perf-controls">
-        <div class="control control-slider" title="How much pitch-bend to apply to the DCO pitch">
-          <label class="control-label">DCO</label>
-          <div id="dco-bend-depth"></div>
-        </div>
-        <div class="control control-slider" title="How much pitch-bend to apply to the VCF cutoff">
-          <label class="control-label">VCF</label>
-          <div id="vcf-bend-depth"></div>
-        </div>
-
-        <div id="pitchBend"></div>
-      </div>
-
-      <div id="piano"></div>
     </div>
 
     <script type="module">
       import { MidiAdapter, MidiConsumer } from '../src/midiAdapter.js'
+      import { NexusUIHelper } from './nexusui-helper.js'
+      import Juno60FactoryPatchesA from '../src/junox/patches.js'
 
-      const lfoRate = createSlider('#lfo-rate')
-      const lfoDelay = createSlider('#lfo-delay')
-      const lfoTriggerMode = createCheckButtons({
-        true: '#lfo-trigger-mode-auto',
-        false: '#lfo-trigger-mode-manual',
-      })
-      const dcoLfoDepth = createSlider('#dco-lfo-depth')
-      const dcoPwmDepth = createSlider('#dco-pwm-depth')
-      const dcoPwmSource = createCheckButtons({
-        l: '#dco-pwm-source-lfo',
-        m: '#dco-pwm-source-manual',
-        e: '#dco-pwm-source-env',
-      })
-      const dcoPulseLevel = createSlider('#dco-pulse-level')
-      const dcoSawLevel = createSlider('#dco-saw-level')
-      const dcoSubLevel = createSlider('#dco-sub-level')
-      const dcoNoiseLevel = createSlider('#dco-noise-level')
+      Nexus.colors.accent = 'rgb(0, 123, 255)'
+      Nexus.colors.mediumLight = '#669'
+      Nexus.colors.fill = 'rgba(0, 123, 255, 0.15)'
 
-      const hpfFreq = createSlider('#hpf-freq')
+      const ui = new NexusUIHelper(Nexus)
 
-      const vcfFreq = createSlider('#vcf-freq')
-      const vcfResonance = createSlider('#vcf-resonance')
-      const vcfPolarity = createCheckButtons({
-        true: '#vcf-polarity-positive',
-        false: '#vcf-polarity-negative',
-      })
-      const vcfEnv = createSlider('#vcf-env')
-      const vcfLfo = createSlider('#vcf-lfo')
-      const vcfKey = createSlider('#vcf-key')
-
-      const vcaSource = createCheckButtons({
-        env: '#vca-source-env',
-        gate: '#vca-source-gate',
-      })
-      const vcaLevel = createSlider('#vca-level')
-
-      const envAttack = createSlider('#env-attack')
-      const envDecay = createSlider('#env-decay')
-      const envSustain = createSlider('#env-sustain')
-      const envRelease = createSlider('#env-release')
-
-      const chorusMode = createCheckButtons({
-        0: '#chorus-mode-0',
-        1: '#chorus-mode-1',
-        2: '#chorus-mode-2',
-        3: '#chorus-mode-3',
-      })
-
-      const dcoBendDepth = createSlider('#dco-bend-depth')
-      const vcfBendDepth = createSlider('#vcf-bend-depth')
-      const pitchBend = createPan('#pitchBend')
-
-      const piano = new Nexus.Piano('#piano', {
-        lowNote: 36,
-        highNote: 72,
+      const lfoRate = ui.createSlider(1, 'LFO Rate', '#lfo-rate', onControlChange)
+      const lfoDelay = ui.createSlider(2, 'LFO Delay', '#lfo-delay', onControlChange)
+      const lfoTriggerMode = ui.createRadioButtonGroup(
+        3,
+        'LFO Trigger Mode',
+        {
+          true: '#lfo-trigger-mode-auto',
+          false: '#lfo-trigger-mode-manual',
+        },
+        onControlChange
+      )
+      const lfoManualTrigger = new Nexus.Button('#lfo-manual-trigger', {
+        size: [60, 60],
         mode: 'button',
-        size: [1000, 250],
       })
 
-      function createCheckButtons(keyToIdMap) {
-        let value = null
+      const dcoRange = ui.createRadioButtonGroup(
+        3,
+        'DCO range',
+        {
+          0.5: '#dco-range-16',
+          1: '#dco-range-8',
+          2: '#dco-range-4',
+        },
+        onControlChange
+      )
+      const dcoLfoDepth = ui.createSlider(
+        4,
+        'DCO LFO Modulation Depth',
+        '#dco-lfo-depth',
+        onControlChange
+      )
+      const dcoPwmDepth = ui.createSlider(
+        5,
+        'DCO PWM Modulation Depth',
+        '#dco-pwm-depth',
+        onControlChange
+      )
+      const dcoPwmSource = ui.createRadioButtonGroup(
+        6,
+        'DCO PWM Source',
+        {
+          l: '#dco-pwm-source-lfo',
+          m: '#dco-pwm-source-manual',
+          e: '#dco-pwm-source-env',
+        },
+        onControlChange
+      )
+      const dcoPulseLevel = ui.createSlider(
+        7,
+        'DCO Pulse Level',
+        '#dco-pulse-level',
+        onControlChange
+      )
+      const dcoSawLevel = ui.createSlider(8, 'DCO Saw Level', '#dco-saw-level', onControlChange)
+      const dcoSubLevel = ui.createSlider(9, 'DCO Sub Level', '#dco-sub-level', onControlChange)
+      const dcoNoiseLevel = ui.createSlider(
+        10,
+        'DCO Noise Level',
+        '#dco-noise-level',
+        onControlChange
+      )
 
-        const keyToNexusElementMap = {}
-        for (let v of Object.keys(keyToIdMap)) {
-          const vcopy = v
-          const control = new Nexus.Button(keyToIdMap[vcopy], { size: [30, 30], mode: 'toggle' })
+      const hpfFreq = ui.createSlider(11, 'HPF Cutoff', '#hpf-freq', onControlChange)
 
-          if (value === null) {
-            control.state = true
-            value = v
-          }
+      const vcfFreq = ui.createSlider(12, 'VCF Cutoff', '#vcf-freq', onControlChange)
+      const vcfResonance = ui.createSlider(13, 'VCF Resonance', '#vcf-resonance', onControlChange)
+      const vcfPolarity = ui.createRadioButtonGroup(
+        14,
+        'VCF Polarity',
+        {
+          true: '#vcf-polarity-positive',
+          false: '#vcf-polarity-negative',
+        },
+        onControlChange
+      )
+      const vcfEnv = ui.createSlider(
+        15,
+        'VCF Envelope Modulation Depth',
+        '#vcf-env',
+        onControlChange
+      )
+      const vcfLfo = ui.createSlider(16, 'VCF LFO Modulation Depth', '#vcf-lfo', onControlChange)
+      const vcfKey = ui.createSlider(17, 'VCF Keyboard Tracking Depth', '#vcf-key', onControlChange)
 
-          control.on('change', (state) => {
-            if (state ^ (value === vcopy)) {
-              setValue(vcopy)
-              onControlChange()
-            }
+      const vcaSource = ui.createRadioButtonGroup(
+        18,
+        'VCA Source',
+        {
+          env: '#vca-source-env',
+          gate: '#vca-source-gate',
+        },
+        onControlChange
+      )
+      const vcaLevel = ui.createSlider(19, 'VCA Level', '#vca-level', onControlChange)
+
+      const envAttack = ui.createSlider(20, 'Envelope Attack Rate', '#env-attack', onControlChange)
+      const envDecay = ui.createSlider(21, 'Envelope Decay Rate', '#env-decay', onControlChange)
+      const envSustain = ui.createSlider(
+        22,
+        'Envelope Sustain Level',
+        '#env-sustain',
+        onControlChange
+      )
+      const envRelease = ui.createSlider(
+        23,
+        'Envelope Release Rate',
+        '#env-release',
+        onControlChange
+      )
+
+      const chorusMode = ui.createRadioButtonGroup(
+        24,
+        'Chorus Mode',
+        {
+          0: '#chorus-mode-0',
+          1: '#chorus-mode-1',
+          2: '#chorus-mode-2',
+          3: '#chorus-mode-3',
+        },
+        onControlChange
+      )
+
+      const dcoBendDepth = ui.createSlider(
+        24,
+        'DCO Pitch-Bend Depth',
+        '#dco-bend-depth',
+        onControlChange
+      )
+      const vcfBendDepth = ui.createSlider(
+        25,
+        'DCO Cutoff-Bend Depth',
+        '#vcf-bend-depth',
+        onControlChange
+      )
+
+      const pitchBend = ui.createBendLever(100, 'Bend lever', '#pitchBend')
+
+      const $juno60PatchListA = $('#patch-list-juno60-factoryA').empty()
+      let $patchColumn = null
+      for (let patch of Juno60FactoryPatchesA) {
+        if ($patchColumn === null) {
+          $patchColumn = $('<ul></ul>').appendTo($juno60PatchListA)
+        }
+
+        $('<li><a class="btn btn-outline-primary"></a></li>')
+          .appendTo($patchColumn)
+          .find('a')
+          .text(patch.name)
+          .attr('title', patch.name)
+          .data('patch', patch)
+          .on('click', function () {
+            $('#synth-patches a.active').removeClass('active')
+            $(this).addClass('active')
+
+            alert($(this).data('patch').name)
           })
 
-          keyToNexusElementMap[v] = control
-        }
-
-        function setValue(newValue) {
-          if (keyToNexusElementMap[newValue] !== undefined) {
-            value = newValue
-            for (let v of Object.keys(keyToIdMap)) {
-              const newState = v === newValue
-              if (keyToNexusElementMap[v].state !== newState) {
-                keyToNexusElementMap[v].state = newState
-              }
-            }
-          }
-        }
-
-        return {
-          getValue: () => value,
-          setValue: setValue,
+        if ($patchColumn.children().length >= 6) {
+          $patchColumn = null
         }
       }
 
-      function createSlider(id) {
-        const digitsControl = document.createElement('span')
-        digitsControl.innerText = '0.0'
-
-        const control = new Nexus.Slider(id, { size: [40, 150], min: 0, max: 10, step: 0.1 }).on(
-          'change',
-          (v) => {
-            digitsControl.innerText = v.toFixed(1)
-            onControlChange()
-          }
-        )
-
-        control.parent.parentElement.insertBefore(digitsControl, control.parent)
-
-        return control
+      const piano = new Nexus.Piano('#piano', {
+        lowNote: 24,
+        highNote: 96,
+        mode: 'button',
+        size: [2582, 210],
+      })
+      const pianoKeyNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+      for (let key of piano.keys) {
+        const octave = Math.floor(key.note / 12)
+        const octaveNote = key.note - octave * 12
+        const keyName = pianoKeyNames[octaveNote].replace('#', '<sup>#</sup>') + octave.toString()
+        const $keySpan = $(`<span class="piano-key-name">${keyName}</span>`)
+        $keySpan.appendTo(key.parent)
       }
 
-      function createPan(id) {
-        const control = new Nexus.Pan(id, { size: [150, 40], min: -1, max: 1, step: 0.01 }).on(
-          'change',
-          (v) => {
-            onControlChange()
-          }
-        )
+      // Allow user to change the visible range of octaves.
+      $('#piano-change-octave a').each(function (i) {
+        $(this).click(function () {
+          $('#piano-change-octave a.active').removeClass('active')
+          $(this).addClass('active')
+          $('#piano').css('margin-left', `${(i - 2) * -421}px`)
+        })
+      })
 
-        return control
+      // If the window is resized then default to middle-C being centred.
+      centreKeyboard()
+      $(window).resize(centreKeyboard)
+      function centreKeyboard() {
+        const painoWidth = $('#piano-wrapper').width()
+        const offsetToCentreC4 = painoWidth / 2 - 1291
+        $('#piano').css('left', `${offsetToCentreC4}px`)
       }
 
       function onControlChange() {
@@ -499,6 +686,11 @@
           },
         }
         console.log(patch)
+
+        $('#lfo-manual-trigger-wrapper').css(
+          'display',
+          lfoTriggerMode.value.toString() === 'false' ? 'block' : 'none'
+        )
       }
 
       let isNexusChanging = false
@@ -537,13 +729,40 @@
         isNexusChanging = false
       })
 
-      if (navigator.requestMIDIAccess) {
-        const midiAdapter = new MidiAdapter()
+      $('#btnMidi').click(function () {
+        if (!navigator.requestMIDIAccess) {
+          alert('Sorry - MIDI not available')
+          return
+        }
+
+        const midiAdapter = new MidiAdapter().withSysex()
         midiAdapter.start().then(() => {
           const inputs = midiAdapter.listInputs()
-          midiAdapter.connectFromInput(inputs[0].id, consumer)
+          if (!inputs.length) {
+            alert('Sorry - No MIDI input devices detected')
+            return
+          }
+
+          const $midiPortList = $('#midi-port-list')
+            .empty()
+            .on('click', 'a', (ev) => {
+              midiAdapter.connectFromInput($(ev.currentTarget).data('portId'), consumer)
+              $('#modal-midi-port-selector').modal('hide')
+              $('#btnMidi').addClass('d-none')
+              $('#menuMidiOptions').removeClass('d-none')
+            })
+          $.each(inputs, (i, x) => {
+            const $portHtml = $(
+              '<a href="javascript:" class="list-group-item list-group-item-action bg-secondary text-light"></a>'
+            )
+              .data('portId', x.id)
+              .text(x.name)
+              .appendTo($midiPortList)
+          })
+
+          $('#modal-midi-port-selector').modal()
         })
-      }
+      })
     </script>
   </body>
 </html>

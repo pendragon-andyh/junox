@@ -4,6 +4,7 @@ export class MidiAdapter {
 
   withSysex(sysexMode = true) {
     this._midiOptions.sysex = sysexMode
+    return this
   }
 
   isConnected() {
@@ -37,11 +38,22 @@ export class MidiAdapter {
   }
 
   listInputs() {
-    this.ensureMidiStarted()
     const results = []
-    this._midiAccess.inputs.forEach((x) => {
-      results.push({ id: x.id, name: x.name, port: x })
-    })
+    if (this._midiAccess) {
+      this._midiAccess.inputs.forEach((port) => {
+        results.push({ id: port.id, name: port.name, port })
+      })
+    }
+    return results
+  }
+
+  listOutputs() {
+    const results = []
+    if (this._midiAccess) {
+      this._midiAccess.outputs.forEach((port) => {
+        results.push({ id: port.id, name: port.name, port })
+      })
+    }
     return results
   }
 
@@ -53,7 +65,7 @@ export class MidiAdapter {
       throw new RangeError(`MIDI Input port "${portId} not found`)
     }
 
-    // If port is already connected to somethinf then send "all notes off" message to tidy-up.
+    // If port is already connected to something then send "all notes off" message to tidy-up.
     if (port.onmidimessage) {
       port.onmidimessage([176, 123, 0])
     }
