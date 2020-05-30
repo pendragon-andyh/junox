@@ -163,6 +163,7 @@ header {
 }
 #piano-change-octave a {
   width: 30px;
+  padding: 0;
 }
 #piano {
   position: relative;
