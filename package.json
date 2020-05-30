@@ -7,7 +7,7 @@
     "lint": "eslint src",
     "build": "cross-env NODE_ENV=production rimraf dist && webpack --mode production --config webpack.config.js",
     "stats": "cross-env NODE_ENV=production rimraf dist && webpack --mode production --config webpack.config.js --json > stats.json",
-    "deploy": "gh-pages --dist dist",
+    "deploy": "gh-pages --dist .",
     "test": "jest",
     "tdd": "jest --watch",
     "convert:patches": "node patches/Juno60.js"
