@@ -68,9 +68,9 @@ export class NexusUIHelper {
   createBendLever(controlId, title, htmlId, onControlChange) {
     const control = new this.nexus.Pan(htmlId, {
       size: [50, 200],
-      min: -100,
-      max: +100,
-      step: 0.1,
+      min: -10,
+      max: +10,
+      step: 0.11,
     }).on('change', (v) => {
       onControlChange && onControlChange(controlId, v)
     })
