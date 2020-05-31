@@ -87,6 +87,7 @@ header {
   margin-bottom: 3px;
   border-radius: 15px;
   padding-right: 6px;
+  min-width: 55px;
 }
 .radio-buttons div:hover {
   background-color: rgba(0, 123, 255, 0.4);
@@ -104,10 +105,10 @@ header {
 }
 
 .hpf-width {
-  min-width: 58px;
+  min-width: 50px;
 }
 .chorus-width {
-  min-width: 89px;
+  min-width: 73px;
 }
 
 #synth-sequencer .control {
