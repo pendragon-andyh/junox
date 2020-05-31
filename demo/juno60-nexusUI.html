@@ -32,15 +32,15 @@
   </head>
 
   <body>
-    <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bg-primary">
-      <span class="navbar-brand mb-0 h1">JUNOX</span> -
+    <header class="navbar navbar-dark bg-primary">
+      <span class="navbar-brand mb-0 h1">JUNOX</span>
 
-      <ul class="navbar-nav ml-md-auto pull-right">
+      <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="btn btn-secondary" id="btnMidi" href="javascript:">MIDI &hellip;</a>
+          <a class="btn btn-sm btn-outline-dark" id="btnMidi" href="javascript:">MIDI &hellip;</a>
           <div class="dropdown d-none" id="menuMidiOptions">
             <button
-              class="btn btn-secondary dropdown-toggle"
+              class="btn btn-sm btn-outline-dark dropdown-toggle"
               type="button"
               id="dropdownMenuButton"
               data-toggle="dropdown"
@@ -59,16 +59,11 @@
         &nbsp;
         <li class="nav-item">
           <a
-            class="btn btn-secondary btn-github"
+            class="btn btn-sm btn-outline-dark"
             href="https://github.com/pendragon-andyh/junox"
             target="_blank"
           >
             Github
-            <img
-              height="22"
-              width="22"
-              src="https://cdn.jsdelivr.net/npm/simple-icons@v2/icons/github.svg"
-            />
           </a>
         </li>
       </ul>
@@ -76,6 +71,12 @@
 
     <div class="container-fluid">
       <div id="synth-container">
+        <span class="float-right">
+          <a class="btn btn-outline-secondary" id="btnSavePatch" href="javascript:">
+            Save patch
+          </a>
+        </span>
+
         <ul class="nav nav-tabs">
           <li class="nav-item">
             <a
@@ -83,7 +84,7 @@
               id="synth-patches-tab"
               data-toggle="tab"
               href="#synth-patches"
-              >Patch manager</a
+              >Patches</a
             >
           </li>
           <li class="nav-item">
@@ -111,7 +112,7 @@
             role="tabpanel"
             aria-labelledby="synth-patches-tab"
           >
-            <div class="control-block">
+            <div class="control-block d-none">
               <h2>My patches</h2>
               <div class="control patch-list" id="patch-list-mine">
                 <div class="alert alert-info" role="alert">
@@ -120,14 +121,14 @@
               </div>
             </div>
 
-            <div class="control-block">
+            <div class="control-block d-none">
               <h2>Juno 60 - Factory Bank A</h2>
               <div class="control patch-list" id="patch-list-juno60-factoryA"></div>
             </div>
 
-            <div class="control-block">
+            <div class="control-block d-none">
               <h2>Juno 60 - Factory Bank B</h2>
-              <div class="control patch-list" id="patch-list-mine">
+              <div class="control patch-list" id="patch-list-juno60-factoryB">
                 <div class="alert alert-info" role="alert">
                   Coming soon!
                 </div>
@@ -422,13 +423,13 @@
         id="modal-midi-port-selector"
         tabindex="-1"
         role="dialog"
-        aria-labelledby="modal-midi-port-selector-Label"
+        aria-labelledby="modal-midi-port-selector-label"
         aria-hidden="true"
       >
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="modal-midi-port-selector-Label">
+              <h5 class="modal-title" id="modal-midi-port-selector-label">
                 Connect to MIDI input device
               </h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -447,15 +448,55 @@
       </div>
     </div>
 
+    <div
+      class="modal"
+      id="modal-save-patch"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modal-save-patch-label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <form id="formSavePatch">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modal-save-patch-label">
+                Save patch
+              </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="patchName">Patch name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="patchName"
+                  required
+                  pattern="^[A-Za-z0-9 -]+$"
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-secondary">OK</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
       <div class="toast-header">
-        <strong class="mr-auto">Bootstrap</strong>
+        <strong class="mr-auto">JUNOX</strong>
         <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="toast-body">
-        Welcome to Junox!
+        Welcome to Junox! Choose a patch &hellip;
       </div>
     </div>
 
@@ -644,10 +685,10 @@
       $('.toast').toast({ delay: 2000, autohide: true }).toast('show')
 
       // Load Andy's base testing scenario.
-      let patchName = 'Unspecified name'
+      let patchName = 'Unspecified patch'
       let originalPatchJson = ''
       const defaultPatch = {
-        name: 'Unspecified name',
+        name: 'Unspecified patch',
         vca: 0.5,
         vcaType: 'gate',
         lfo: { autoTrigger: true, frequency: 0.0, delay: 0.0 },
@@ -688,12 +729,12 @@
         const currentPatchJson = JSON.stringify(patch)
         console.log(currentPatchJson)
 
-        // Update the status message.
-        $('#piano-message').text('Patch: ' + patchName + '  ')
-        if (currentPatchJson !== originalPatchJson) {
-          $('<span class="badge badge-info"></span>')
-            .text('Unsaved changes')
-            .appendTo($('#piano-message'))
+        // Update the status message and show "save patch" button if user has changed stuff.
+        $('#piano-message').text(patchName)
+        if (currentPatchJson === originalPatchJson) {
+          $('#btnSavePatch').hide()
+        } else {
+          $('#btnSavePatch').show()
         }
 
         // Show/hide related stuff.
@@ -734,6 +775,8 @@
           $patchColumn = null
         }
       }
+
+      $juno60PatchListA.closest('.control-block').removeClass('d-none')
 
       function serializeFromControlsToPatch() {
         return {
@@ -912,6 +955,24 @@
 
           $('#modal-midi-port-selector').modal()
         })
+      })
+
+      $('#btnSavePatch').click(function () {
+        $('#patchName').val(patchName)
+        $('#modal-save-patch').modal()
+        setTimeout(function () {
+          $('#patchName').focus()[0].select()
+        }, 0)
+      })
+
+      $('#formSavePatch').submit(function (ev) {
+        ev.preventDefault()
+        patchName = $('#patchName').val()
+        const serializedPatch = serializeFromControlsToPatch()
+        deserializeFromPatchToControls(serializedPatch)
+        // TODO
+        $('#modal-save-patch').modal('hide')
+        return false
       })
     </script>
   </body>
