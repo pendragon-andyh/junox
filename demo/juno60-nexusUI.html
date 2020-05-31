@@ -7,25 +7,25 @@
 
     <link
       rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="juno60-nexusUI.css" />
 
     <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
       crossorigin="anonymous"
     ></script>
     <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
       crossorigin="anonymous"
     ></script>
     <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
       crossorigin="anonymous"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/nexusui@2.0.13/dist/NexusUI.js"></script>
@@ -80,15 +80,15 @@
           <li class="nav-item">
             <a
               class="nav-link active"
-              id="synth-controls-tab"
+              id="synth-patches-tab"
               data-toggle="tab"
-              href="#synth-controls"
-              >Control panel</a
+              href="#synth-patches"
+              >Patch manager</a
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" id="synth-patches-tab" data-toggle="tab" href="#synth-patches"
-              >Patch manager</a
+            <a class="nav-link" id="synth-controls-tab" data-toggle="tab" href="#synth-controls"
+              >Control panel</a
             >
           </li>
           <li class="nav-item">
@@ -105,8 +105,39 @@
 
         <div class="tab-content">
           <div
-            id="synth-controls"
+            id="synth-patches"
             class="tab-pane active"
+            id="home"
+            role="tabpanel"
+            aria-labelledby="synth-patches-tab"
+          >
+            <div class="control-block">
+              <h2>My patches</h2>
+              <div class="control patch-list" id="patch-list-mine">
+                <div class="alert alert-info" role="alert">
+                  Coming soon!
+                </div>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h2>Juno 60 - Factory Bank A</h2>
+              <div class="control patch-list" id="patch-list-juno60-factoryA"></div>
+            </div>
+
+            <div class="control-block">
+              <h2>Juno 60 - Factory Bank B</h2>
+              <div class="control patch-list" id="patch-list-mine">
+                <div class="alert alert-info" role="alert">
+                  Coming soon!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            id="synth-controls"
+            class="tab-pane"
             id="home"
             role="tabpanel"
             aria-labelledby="synth-controls-tab"
@@ -304,65 +335,6 @@
           </div>
 
           <div
-            id="synth-patches"
-            class="tab-pane"
-            id="home"
-            role="tabpanel"
-            aria-labelledby="synth-patches-tab"
-          >
-            <div class="control-block">
-              <h2>My patches</h2>
-              <div class="control patch-list" id="patch-list-mine">
-                <div class="alert alert-info" role="alert">
-                  Coming soon!
-                </div>
-              </div>
-            </div>
-
-            <div class="control-block">
-              <h2>Juno 60 - Factory Bank A</h2>
-              <div class="control patch-list" id="patch-list-juno60-factoryA">
-                <ul>
-                  <li><a class="btn btn-outline-primary">Strings I</a></li>
-                  <li><a class="btn btn-outline-primary">Strings II</a></li>
-                  <li><a class="btn btn-outline-primary">Strings III</a></li>
-                  <li><a class="btn btn-outline-primary">Organ I</a></li>
-                  <li><a class="btn btn-outline-primary">Organ II</a></li>
-                </ul>
-                <ul>
-                  <li><a class="btn btn-outline-primary">Organ III</a></li>
-                  <li><a class="btn btn-outline-primary">Brass</a></li>
-                  <li><a class="btn btn-outline-primary">Phase Brass</a></li>
-                  <li><a class="btn btn-outline-primary">Piano I</a></li>
-                  <li><a class="btn btn-outline-primary">Piano II</a></li>
-                </ul>
-                <ul>
-                  <li><a class="btn btn-outline-primary">Celesta</a></li>
-                  <li><a class="btn btn-outline-primary">Mellow Piano</a></li>
-                  <li><a class="btn btn-outline-primary">Harpsichord I</a></li>
-                  <li><a class="btn btn-outline-primary">Harpsichord II</a></li>
-                  <li><a class="btn btn-outline-primary">Synthetiser Harp</a></li>
-                </ul>
-                <ul>
-                  <li><a class="btn btn-outline-primary">Bass I</a></li>
-                  <li><a class="btn btn-outline-primary">Bass II</a></li>
-                  <li><a class="btn btn-outline-primary">Clavichord I</a></li>
-                  <li><a class="btn btn-outline-primary">Clavichord II</a></li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="control-block">
-              <h2>Juno 60 - Factory Bank B</h2>
-              <div class="control patch-list" id="patch-list-mine">
-                <div class="alert alert-info" role="alert">
-                  Coming soon!
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div
             id="synth-sequencer"
             class="tab-pane"
             id="home"
@@ -430,7 +402,7 @@
             </div>
           </div>
           <div class="control-block" id="piano-block">
-            <h2>&nbsp;</h2>
+            <h2 id="piano-message">&nbsp;</h2>
             <div class="btn-group" id="piano-change-octave" title="Visible range for the keyboard">
               <a class="btn btn-outline-secondary btn-sm" tabindex="-1">o</a>
               <a class="btn btn-outline-secondary btn-sm" tabindex="-1">o</a>
@@ -472,6 +444,18 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="mr-auto">Bootstrap</strong>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="toast-body">
+        Welcome to Junox!
       </div>
     </div>
 
@@ -624,31 +608,6 @@
 
       const pitchBend = ui.createBendLever(100, 'Bend lever', '#pitchBend')
 
-      const $juno60PatchListA = $('#patch-list-juno60-factoryA').empty()
-      let $patchColumn = null
-      for (let patch of Juno60FactoryPatchesA) {
-        if ($patchColumn === null) {
-          $patchColumn = $('<ul></ul>').appendTo($juno60PatchListA)
-        }
-
-        $('<li><a class="btn btn-outline-primary"></a></li>')
-          .appendTo($patchColumn)
-          .find('a')
-          .text(patch.name)
-          .attr('title', patch.name)
-          .data('patch', patch)
-          .on('click', function () {
-            $('#synth-patches a.active').removeClass('active')
-            $(this).addClass('active')
-
-            alert($(this).data('patch').name)
-          })
-
-        if ($patchColumn.children().length >= 6) {
-          $patchColumn = null
-        }
-      }
-
       const piano = new Nexus.Piano('#piano', {
         lowNote: 24,
         highNote: 96,
@@ -682,19 +641,206 @@
         $('#piano').css('left', `${offsetToCentreC4}px`)
       }
 
-      function onControlChange() {
-        const patch = {
-          lfo: {
-            rate: lfoRate.value,
-            delay: lfoDelay.value,
-          },
-        }
-        console.log(patch)
+      $('.toast').toast({ delay: 2000, autohide: true }).toast('show')
 
+      // Load Andy's base testing scenario.
+      let patchName = 'Unspecified name'
+      let originalPatchJson = ''
+      const defaultPatch = {
+        name: 'Unspecified name',
+        vca: 0.5,
+        vcaType: 'gate',
+        lfo: { autoTrigger: true, frequency: 0.0, delay: 0.0 },
+        dco: {
+          range: 1,
+          saw: false,
+          pulse: true,
+          sub: false,
+          subAmount: 0,
+          noise: 0,
+          pwm: 0,
+          pwmMod: 'm',
+          lfo: 0,
+        },
+        hpf: 0,
+        vcf: {
+          type: 'diode-ladder',
+          frequency: 1.0,
+          resonance: 0.0,
+          modPositive: true,
+          envMod: 0,
+          lfoMod: 0,
+          keyMod: 0,
+        },
+        env: { attack: 0.5, decay: 0.5, sustain: 0.5, release: 0.5 },
+        chorus: 0,
+      }
+      deserializeFromPatchToControls(defaultPatch)
+
+      function onControlChange() {
+        // If "originalPatchJson" then we're doing a bulk change - so ignore temporarily.
+        if (originalPatchJson === null) {
+          return
+        }
+
+        // Seialize the current control panel settings.
+        const patch = serializeFromControlsToPatch()
+        const currentPatchJson = JSON.stringify(patch)
+        console.log(currentPatchJson)
+
+        // Update the status message.
+        $('#piano-message').text('Patch: ' + patchName + '  ')
+        if (currentPatchJson !== originalPatchJson) {
+          $('<span class="badge badge-info"></span>')
+            .text('Unsaved changes')
+            .appendTo($('#piano-message'))
+        }
+
+        // Show/hide related stuff.
         $('#lfo-manual-trigger-wrapper').css(
           'display',
           lfoTriggerMode.value.toString() === 'false' ? 'block' : 'none'
         )
+      }
+
+      // Display the available patches.
+      // TODO - refactor.
+      const $juno60PatchListA = $('#patch-list-juno60-factoryA').empty()
+      let $patchColumn = null
+      for (let patch of Juno60FactoryPatchesA) {
+        if ($patchColumn === null) {
+          $patchColumn = $('<ul></ul>').appendTo($juno60PatchListA)
+        }
+
+        $('<li><a class="btn btn-outline-primary"></a></li>')
+          .appendTo($patchColumn)
+          .find('a')
+          .text(patch.name)
+          .attr('title', patch.name)
+          .data('patch', patch)
+          .on('click', function () {
+            // Highlight the current patch.
+            $('#synth-patches a.active').removeClass('active')
+            $(this).addClass('active')
+
+            // Apply the patch to the control-panel.
+            deserializeFromPatchToControls(patch)
+
+            $('.toast-body').text('Patch loaded ... have a play!')
+            $('.toast').toast('show')
+          })
+
+        if ($patchColumn.children().length >= 6) {
+          $patchColumn = null
+        }
+      }
+
+      function serializeFromControlsToPatch() {
+        return {
+          name: patchName,
+          vca: (0.1 * vcaLevel.value).toFixed(2),
+          vcaType: vcaSource.value,
+          lfo: {
+            autoTrigger: lfoTriggerMode.value === 'true',
+            frequency: (0.1 * lfoRate.value).toFixed(2),
+            delay: (0.1 * lfoDelay.value).toFixed(2),
+          },
+          dco: {
+            range: dcoRange.value,
+            saw: (0.1 * dcoSawLevel.value).toFixed(2),
+            pulse: (0.1 * dcoPulseLevel.value).toFixed(2),
+            sub: dcoSubLevel.value > 0, //TODO - Improve names.
+            subAmount: (0.1 * dcoSubLevel.value).toFixed(2),
+            noise: (0.1 * dcoNoiseLevel.value).toFixed(2),
+            pwm: (0.1 * dcoPwmDepth.value).toFixed(2),
+            pwmMod: dcoPwmSource.value,
+            lfo: (0.1 * dcoLfoDepth.value).toFixed(2),
+          },
+          hpf: (0.1 * hpfFreq.value).toFixed(2),
+          vcf: {
+            type: 'moog',
+            frequency: (0.1 * vcfFreq.value).toFixed(2),
+            resonance: (0.1 * vcfResonance.value).toFixed(2),
+            modPositive: vcfPolarity.value === 'true',
+            envMod: (0.1 * vcfEnv.value).toFixed(2),
+            lfoMod: (0.1 * vcfLfo.value).toFixed(2),
+            keyMod: (0.1 * vcfKey.value).toFixed(2),
+          },
+          env: {
+            attack: (0.1 * envAttack.value).toFixed(2),
+            decay: (0.1 * envDecay.value).toFixed(2),
+            sustain: (0.1 * envSustain.value).toFixed(2),
+            release: (0.1 * envRelease.value).toFixed(2),
+          },
+          bend: {
+            dcoDepth: (0.1 * dcoBendDepth.value).toFixed(2),
+            vcfDepth: (0.1 * vcfBendDepth.value).toFixed(2),
+          },
+          chorus: chorusMode.value,
+        }
+      }
+
+      function deserializeFromPatchToControls(patch) {
+        // Disable change-tracking.
+        originalPatchJson = null
+
+        patchName = patch.name || 'Unknown'
+
+        vcaLevel.value = (patch.vca || 0) * 10
+        vcaSource.value = (patch.vcaType || 'env').toString()
+
+        lfoTriggerMode.value = (patch.lfo.autoTrigger === false ? false : true).toString()
+        lfoRate.value = (patch.lfo.frequency || 0) * 10
+        lfoDelay.value = (patch.lfo.delay || 0) * 10
+
+        dcoRange.value = (patch.dco.range || 1).toString()
+        if (patch.dco.saw === false) {
+          dcoSawLevel.value = 0
+        } else if (patch.dco.saw === true) {
+          dcoSawLevel.value = 10
+        } else {
+          dcoSawLevel.value = (patch.dco.saw || 0) * 10
+        }
+        if (patch.dco.pulse === false) {
+          dcoPulseLevel.value = 0
+        } else if (patch.dco.pulse === true) {
+          dcoPulseLevel.value = 10
+        } else {
+          dcoPulseLevel.value = (patch.dco.pulse || 0) * 10
+        }
+        if (patch.dco.sub === false) {
+          dcoSubLevel.value = 0
+        } else {
+          dcoSubLevel.value = (patch.dco.subAmount || 0) * 10
+        }
+        dcoNoiseLevel.value = (patch.dco.noise || 0) * 10
+        dcoPwmDepth.value = (patch.dco.pwm || 0) * 10
+        dcoPwmSource.value = patch.dco.pwmMod || 'm'
+        dcoLfoDepth.value = (patch.dco.lfo || 0) * 10
+
+        hpfFreq.value = (patch.hpf || 0) * 10
+
+        vcfFreq.value = (patch.vcf.frequency || 0) * 10
+        vcfResonance.value = (patch.vcf.resonance || 0) * 10
+        vcfPolarity.value = (patch.vcf.modPositive === false ? false : true).toString()
+        vcfEnv.value = (patch.vcf.envMod || 0) * 10
+        vcfLfo.value = (patch.vcf.lfoMod || 0) * 10
+        vcfKey.value = (patch.vcf.keyMod || 0) * 10
+
+        envAttack.value = (patch.env.attack || 0) * 10
+        envDecay.value = (patch.env.decay || 0) * 10
+        envSustain.value = (patch.env.sustain || 0) * 10
+        envRelease.value = (patch.env.release || 0) * 10
+
+        chorusMode.value = (patch.chorus || 0).toString()
+
+        dcoBendDepth.value = ((patch.bend || {}).dcoDepth || 0.5) * 10
+        vcfBendDepth.value = ((patch.bend || {}).vcfDepth || 0.5) * 10
+
+        // Re-enable change tracking.
+        originalPatchJson = JSON.stringify(serializeFromControlsToPatch())
+        patchName = patch.name
+        onControlChange()
       }
 
       let isNexusChanging = false

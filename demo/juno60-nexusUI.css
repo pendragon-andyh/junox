@@ -78,7 +78,7 @@ header {
 
 .radio-buttons {
   text-align: left;
-  margin-top: 31px;
+  margin-top: 28px;
   padding: 0 3px;
   line-height: 30px;
 }
@@ -185,8 +185,8 @@ header {
 #synth-container {
   position: absolute;
   top: 80px;
-  left: 2%;
-  right: 2%;
+  left: 1%;
+  right: 1%;
   border: 3px solid #ff0700;
   border-radius: 10px;
   padding: 5px;
@@ -259,4 +259,11 @@ header {
   margin-left: 5px;
   border-radius: 9px;
   border: 2px solid #ddd;
+}
+
+.toast {
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+  min-width: 300px;
 }
