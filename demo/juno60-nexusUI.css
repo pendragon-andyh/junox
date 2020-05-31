@@ -250,3 +250,12 @@ header {
 .modal-body {
   background-color: #ccf;
 }
+
+.btn-github img {
+  background-color: #ddd;
+  padding: 0px;
+  margin: -1px;
+  margin-left: 5px;
+  border-radius: 9px;
+  border: 2px solid #ddd;
+}

@@ -34,44 +34,48 @@
   <body>
     <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bg-primary">
       <span class="navbar-brand mb-0 h1">JUNOX</span> -
-      <span class="navbar-text">
-        Patch name
-      </span>
 
       <ul class="navbar-nav ml-md-auto pull-right">
         <li class="nav-item">
+          <a class="btn btn-secondary" id="btnMidi" href="javascript:">MIDI &hellip;</a>
+          <div class="dropdown d-none" id="menuMidiOptions">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              MIDI Options
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </div>
+        </li>
+        &nbsp;
+        <li class="nav-item">
           <a
-            class="btn btn-secondary"
-            href="https://github.com/"
+            class="btn btn-secondary btn-github"
+            href="https://github.com/pendragon-andyh/junox"
             target="_blank"
-            aria-label="GitHub"
-            >Github</a
           >
+            Github
+            <img
+              height="22"
+              width="22"
+              src="https://cdn.jsdelivr.net/npm/simple-icons@v2/icons/github.svg"
+            />
+          </a>
         </li>
       </ul>
     </header>
 
     <div class="container-fluid">
       <div id="synth-container">
-        <a class="btn btn-secondary float-right" id="btnMidi" tabindex="-1">MIDI &hellip;</a>
-        <div class="dropdown float-right d-none" id="menuMidiOptions">
-          <button
-            class="btn btn-secondary dropdown-toggle"
-            type="button"
-            id="dropdownMenuButton"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            MIDI Options
-          </button>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </div>
-
         <ul class="nav nav-tabs">
           <li class="nav-item">
             <a
