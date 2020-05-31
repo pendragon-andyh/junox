@@ -8,8 +8,6 @@ import {
   PANIC,
   SET_PARAM,
   SET_PATCH,
-  START_SAMPLE_TIME,
-  STOP_SAMPLE_TIME,
 } from './synth.constants'
 
 class JunoxWorker extends AudioWorkletProcessor {
