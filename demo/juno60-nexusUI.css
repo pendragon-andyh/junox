@@ -121,7 +121,7 @@ header {
 }
 
 .patch-list {
-  min-width: 250px;
+  min-width: 160px;
   text-align: left;
   height: 210px;
 }
@@ -130,7 +130,7 @@ header {
   display: inline-block;
   padding: 0 0 0 2px;
 }
-.patch-list ul a {
+.patch-list ul a.btn {
   padding: 2px 3px;
   text-align: left;
   margin: 0 1px 2px 2px;
@@ -138,6 +138,19 @@ header {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
+}
+.patch-list ul a.can-delete-item {
+  width: 160px;
+}
+.patch-list ul a.delete-item {
+  float: right;
+  display: none;
+  padding: 0 8px 0;
+  border-left: 1px solid #666;
+}
+.patch-list ul a:hover a.delete-item {
+  display: block;
 }
 
 #perf-block {
