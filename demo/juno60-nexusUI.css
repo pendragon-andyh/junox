@@ -3,11 +3,8 @@ body {
   border-bottom: 10px solid #007bff;
   height: 100vh;
   position: relative;
-  font-size: 0.8rem;
 }
-.btn {
-  font-size: 0.9rem;
-}
+
 header {
   box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.3);
 }
@@ -27,13 +24,13 @@ header {
   margin-right: 5px;
 }
 .control-block h2 {
-  padding: 3px 8px 1px;
+  padding: 3px 8px;
   background-color: #ff0700;
   color: white;
   margin: -3px -3px 5px -3px;
   text-shadow: -1px -1px black;
   border-bottom: 1px solid #669;
-  font-size: 1.4em;
+  font-size: 1.2em;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
@@ -69,7 +66,7 @@ header {
   width: 34px;
   height: 18px;
   color: #99c;
-  padding: 3px 0;
+  padding: 2px 0;
   line-height: 1;
 }
 .control-slider > div {
@@ -124,24 +121,36 @@ header {
 }
 
 .patch-list {
-  min-width: 250px;
+  min-width: 160px;
   text-align: left;
   height: 210px;
-  overflow: hidden;
 }
 .patch-list ul {
   list-style-type: none;
-  float: left;
-  padding: 0 0 0 5px;
+  display: inline-block;
+  padding: 0 0 0 2px;
 }
-.patch-list ul a {
-  padding: 4px 3px;
+.patch-list ul a.btn {
+  padding: 2px 3px;
   text-align: left;
-  margin-bottom: 1.1px;
-  width: 120px;
+  margin: 0 1px 2px 2px;
+  width: 140px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
+}
+.patch-list ul a.can-delete-item {
+  width: 160px;
+}
+.patch-list ul a.delete-item {
+  float: right;
+  display: none;
+  padding: 0 8px 0;
+  border-left: 1px solid #666;
+}
+.patch-list ul a:hover a.delete-item {
+  display: block;
 }
 
 #perf-block {
@@ -203,7 +212,6 @@ header {
   border: 1px solid #669;
   margin-right: 5px;
   border-bottom-color: transparent;
-  font-size: 0.9rem;
 }
 #synth-container .nav-link:focus,
 #synth-container .nav-link:hover {
@@ -224,7 +232,7 @@ header {
   white-space: nowrap;
   overflow-x: auto;
   overflow-y: hidden;
-  height: 275px;
+  height: 285px;
 }
 #synth-performance {
   position: relative;
@@ -233,6 +241,10 @@ header {
 
 .navbar {
   padding: 0.25rem 1rem;
+  margin-left: auto !important;
+}
+.navbar-nav {
+  flex-direction: inherit;
 }
 
 .modal-content {
@@ -250,15 +262,6 @@ header {
 }
 .modal-body {
   background-color: #ccf;
-}
-
-.btn-github img {
-  background-color: #ddd;
-  padding: 0px;
-  margin: -1px;
-  margin-left: 5px;
-  border-radius: 9px;
-  border: 2px solid #ddd;
 }
 
 .toast {
