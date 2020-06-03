@@ -91,9 +91,8 @@ header {
   cursor: pointer;
 }
 .radio-buttons span {
-  margin-right: 4px;
   float: left;
-  margin-left: -2px;
+  margin: -1px 4px 0 -2px;
 }
 
 #lfo-manual-trigger-wrapper {
@@ -153,31 +152,27 @@ header {
   display: block;
 }
 
-#perf-block {
-  float: left;
-  margin-right: 4px;
-}
-
 #piano-block {
   overflow: hidden;
   display: block;
 }
+#piano-block .control.float-left {
+  margin-right: 5px;
+}
+#piano-block .control.float-right {
+  margin-left: 5px;
+}
+#piano-block .radio-buttons {
+  margin-top: 0;
+}
 #piano-wrapper {
   overflow: hidden;
-  border-left: 1px solid #669;
-  border-right: 1px solid #669;
-}
-#piano-change-octave {
-  position: absolute;
-  top: 1px;
-  right: 5px;
-}
-#piano-change-octave a {
-  width: 30px;
-  padding: 0;
+  border: 1px solid #669;
+  position: relative;
 }
 #piano {
   position: relative;
+  margin: -2px 0 0;
   transition: margin-left 0.5s;
 }
 .piano-key-name {
@@ -189,6 +184,9 @@ header {
   color: #bbb;
   pointer-events: none;
   touch-action: none;
+}
+#piano-message {
+  text-align: center;
 }
 
 #synth-container {
@@ -207,6 +205,9 @@ header {
   border-bottom: none;
   padding: 0 20px;
   position: relative;
+}
+#synth-container .nav-item {
+  margin-bottom: -2px;
 }
 #synth-container .nav-link {
   border: 1px solid #669;
@@ -248,25 +249,27 @@ header {
 }
 
 .modal-content {
-  border: 2px solid 007bff;
-  border-radius: 5px;
+  border: 2px solid #048;
+  border-radius: 10px;
+  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.5);
 }
 .modal-header {
   background-color: #007bff;
   color: white;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  padding: 12px 10px;
+  border-bottom: 2px solid #ff0700;
 }
 .modal-footer {
   background-color: #007bff;
   color: white;
   justify-content: flex-start;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding: 4px 8px;
+  border-top: 2px solid #ff0700;
 }
 .modal-body {
   background-color: #ccf;
-}
-
-.toast {
-  position: absolute;
-  bottom: 0;
-  right: 10px;
-  min-width: 300px;
 }

@@ -57,7 +57,7 @@
 
           &nbsp;
 
-          <a class="btn btn-outline-dark" id="btnMidi" href="javascript:">MIDI &hellip;</a>
+          <a class="btn btn-outline-dark" id="btnMidi" href="javascript:">MIDI</a>
           <div class="dropdown d-none" id="menuMidiOptions">
             <button
               class="btn btn-outline-dark dropdown-toggle"
@@ -89,7 +89,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" id="synth-controls-tab" data-toggle="tab" href="#synth-controls"
-              >Control panel</a
+              >Controls</a
             >
           </li>
           <li class="nav-item">
@@ -143,6 +143,26 @@
             role="tabpanel"
             aria-labelledby="synth-controls-tab"
           >
+            <div class="control-block">
+              <h2>BEND</h2>
+              <div>
+                <div
+                  class="control control-slider"
+                  title="How much pitch-bend to apply to the DCO pitch"
+                >
+                  <label class="control-label">DCO</label>
+                  <div id="dco-bend-depth"></div>
+                </div>
+                <div
+                  class="control control-slider"
+                  title="How much pitch-bend to apply to the VCF cutoff"
+                >
+                  <label class="control-label">VCF</label>
+                  <div id="vcf-bend-depth"></div>
+                </div>
+              </div>
+            </div>
+
             <div class="control-block">
               <h2>LFO</h2>
               <div class="control control-slider" title="Speed of the LFO (between 0.3 and 20 Hz)">
@@ -380,37 +400,26 @@
         </div>
 
         <div id="synth-performance">
-          <div class="control-block" id="perf-block">
-            <h2>Bend</h2>
-            <div>
-              <div class="control control-slider" title="Bend the note's pitch">
-                <div id="pitchBend"></div>
-              </div>
-              <div
-                class="control control-slider"
-                title="How much pitch-bend to apply to the DCO pitch"
-              >
-                <label class="control-label">DCO</label>
-                <div id="dco-bend-depth"></div>
-              </div>
-              <div
-                class="control control-slider"
-                title="How much pitch-bend to apply to the VCF cutoff"
-              >
-                <label class="control-label">VCF</label>
-                <div id="vcf-bend-depth"></div>
-              </div>
-            </div>
-          </div>
           <div class="control-block" id="piano-block">
             <h2 id="piano-message">&nbsp;</h2>
-            <div class="btn-group" id="piano-change-octave" title="Visible range for the keyboard">
-              <a class="btn btn-outline-secondary btn-sm" tabindex="-1">o</a>
-              <a class="btn btn-outline-secondary btn-sm" tabindex="-1">o</a>
-              <a class="btn btn-outline-secondary btn-sm active" tabindex="-1">o</a>
-              <a class="btn btn-outline-secondary btn-sm" tabindex="-1">o</a>
-              <a class="btn btn-outline-secondary btn-sm" tabindex="-1">o</a>
+            <div class="control control-slider float-left" title="Bend the note's pitch">
+              <div id="pitchBend"></div>
             </div>
+
+            <div
+              class="control control-radio-group float-right"
+              title="Visible range for the keyboard"
+            >
+              <label class="control-label">Octave</label>
+              <div class="radio-buttons">
+                <div><span id="piano-change-octave-top"></span>+2</div>
+                <div><span id="piano-change-octave-plus1"></span>+1</div>
+                <div><span id="piano-change-octave-centre"></span>0</div>
+                <div><span id="piano-change-octave-minus1"></span>-1</div>
+                <div><span id="piano-change-octave-bottom"></span>-2</div>
+              </div>
+            </div>
+
             <div id="piano-wrapper">
               <div id="piano"></div>
             </div>
@@ -486,18 +495,6 @@
             </div>
           </form>
         </div>
-      </div>
-    </div>
-
-    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="toast-header">
-        <strong class="mr-auto">JUNOX</strong>
-        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="toast-body">
-        Welcome to Junox! Choose a patch &hellip;
       </div>
     </div>
 
@@ -666,13 +663,20 @@
       }
 
       // Allow user to change the visible range of octaves.
-      $('#piano-change-octave a').each(function (i) {
-        $(this).click(function () {
-          $('#piano-change-octave a.active').removeClass('active')
-          $(this).addClass('active')
-          $('#piano').css('margin-left', `${(i - 2) * -421}px`)
-        })
-      })
+      const pianoOctave = ui.createRadioButtonGroup(
+        101,
+        'Chorus Mode',
+        {
+          '0': '#piano-change-octave-centre',
+          '+2': '#piano-change-octave-top',
+          '+1': '#piano-change-octave-plus1',
+          '-1': '#piano-change-octave-minus1',
+          '-2': '#piano-change-octave-bottom',
+        },
+        function () {
+          $('#piano').css('margin-left', `${parseInt(pianoOctave.value, 10) * -421}px`)
+        }
+      )
 
       // If the window is resized then default to middle-C being centred.
       centreKeyboard()
@@ -682,8 +686,6 @@
         const offsetToCentreC4 = painoWidth / 2 - 1291
         $('#piano').css('left', `${offsetToCentreC4}px`)
       }
-
-      $('.toast').toast({ delay: 2000, autohide: true }).toast('show')
 
       // Load Andy's base testing scenario.
       let patchName = 'Unspecified patch'
@@ -794,9 +796,6 @@
 
           // Apply the patch to the control-panel.
           deserializeFromPatchToControls($(this).data('patch'))
-
-          $('.toast-body').text('Patch loaded ... have a play!')
-          $('.toast').toast('show')
         })
         .on('click', '.patch-list a.delete-item', function (ev) {
           ev.preventDefault()
