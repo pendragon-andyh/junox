@@ -91,9 +91,8 @@ header {
   cursor: pointer;
 }
 .radio-buttons span {
-  margin-right: 4px;
   float: left;
-  margin-left: -2px;
+  margin: -1px 4px 0 -2px;
 }
 
 #lfo-manual-trigger-wrapper {
