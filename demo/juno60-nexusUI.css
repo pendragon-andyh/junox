@@ -25,6 +25,7 @@ header {
 }
 .control-block h2 {
   padding: 3px 8px;
+  text-align: center;
   background-color: #ff0700;
   color: white;
   margin: -3px -3px 5px -3px;
@@ -184,9 +185,6 @@ header {
   color: #bbb;
   pointer-events: none;
   touch-action: none;
-}
-#piano-message {
-  text-align: center;
 }
 
 #synth-container {
