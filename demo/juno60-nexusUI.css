@@ -152,31 +152,27 @@ header {
   display: block;
 }
 
-#perf-block {
-  float: left;
-  margin-right: 4px;
-}
-
 #piano-block {
   overflow: hidden;
   display: block;
 }
+#piano-block .control.float-left {
+  margin-right: 5px;
+}
+#piano-block .control.float-right {
+  margin-left: 5px;
+}
+#piano-block .radio-buttons {
+  margin-top: 0;
+}
 #piano-wrapper {
   overflow: hidden;
-  border-left: 1px solid #669;
-  border-right: 1px solid #669;
-}
-#piano-change-octave {
-  position: absolute;
-  top: 1px;
-  right: 5px;
-}
-#piano-change-octave a {
-  width: 30px;
-  padding: 0;
+  border: 1px solid #669;
+  position: relative;
 }
 #piano {
   position: relative;
+  margin: -2px 0 0;
   transition: margin-left 0.5s;
 }
 .piano-key-name {
@@ -188,6 +184,9 @@ header {
   color: #bbb;
   pointer-events: none;
   touch-action: none;
+}
+#piano-message {
+  text-align: center;
 }
 
 #synth-container {
