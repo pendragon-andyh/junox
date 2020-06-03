@@ -208,6 +208,9 @@ header {
   padding: 0 20px;
   position: relative;
 }
+#synth-container .nav-item {
+  margin-bottom: -2px;
+}
 #synth-container .nav-link {
   border: 1px solid #669;
   margin-right: 5px;
@@ -248,17 +251,26 @@ header {
 }
 
 .modal-content {
-  border: 2px solid 007bff;
-  border-radius: 5px;
+  border: 2px solid #048;
+  border-radius: 10px;
+  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.5);
 }
 .modal-header {
   background-color: #007bff;
   color: white;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  padding: 12px 10px;
+  border-bottom: 2px solid #ff0700;
 }
 .modal-footer {
   background-color: #007bff;
   color: white;
   justify-content: flex-start;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding: 4px 8px;
+  border-top: 2px solid #ff0700;
 }
 .modal-body {
   background-color: #ccf;
