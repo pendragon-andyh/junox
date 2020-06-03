@@ -176,6 +176,15 @@ header {
   margin: -2px 0 0;
   transition: margin-left 0.5s;
 }
+#piano > div > span {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border: 1px solid #666;
+  overflow: hidden;
+}
+#piano > div > span:last-child {
+  border-right-width: 2px;
+}
 .piano-key-name {
   position: absolute;
   bottom: 5px;
@@ -246,6 +255,9 @@ header {
   flex-direction: inherit;
 }
 
+.modal-backdrop.show {
+  opacity: 0.2;
+}
 .modal-content {
   border: 2px solid #048;
   border-radius: 10px;
