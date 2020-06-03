@@ -273,10 +273,3 @@ header {
 .modal-body {
   background-color: #ccf;
 }
-
-.toast {
-  position: absolute;
-  bottom: 0;
-  right: 10px;
-  min-width: 300px;
-}
