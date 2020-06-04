@@ -280,6 +280,15 @@ header {
   padding: 4px 8px;
   border-top: 2px solid #ff0700;
 }
+.modal-footer .btn {
+  min-width: 70px;
+  color: white;
+}
+.modal-body input,
+.modal-body textarea,
+.modal-body select {
+  padding: 3px 9px;
+}
 .modal-body {
   background-color: #ccf;
 }

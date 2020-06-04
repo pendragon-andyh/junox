@@ -429,29 +429,40 @@
 
       <div
         class="modal"
-        id="modal-midi-port-selector"
+        id="modal-midi"
         tabindex="-1"
         role="dialog"
-        aria-labelledby="modal-midi-port-selector-label"
+        aria-labelledby="modal-midi-label"
         aria-hidden="true"
       >
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modal-midi-port-selector-label">
-                Connect to MIDI input device
-              </h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p>Select MIDI input device:</p>
-              <div class="list-group" id="midi-port-list"></div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            </div>
+            <form id="formMidi">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modal-midi-label">
+                  MIDI integration
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group row">
+                  <label for="midiInputPort" class="col-sm-3 col-form-label">Input device</label>
+                  <div class="col-sm-9">
+                    <select class="form-control" id="midiInputPort">
+                      <option value="">Not selected</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-success btn-outline-dark">OK</button>
+                <button type="button" class="btn btn-outline-dark" data-dismiss="modal">
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -477,21 +488,25 @@
               </button>
             </div>
             <div class="modal-body">
-              <div class="form-group">
-                <label for="patchName">Patch name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="patchName"
-                  required
-                  pattern="^[A-Za-z0-9 .-]{1,24}$"
-                  maxlength="24"
-                />
+              <div class="form-group row">
+                <label for="patchName" class="col-sm-3 col-form-label">Patch name</label>
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="patchName"
+                    required
+                    pattern="^[A-Za-z0-9 .-]{1,24}$"
+                    maxlength="24"
+                  />
+                </div>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-secondary">OK</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-success btn-outline-dark">OK</button>
+              <button type="button" class="btn btn-outline-dark" data-dismiss="modal">
+                Cancel
+              </button>
             </div>
           </form>
         </div>
@@ -499,7 +514,8 @@
     </div>
 
     <script type="module">
-      import { MidiAdapter, MidiConsumer } from '../src/midiAdapter.js'
+      import { MidiAdapter } from '../src/midiAdapter.js'
+      import { MidiConsumer } from '../src/midiConsumer.js'
       import { NexusUIHelper } from './nexusui-helper.js'
       import Juno60FactoryPatchesA from '../src/junox/patches.js'
 
@@ -953,49 +969,68 @@
         isNexusChanging = false
       })
 
+      const midiAdapter = new MidiAdapter()
       $('#btnMidi').click(function () {
         if (!navigator.requestMIDIAccess) {
           alert('Sorry - MIDI not available')
           return
         }
 
-        const midiAdapter = new MidiAdapter().withSysex()
-        midiAdapter.start().then(() => {
-          const inputs = midiAdapter.listInputs()
-          if (!inputs.length) {
-            alert('Sorry - No MIDI input devices detected')
-            return
+        if (midiAdapter.isConnected()) {
+          openMidiModal()
+        } else {
+          midiAdapter.connect().then(openMidiModal)
+        }
+      })
+      function openMidiModal() {
+        const $midiInputPort = $('#midiInputPort')
+
+        // Get the existing details.
+        let existingMidiPort = $midiInputPort.val() || localStorage.getItem('midiInputPort') || ''
+
+        // Populate the drop-down list with the list of MIDI input devices.
+        $midiInputPort.children().slice(1).remove()
+        $.each(midiAdapter.listInputs(), (i, x) => {
+          const $portHtml = $('<option></option>')
+            .attr('value', x.id)
+            .text(x.name)
+            .appendTo($midiInputPort)
+          if (existingMidiPort === '') {
+            existingMidiPort = x.id
           }
-
-          const $midiPortList = $('#midi-port-list')
-            .empty()
-            .on('click', 'a', (ev) => {
-              midiAdapter.connectFromInput($(ev.currentTarget).data('portId'), consumer)
-              $('#modal-midi-port-selector').modal('hide')
-              $('#btnMidi').addClass('d-none')
-              $('#menuMidiOptions').removeClass('d-none')
-            })
-          $.each(inputs, (i, x) => {
-            const $portHtml = $(
-              '<a href="javascript:" class="list-group-item list-group-item-action bg-secondary text-light"></a>'
-            )
-              .data('portId', x.id)
-              .text(x.name)
-              .appendTo($midiPortList)
-          })
-
-          $('#modal-midi-port-selector').modal()
         })
+        $midiInputPort.val(existingMidiPort)
+
+        // Open the MIDI dialog and focus on the drop-down list.
+        $('#modal-midi').modal()
+        setTimeout(function () {
+          $('#modal-midi button[type=submit]').focus()
+        }, 0)
+      }
+      $('#modal-midi').on('hidden.bs.modal', function (e) {
+        midiAdapter.routeInputMessagesTo(consumer)
+      })
+      $('#formMidi').submit(function (ev) {
+        ev.preventDefault()
+        $('#modal-midi').modal('hide')
+        const chosenMidiPort = $('#midiInputPort').val()
+        midiAdapter.setInputPort(chosenMidiPort)
+        if (chosenMidiPort) {
+          localStorage.setItem('midiInputPort', chosenMidiPort)
+          $('#btnMidi').addClass('btn-success')
+        } else {
+          $('#btnMidi').removeClass('btn-success')
+        }
+        return false
       })
 
       $('#btnSavePatch').click(function () {
-        $('#patchName').val(patchName)
+        $('#patchName').attr('name', Math.random()).val(patchName)
         $('#modal-save-patch').modal()
         setTimeout(function () {
           $('#patchName').focus()[0].select()
         }, 0)
       })
-
       $('#formSavePatch').submit(function (ev) {
         ev.preventDefault()
         patchName = $('#patchName').val()
