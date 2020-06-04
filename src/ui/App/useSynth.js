@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import { set } from 'lodash'
-import patches from '../../junox/patches'
+import { set, cloneDeep } from 'lodash'
+import patches from '../../patches'
 
 export default function useSynth(synth, setLastNoteOn) {
   const [patch, setPatchValues] = useState(patches[0])
   const setSynthPatchValue = (name, value) => {
     synth.setParam(name, value)
-    setPatchValues(patch => {
+    setPatchValues((patch) => {
       set(patch, name, value)
       return { ...patch }
     })
   }
 
-  const setSynthValue = (name, forceValue, transformer = v => v) => value => {
+  const setSynthValue = (name, forceValue, transformer = (v) => v) => (value) => {
     const paramValue = forceValue != null ? forceValue : transformer(value)
     setSynthPatchValue(name, paramValue)
   }
@@ -21,11 +21,12 @@ export default function useSynth(synth, setLastNoteOn) {
     synth.noteOn(note, velocity)
     setLastNoteOn(note)
   }
-  const noteOff = note => synth.noteOff(note)
+  const noteOff = (note) => synth.noteOff(note)
 
-  const setPatch = patchIndex => {
-    synth.setPatch(patchIndex)
-    setPatchValues(patches[patchIndex])
+  const setPatch = (patchIndex) => {
+    const newPatchData = cloneDeep(patches[patchIndex])
+    synth.setPatch(newPatchData)
+    setPatchValues(newPatchData)
   }
 
   const lfoTrigger = () => synth.lfoTrigger()
@@ -39,6 +40,6 @@ export default function useSynth(synth, setLastNoteOn) {
     patch,
     setPatch,
     setSynthPatchValue,
-    setSynthValue
+    setSynthValue,
   }
 }

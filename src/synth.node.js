@@ -8,9 +8,57 @@ import {
   SET_PATCH,
 } from './synth.constants'
 
-export default class SynthWorkletNode extends AudioWorkletNode {
-  constructor(context, options) {
-    super(context, 'junox-synth', options)
+export const defaultPatch = {
+  name: 'Unspecified patch',
+  vca: 0.5,
+  vcaType: 'gate',
+  lfo: { autoTrigger: true, frequency: 0.0, delay: 0.0 },
+  dco: {
+    range: 1,
+    saw: false,
+    pulse: true,
+    sub: false,
+    subAmount: 0,
+    noise: 0,
+    pwm: 0,
+    pwmMod: 'm',
+    lfo: 0,
+  },
+  hpf: 0,
+  vcf: {
+    frequency: 1.0,
+    resonance: 0.0,
+    modPositive: true,
+    envMod: 0,
+    lfoMod: 0,
+    keyMod: 0,
+  },
+  env: { attack: 0.5, decay: 0.5, sustain: 0.5, release: 0.5 },
+  chorus: 0,
+}
+
+export const defaultAudioNodeOptions = {
+  numberOfInputs: 1,
+  numberOfOutputs: 1,
+  channelCountMode: 'explicit',
+  channelCount: 2,
+  outputChannelCount: [2],
+}
+
+export const defaultProcessorOptions = {
+  patch: defaultPatch,
+  polyphony: 6,
+}
+
+export class SynthWorkletNode extends AudioWorkletNode {
+  constructor(context, processorOptions) {
+    super(context, 'junox-synth', {
+      ...defaultAudioNodeOptions,
+      processorOptions: {
+        ...defaultProcessorOptions,
+        ...processorOptions,
+      },
+    })
     this.port.onmessage = this.handleMessage.bind(this)
   }
 
@@ -48,10 +96,10 @@ export default class SynthWorkletNode extends AudioWorkletNode {
     })
   }
 
-  setPatch(index) {
+  setPatch(patchData) {
     this.port.postMessage({
       action: SET_PATCH,
-      index,
+      patchData,
     })
   }
 

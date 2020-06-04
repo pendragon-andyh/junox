@@ -1,40 +1,31 @@
 import synthWorklet from './synth.worklet'
-import SynthWorkletNode from './synth.node'
-
-export const SAMPLE_RATE = 44100
+import { SynthWorkletNode } from './synth.node'
+import Juno60FactoryPatchesA from 'patches'
 
 function unlockAudioContext(audioContext) {
   if (audioContext.state === 'suspended') {
     const events = ['touchstart', 'touchend', 'mousedown', 'keydown']
-    const unlock = () => {
-      events.forEach(function(event) {
-        document.body.removeEventListener(event, unlock)
-      })
-      console.log('Resuming audio context...')
+
+    console.log('Audio context - susepended until user interaction ...')
+    events.forEach((eventName) => document.body.addEventListener(eventName, unlock, false))
+
+    function unlock() {
+      events.forEach((eventName) => document.body.removeEventListener(eventName, unlock))
+      console.log('Audio context - unlocked ...')
       audioContext.resume()
     }
-
-    events.forEach(function(event) {
-      document.body.addEventListener(event, unlock, false)
-    })
   }
 }
 
 export async function initAudio() {
-  const audioContext = new (window.AudioContext || window.webkitAudioContext)({
-    sampleRate: SAMPLE_RATE
-  })
+  const audioContext = new AudioContext()
   try {
     await audioContext.audioWorklet.addModule(synthWorklet)
-    const synthNode = new SynthWorkletNode(audioContext, {
-      numberOfInputs: 1,
-      numberOfOutputs: 1,
-      channelCountMode: 'explicit',
-      channelCount: 2,
-      outputChannelCount: [2]
-    })
+    const synthNode = new SynthWorkletNode(audioContext, { patch: Juno60FactoryPatchesA[0] })
     synthNode.connect(audioContext.destination)
+
     unlockAudioContext(audioContext)
+
     return { synthNode, context: audioContext }
   } catch (error) {
     console.log('error', error)
