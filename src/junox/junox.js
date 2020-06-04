@@ -1,4 +1,3 @@
-//import { set } from 'lodash'
 import { SmoothMoves } from './smoothMoves.js'
 import Voice from './voice.js'
 import { Chorus } from './chorus.js'
@@ -208,8 +207,17 @@ export default class Junox {
   }
 
   setValue(path, value) {
-    //set(this.patch, path, value)
-    this.update()
+    // This used to use NPM.lodash.set ... but that doesn't work well when using ES6 modules.
+    const pathSegments = path.split('.')
+    if (pathSegments.length) {
+      let target = this.patch
+      for (let i = 0; i < pathSegments.length - 1; i++) {
+        target = target[pathSegments[i]] || (target[pathSegments[i]] = {})
+      }
+      target[pathSegments[pathSegments.length - 1]] = value
+
+      this.update()
+    }
   }
 
   update() {
