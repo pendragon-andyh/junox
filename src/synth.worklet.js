@@ -1,4 +1,4 @@
-import Junox from './junox'
+import Junox from './junox/junox.js'
 import {
   LFO_TRIGGER_OFF,
   LFO_TRIGGER_ON,
@@ -7,7 +7,7 @@ import {
   PANIC,
   SET_PARAM,
   SET_PATCH,
-} from './synth.constants'
+} from './synth.constants.js'
 
 class JunoxWorker extends AudioWorkletProcessor {
   constructor(options) {

@@ -6,7 +6,7 @@ import {
   PANIC,
   SET_PARAM,
   SET_PATCH,
-} from './synth.constants'
+} from './synth.constants.js'
 
 export const defaultPatch = {
   name: 'Unspecified patch',
