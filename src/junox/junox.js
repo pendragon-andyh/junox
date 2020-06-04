@@ -1,10 +1,9 @@
-import { set } from 'lodash'
-import { SmoothMoves } from './smoothMoves'
-import Voice from './voice'
-import { Chorus } from './chorus'
-import { LFOWithEnvelope } from './lfoWithEnvelope'
-import HighPassFilter from './hpf'
-import { fastTanh, interpolatedLookup } from './utils'
+import { SmoothMoves } from './smoothMoves.js'
+import Voice from './voice.js'
+import { Chorus } from './chorus.js'
+import { LFOWithEnvelope } from './lfoWithEnvelope.js'
+import HighPassFilter from './hpf.js'
+import { fastTanh, interpolatedLookup } from './utils.js'
 
 const synthStatus = {
   SILENT: 0,
@@ -131,7 +130,7 @@ export default class Junox {
       const lfoOut = this.lfo.render()
 
       // All voices are detuned by the same relative-amount (from LFO and pitch-bend lever).
-      // Calcaultions come from the Juno 60 service manual.
+      // Calculations come from the Juno 60 service manual.
       const dcoDetuneOctaves =
         lfoOut * pitchLfoModDepth * 0.25 + // +-300 cents (page 14).
         (bendAmount * dcoBendDepth * 7) / 12 // +-700 cents (page 14).
@@ -208,8 +207,17 @@ export default class Junox {
   }
 
   setValue(path, value) {
-    set(this.patch, path, value)
-    this.update()
+    // This used to use NPM.lodash.set ... but that doesn't work well when using ES6 modules.
+    const pathSegments = path.split('.')
+    if (pathSegments.length) {
+      let target = this.patch
+      for (let i = 0; i < pathSegments.length - 1; i++) {
+        target = target[pathSegments[i]] || (target[pathSegments[i]] = {})
+      }
+      target[pathSegments[pathSegments.length - 1]] = value
+
+      this.update()
+    }
   }
 
   update() {

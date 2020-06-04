@@ -1,6 +1,6 @@
 // Diode Ladder Filter based on Will Pirkle's C++ Code
-import { OnePoleFilter } from './onepolefilter'
-import { fastTanh } from './utils'
+import { OnePoleFilter } from './onepolefilter.js'
+import { fastTanh } from './utils.js'
 
 export class DiodeLadder {
   constructor(sampleRate) {
@@ -112,8 +112,6 @@ export class DiodeLadder {
     U = fastTanh(U)
 
     // --- cascade of four filters
-    return this.lpf4.render(
-      this.lpf3.render(this.lpf2.render(this.lpf1.render(U)))
-    )
+    return this.lpf4.render(this.lpf3.render(this.lpf2.render(this.lpf1.render(U))))
   }
 }

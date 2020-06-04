@@ -1,10 +1,10 @@
-import { VCA_ENV, VCF_DIODELADDER } from './constants'
-import { Juno60DCO } from './dco'
-import { DiodeLadder } from './diodeladder'
-import { Juno60Envelope } from './juno60Envelope'
-import { MoogLowPassFilter } from './mooglpf'
-import { Noise } from './noise'
-import { interpolatedLookup } from './utils'
+import { VCA_ENV, VCF_DIODELADDER } from './constants.js'
+import { Juno60DCO } from './dco.js'
+import { DiodeLadder } from './diodeladder.js'
+import { Juno60Envelope } from './juno60Envelope.js'
+import { MoogLowPassFilter } from './mooglpf.js'
+import { Noise } from './noise.js'
+import { interpolatedLookup } from './utils.js'
 
 export default class Voice {
   constructor({ patch, sampleRate }) {

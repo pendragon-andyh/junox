@@ -1,5 +1,5 @@
 // Loosely based on Pirkle's HPF for KG25
-import { TWOPI } from './utils'
+import { TWOPI } from './utils.js'
 
 export default class HPF {
   constructor({ cutoff, sampleRate }) {

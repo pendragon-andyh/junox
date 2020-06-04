@@ -517,7 +517,32 @@
       import { MidiAdapter } from '../src/midiAdapter.js'
       import { MidiConsumer } from '../src/midiConsumer.js'
       import { NexusUIHelper } from './nexusui-helper.js'
-      import Juno60FactoryPatchesA from '../src/junox/patches.js'
+      import { defaultPatch, SynthWorkletNode } from '../src/synth.node.js'
+      import Juno60FactoryPatchesA from '../src/patches.js'
+
+      const audioContext = new AudioContext()
+      unlockAudioContext(audioContext)
+
+      function unlockAudioContext(audioContext) {
+        if (audioContext.state === 'suspended') {
+          const events = ['touchstart', 'touchend', 'mousedown', 'keydown']
+
+          console.log('Audio context - susepended until user interaction ...')
+          events.forEach((eventName) => document.body.addEventListener(eventName, unlock, false))
+
+          function unlock() {
+            events.forEach((eventName) => document.body.removeEventListener(eventName, unlock))
+            console.log('Audio context - unlocked ...')
+            audioContext.resume()
+          }
+        }
+      }
+
+      let synthNode = null
+      audioContext.audioWorklet.addModule('../src/synth.worklet.js').then(() => {
+        synthNode = new SynthWorkletNode(audioContext, { patch: defaultPatch })
+        synthNode.connect(audioContext.destination)
+      })
 
       Nexus.colors.accent = 'rgb(0, 123, 255)'
       Nexus.colors.mediumLight = '#669'
@@ -704,36 +729,8 @@
       }
 
       // Load Andy's base testing scenario.
-      let patchName = 'Unspecified patch'
+      let patchName = defaultPatch.name
       let originalPatchJson = ''
-      const defaultPatch = {
-        name: 'Unspecified patch',
-        vca: 0.5,
-        vcaType: 'gate',
-        lfo: { autoTrigger: true, frequency: 0.0, delay: 0.0 },
-        dco: {
-          range: 1,
-          saw: false,
-          pulse: true,
-          sub: false,
-          subAmount: 0,
-          noise: 0,
-          pwm: 0,
-          pwmMod: 'm',
-          lfo: 0,
-        },
-        hpf: 0,
-        vcf: {
-          frequency: 1.0,
-          resonance: 0.0,
-          modPositive: true,
-          envMod: 0,
-          lfoMod: 0,
-          keyMod: 0,
-        },
-        env: { attack: 0.5, decay: 0.5, sustain: 0.5, release: 0.5 },
-        chorus: 0,
-      }
       deserializeFromPatchToControls(defaultPatch)
 
       function onControlChange() {
@@ -746,6 +743,7 @@
         const patch = serializeFromControlsToPatch()
         const currentPatchJson = JSON.stringify(patch)
         console.log(currentPatchJson)
+        synthNode && synthNode.setPatch(patch)
 
         // Update the status message and show "save patch" button if user has changed stuff.
         $('#piano-message').text(patchName)
@@ -828,45 +826,45 @@
       function serializeFromControlsToPatch() {
         return {
           name: patchName,
-          vca: (0.1 * vcaLevel.value).toFixed(2),
+          vca: (0.1 * vcaLevel.value).toFixed(2) * 1.0,
           vcaType: vcaSource.value,
           lfo: {
             autoTrigger: lfoTriggerMode.value === 'true',
-            frequency: (0.1 * lfoRate.value).toFixed(2),
-            delay: (0.1 * lfoDelay.value).toFixed(2),
+            frequency: (0.1 * lfoRate.value).toFixed(2) * 1.0,
+            delay: (0.1 * lfoDelay.value).toFixed(2) * 1.0,
           },
           dco: {
-            range: dcoRange.value,
-            saw: (0.1 * dcoSawLevel.value).toFixed(2),
-            pulse: (0.1 * dcoPulseLevel.value).toFixed(2),
+            range: dcoRange.value * 1.0,
+            saw: (0.1 * dcoSawLevel.value).toFixed(2) * 1.0,
+            pulse: (0.1 * dcoPulseLevel.value).toFixed(2) * 1.0,
             sub: dcoSubLevel.value > 0, //TODO - Improve names.
-            subAmount: (0.1 * dcoSubLevel.value).toFixed(2),
-            noise: (0.1 * dcoNoiseLevel.value).toFixed(2),
-            pwm: (0.1 * dcoPwmDepth.value).toFixed(2),
+            subAmount: (0.1 * dcoSubLevel.value).toFixed(2) * 1.0,
+            noise: (0.1 * dcoNoiseLevel.value).toFixed(2) * 1.0,
+            pwm: (0.1 * dcoPwmDepth.value).toFixed(2) * 1.0,
             pwmMod: dcoPwmSource.value,
-            lfo: (0.1 * dcoLfoDepth.value).toFixed(2),
+            lfo: (0.1 * dcoLfoDepth.value).toFixed(2) * 1.0,
           },
-          hpf: (0.1 * hpfFreq.value).toFixed(2),
+          hpf: (0.1 * hpfFreq.value).toFixed(2) * 1.0,
           vcf: {
             type: 'moog',
-            frequency: (0.1 * vcfFreq.value).toFixed(2),
-            resonance: (0.1 * vcfResonance.value).toFixed(2),
+            frequency: (0.1 * vcfFreq.value).toFixed(2) * 1.0,
+            resonance: (0.1 * vcfResonance.value).toFixed(2) * 1.0,
             modPositive: vcfPolarity.value === 'true',
-            envMod: (0.1 * vcfEnv.value).toFixed(2),
-            lfoMod: (0.1 * vcfLfo.value).toFixed(2),
-            keyMod: (0.1 * vcfKey.value).toFixed(2),
+            envMod: (0.1 * vcfEnv.value).toFixed(2) * 1.0,
+            lfoMod: (0.1 * vcfLfo.value).toFixed(2) * 1.0,
+            keyMod: (0.1 * vcfKey.value).toFixed(2) * 1.0,
           },
           env: {
-            attack: (0.1 * envAttack.value).toFixed(2),
-            decay: (0.1 * envDecay.value).toFixed(2),
-            sustain: (0.1 * envSustain.value).toFixed(2),
-            release: (0.1 * envRelease.value).toFixed(2),
+            attack: (0.1 * envAttack.value).toFixed(2) * 1.0,
+            decay: (0.1 * envDecay.value).toFixed(2) * 1.0,
+            sustain: (0.1 * envSustain.value).toFixed(2) * 1.0,
+            release: (0.1 * envRelease.value).toFixed(2) * 1.0,
           },
           bend: {
-            dcoDepth: (0.1 * dcoBendDepth.value).toFixed(2),
-            vcfDepth: (0.1 * vcfBendDepth.value).toFixed(2),
+            dcoDepth: (0.1 * dcoBendDepth.value).toFixed(2) * 1.0,
+            vcfDepth: (0.1 * vcfBendDepth.value).toFixed(2) * 1.0,
           },
-          chorus: chorusMode.value,
+          chorus: chorusMode.value * 1,
         }
       }
 
@@ -937,24 +935,27 @@
 
       const consumer = new MidiConsumer()
       consumer.onNoteOn = (noteNumber, velocity) => {
+        console.log(`NoteOn - note=${noteNumber}`)
+        synthNode && synthNode.noteOn(noteNumber, velocity / 127)
         if (!isNexusChanging) {
-          console.log(`NoteOn - note=${noteNumber}`)
           if (noteNumber >= piano.range.low && noteNumber <= piano.range.high) {
             piano.toggleKey(noteNumber, true)
           }
         }
       }
       consumer.onNoteOff = (noteNumber, velocity) => {
+        console.log(`NoteOff - note=${noteNumber}`)
+        synthNode && synthNode.noteOff(noteNumber, velocity / 127)
         if (!isNexusChanging) {
-          console.log(`NoteOff - note=${noteNumber}`)
           if (noteNumber >= piano.range.low && noteNumber <= piano.range.high) {
             piano.toggleKey(noteNumber, false)
           }
         }
       }
       consumer.onPitchBend = (bendValue) => {
+        console.log(`PitchBend - value=${bendValue}`)
+        // TODO
         if (!isNexusChanging) {
-          console.log(`PitchBend - value=${bendValue}`)
           pitchBend.value = bendValue
         }
       }
@@ -962,9 +963,9 @@
       piano.on('change', (v) => {
         isNexusChanging = true
         if (v.state) {
-          consumer.noteOn(v.note)
+          consumer.noteOn(v.note, 127)
         } else {
-          consumer.noteOff(v.note)
+          consumer.noteOff(v.note, 127)
         }
         isNexusChanging = false
       })

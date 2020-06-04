@@ -1,5 +1,4 @@
-import Junox from './junox'
-import patches from './junox/patches'
+import Junox from './junox/junox.js'
 import {
   LFO_TRIGGER_OFF,
   LFO_TRIGGER_ON,
@@ -8,15 +7,16 @@ import {
   PANIC,
   SET_PARAM,
   SET_PATCH,
-} from './synth.constants'
+} from './synth.constants.js'
 
 class JunoxWorker extends AudioWorkletProcessor {
-  constructor() {
+  constructor(options) {
     super()
     this.synth = new Junox({
-      patch: patches[0],
-      sampleRate: 44100,
-      polyphony: 6,
+      patch: options.processorOptions.patch,
+      polyphony: options.processorOptions.polyphony,
+      // eslint-disable-next-line no-undef
+      sampleRate: sampleRate || 44100,
     })
     this.port.onmessage = this.handleMessage.bind(this)
   }
@@ -29,7 +29,7 @@ class JunoxWorker extends AudioWorkletProcessor {
     } else if (event.data.action === SET_PARAM) {
       this.synth.setValue(event.data.name, event.data.value)
     } else if (event.data.action === SET_PATCH) {
-      this.synth.patch = patches[event.data.index]
+      this.synth.patch = event.data.patchData
       this.synth.update()
     } else if (event.data.action === LFO_TRIGGER_ON) {
       this.synth.lfoTrigger()
