@@ -25,6 +25,7 @@ header {
 }
 .control-block h2 {
   padding: 3px 8px;
+  text-align: center;
   background-color: #ff0700;
   color: white;
   margin: -3px -3px 5px -3px;
@@ -175,6 +176,15 @@ header {
   margin: -2px 0 0;
   transition: margin-left 0.5s;
 }
+#piano > div > span {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border: 1px solid #666;
+  overflow: hidden;
+}
+#piano > div > span:last-child {
+  border-right-width: 2px;
+}
 .piano-key-name {
   position: absolute;
   bottom: 5px;
@@ -184,9 +194,6 @@ header {
   color: #bbb;
   pointer-events: none;
   touch-action: none;
-}
-#piano-message {
-  text-align: center;
 }
 
 #synth-container {
@@ -248,6 +255,9 @@ header {
   flex-direction: inherit;
 }
 
+.modal-backdrop.show {
+  opacity: 0.2;
+}
 .modal-content {
   border: 2px solid #048;
   border-radius: 10px;
@@ -269,6 +279,15 @@ header {
   border-bottom-right-radius: 8px;
   padding: 4px 8px;
   border-top: 2px solid #ff0700;
+}
+.modal-footer .btn {
+  min-width: 70px;
+  color: white;
+}
+.modal-body input,
+.modal-body textarea,
+.modal-body select {
+  padding: 3px 9px;
 }
 .modal-body {
   background-color: #ccf;
