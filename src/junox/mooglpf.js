@@ -16,7 +16,7 @@ export class MoogLowPassFilter {
     this._out1 = 0.0
     this._out2 = 0.0
     this._out3 = 0.0
-    this._out4 = 0.0
+    this._out4 = 1.0
   }
 
   reset() {
@@ -27,7 +27,7 @@ export class MoogLowPassFilter {
     this._out1 = 0.0
     this._out2 = 0.0
     this._out3 = 0.0
-    this._out4 = 0.0
+    this._out4 = 0.3
   }
 
   /**
