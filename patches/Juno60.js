@@ -27,7 +27,7 @@ function toJSON(results) {
     .map((patch, i) => {
       return {
         name: patch['Name'],
-        vca: toSlider(patch['VCA Value'] + 5),
+        vca: toSlider(patch['VCA Value']) + 0.5,
         vcaType: patch['VCA Dir'] === 'G' ? 'gate' : 'env',
         lfo: {
           autoTrigger: patch['LFO Trigger'] === 'A',

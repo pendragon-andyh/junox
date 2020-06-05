@@ -9,6 +9,13 @@ export class MoogLowPassFilter {
     // Resonance factor (0 = no resonance, 4 = self-oscillation).
     this.resonance = 0.0
 
+    this.reset()
+  }
+
+  /**
+   * Reset the filter - ready for the next note.
+   */
+  reset() {
     this._in1 = 0.0
     this._in2 = 0.0
     this._in3 = 0.0
@@ -19,15 +26,12 @@ export class MoogLowPassFilter {
     this._out4 = 0.0
   }
 
-  reset() {
-    this._in1 = 0.0
-    this._in2 = 0.0
-    this._in3 = 0.0
-    this._in4 = 0.0
-    this._out1 = 0.0
-    this._out2 = 0.0
-    this._out3 = 0.0
-    this._out4 = 0.0
+  /**
+   * Trigger the filter (useful for percussive sounds).
+   * @param {number} initialExcite - Initial amout of excitement for the feedback resonance loop.
+   */
+  trigger(initialExcite) {
+    this._out4 += initialExcite
   }
 
   /**
