@@ -150,7 +150,7 @@ export default [
     vcaType: 'gate',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0.4 },
     dco: {
-      range: 1,
+      range: 2,
       saw: false,
       pulse: true,
       sub: true,
@@ -266,7 +266,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.4, delay: 0 },
     dco: {
-      range: 1,
+      range: 2,
       saw: false,
       pulse: true,
       sub: true,
@@ -353,7 +353,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0.4 },
     dco: {
-      range: 1,
+      range: 2,
       saw: false,
       pulse: true,
       sub: true,
@@ -382,7 +382,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.55, delay: 0.6 },
     dco: {
-      range: 1,
+      range: 2,
       saw: false,
       pulse: true,
       sub: true,
@@ -469,7 +469,7 @@ export default [
     vcaType: 'gate',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0.6 },
     dco: {
-      range: 1,
+      range: 0.5,
       saw: true,
       pulse: true,
       sub: true,
@@ -498,7 +498,7 @@ export default [
     vcaType: 'gate',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0.6 },
     dco: {
-      range: 1,
+      range: 0.5,
       saw: true,
       pulse: true,
       sub: false,
@@ -527,7 +527,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: false, frequency: 0.6, delay: 0.25 },
     dco: {
-      range: 1,
+      range: 0.5,
       saw: false,
       pulse: true,
       sub: false,
@@ -556,7 +556,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.1, delay: 0 },
     dco: {
-      range: 1,
+      range: 0.5,
       saw: false,
       pulse: true,
       sub: false,
@@ -614,7 +614,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0.6 },
     dco: {
-      range: 1,
+      range: 2,
       saw: false,
       pulse: true,
       sub: true,
@@ -643,7 +643,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0 },
     dco: {
-      range: 1,
+      range: 2,
       saw: false,
       pulse: false,
       sub: true,
@@ -672,7 +672,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0 },
     dco: {
-      range: 1,
+      range: 2,
       saw: false,
       pulse: true,
       sub: false,
@@ -788,7 +788,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.25, delay: 0.7 },
     dco: {
-      range: 1,
+      range: 0.5,
       saw: true,
       pulse: false,
       sub: false,
@@ -817,7 +817,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.55, delay: 0.5 },
     dco: {
-      range: 1,
+      range: 2,
       saw: true,
       pulse: false,
       sub: false,
@@ -904,7 +904,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0.7 },
     dco: {
-      range: 1,
+      range: 0.5,
       saw: false,
       pulse: true,
       sub: false,
@@ -1049,7 +1049,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0, delay: 0 },
     dco: {
-      range: 1,
+      range: 2,
       saw: false,
       pulse: false,
       sub: true,
@@ -1078,7 +1078,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: false, frequency: 0.3, delay: 0.8 },
     dco: {
-      range: 1,
+      range: 2,
       saw: false,
       pulse: false,
       sub: true,
@@ -1107,7 +1107,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: false, frequency: 0.6, delay: 0.2 },
     dco: {
-      range: 1,
+      range: 2,
       saw: false,
       pulse: false,
       sub: true,
@@ -1194,7 +1194,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.45, delay: 0.6 },
     dco: {
-      range: 1,
+      range: 2,
       saw: true,
       pulse: true,
       sub: true,
@@ -1397,7 +1397,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0, delay: 0 },
     dco: {
-      range: 1,
+      range: 2,
       saw: false,
       pulse: false,
       sub: false,
@@ -1455,7 +1455,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.55, delay: 0.5 },
     dco: {
-      range: 1,
+      range: 2,
       saw: false,
       pulse: false,
       sub: false,
@@ -1513,7 +1513,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.6, delay: 0 },
     dco: {
-      range: 1,
+      range: 2,
       saw: false,
       pulse: false,
       sub: false,
@@ -1542,7 +1542,7 @@ export default [
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.6, delay: 0 },
     dco: {
-      range: 1,
+      range: 2,
       saw: false,
       pulse: false,
       sub: false,
