@@ -23,12 +23,12 @@ function toBoolean(value) {
 
 function toJSON(results) {
   const formatted = results
-    .filter((patch) => parseInt(patch['Number']) < 71)
+    .filter((patch) => !isNaN(parseInt(patch['Number'])))
     .map((patch, i) => {
       return {
         name: patch['Name'],
         // this is a bit fudged, unsure what negative values do?
-        vca: Math.max(0.7, Math.abs(toSlider(patch['VCA Value'])) + 0.35),
+        vca: toSlider(patch['VCA Value'] + 5),
         vcaType: patch['VCA Dir'] === 'G' ? 'gate' : 'env',
         lfo: {
           autoTrigger: patch['LFO Trigger'] === 'A',

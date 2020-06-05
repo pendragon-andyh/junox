@@ -1,7 +1,7 @@
 export default [
   {
     name: 'Strings 1',
-    vca: 0.7,
+    vca: 0.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.6, delay: 0 },
     dco: {
@@ -30,7 +30,7 @@ export default [
   },
   {
     name: 'Strings 2',
-    vca: 0.7,
+    vca: -2.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.4, delay: 0 },
     dco: {
@@ -59,7 +59,7 @@ export default [
   },
   {
     name: 'Strings 3',
-    vca: 0.7,
+    vca: -2.5,
     vcaType: 'env',
     lfo: { autoTrigger: false, frequency: 0.3, delay: 0.8 },
     dco: {
@@ -88,7 +88,7 @@ export default [
   },
   {
     name: 'Organ 1',
-    vca: 0.7,
+    vca: 0.5,
     vcaType: 'gate',
     lfo: { autoTrigger: true, frequency: 0.2, delay: 0.8 },
     dco: {
@@ -117,7 +117,7 @@ export default [
   },
   {
     name: 'Organ 2',
-    vca: 0.7,
+    vca: 0.5,
     vcaType: 'gate',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0.4 },
     dco: {
@@ -146,7 +146,7 @@ export default [
   },
   {
     name: 'Organ 3',
-    vca: 0.7,
+    vca: 0.5,
     vcaType: 'gate',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0.4 },
     dco: {
@@ -175,7 +175,7 @@ export default [
   },
   {
     name: 'Brass',
-    vca: 0.7,
+    vca: 2.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0.65 },
     dco: {
@@ -204,7 +204,7 @@ export default [
   },
   {
     name: 'Phase Brass',
-    vca: 0.7,
+    vca: -1.5,
     vcaType: 'gate',
     lfo: { autoTrigger: true, frequency: 0.6, delay: 0 },
     dco: {
@@ -233,7 +233,7 @@ export default [
   },
   {
     name: 'Piano 1',
-    vca: 0.7,
+    vca: 2.5,
     vcaType: 'env',
     lfo: { autoTrigger: false, frequency: 0.6, delay: 0.3 },
     dco: {
@@ -262,7 +262,7 @@ export default [
   },
   {
     name: 'Piano 2',
-    vca: 0.7,
+    vca: 3.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.4, delay: 0 },
     dco: {
@@ -291,7 +291,7 @@ export default [
   },
   {
     name: 'Celesta',
-    vca: 0.7,
+    vca: 1.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.35, delay: 0.6 },
     dco: {
@@ -320,7 +320,7 @@ export default [
   },
   {
     name: 'Mellow Piano',
-    vca: 0.7,
+    vca: 2.5,
     vcaType: 'env',
     lfo: { autoTrigger: false, frequency: 0.5, delay: 0 },
     dco: {
@@ -349,7 +349,7 @@ export default [
   },
   {
     name: 'Harpsichord 1',
-    vca: 0.7,
+    vca: -1.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0.4 },
     dco: {
@@ -378,7 +378,7 @@ export default [
   },
   {
     name: 'Harpsichord 2',
-    vca: 0.7,
+    vca: 0.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.55, delay: 0.6 },
     dco: {
@@ -407,7 +407,7 @@ export default [
   },
   {
     name: 'Guitar',
-    vca: 0.75,
+    vca: 4.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.6, delay: 0.6 },
     dco: {
@@ -436,7 +436,7 @@ export default [
   },
   {
     name: 'Synthesizer Harp',
-    vca: 0.7,
+    vca: 1.5,
     vcaType: 'env',
     lfo: { autoTrigger: false, frequency: 0.3, delay: 0.8 },
     dco: {
@@ -465,7 +465,7 @@ export default [
   },
   {
     name: 'Bass 1',
-    vca: 0.7,
+    vca: 0.5,
     vcaType: 'gate',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0.6 },
     dco: {
@@ -494,7 +494,7 @@ export default [
   },
   {
     name: 'Bass 2',
-    vca: 0.7,
+    vca: -1.5,
     vcaType: 'gate',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0.6 },
     dco: {
@@ -523,7 +523,7 @@ export default [
   },
   {
     name: 'Clavichord 1',
-    vca: 0.7,
+    vca: 2.5,
     vcaType: 'env',
     lfo: { autoTrigger: false, frequency: 0.6, delay: 0.25 },
     dco: {
@@ -533,7 +533,7 @@ export default [
       sub: false,
       subAmount: 0,
       noise: 0,
-      pwm: 0.9,
+      pwm: 0.8,
       pwmMod: 'm',
       lfo: 0.4,
     },
@@ -552,7 +552,7 @@ export default [
   },
   {
     name: 'Clavichord 2',
-    vca: 0.85,
+    vca: 5.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.1, delay: 0 },
     dco: {
@@ -581,7 +581,7 @@ export default [
   },
   {
     name: 'Pizzicato Sound 1',
-    vca: 0.7,
+    vca: 3.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0.6 },
     dco: {
@@ -599,7 +599,7 @@ export default [
     vcf: {
       type: 'moog',
       frequency: 0.45,
-      resonance: 0.4,
+      resonance: 0.3,
       modPositive: true,
       envMod: 0.3,
       lfoMod: 0.3,
@@ -610,7 +610,7 @@ export default [
   },
   {
     name: 'Pizzicato Sound 2',
-    vca: 0.7,
+    vca: 1.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0.6 },
     dco: {
@@ -628,7 +628,7 @@ export default [
     vcf: {
       type: 'moog',
       frequency: 0.5,
-      resonance: 0.4,
+      resonance: 0.3,
       modPositive: true,
       envMod: 0.3,
       lfoMod: 0,
@@ -639,7 +639,7 @@ export default [
   },
   {
     name: 'Xylophone',
-    vca: 0.85,
+    vca: 5.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0 },
     dco: {
@@ -668,7 +668,7 @@ export default [
   },
   {
     name: 'Glockenspiel',
-    vca: 0.75,
+    vca: 4.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0 },
     dco: {
@@ -697,7 +697,7 @@ export default [
   },
   {
     name: 'Violine',
-    vca: 0.7,
+    vca: 2.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.6, delay: 0.6 },
     dco: {
@@ -726,7 +726,7 @@ export default [
   },
   {
     name: 'Trumpet',
-    vca: 0.7,
+    vca: 2.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.25, delay: 0.65 },
     dco: {
@@ -755,7 +755,7 @@ export default [
   },
   {
     name: 'Horn',
-    vca: 0.7,
+    vca: 2.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.25, delay: 0.7 },
     dco: {
@@ -784,7 +784,7 @@ export default [
   },
   {
     name: 'Tuba',
-    vca: 0.85,
+    vca: 5.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.25, delay: 0.7 },
     dco: {
@@ -813,7 +813,7 @@ export default [
   },
   {
     name: 'Flute',
-    vca: 0.85,
+    vca: 5.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.55, delay: 0.5 },
     dco: {
@@ -842,7 +842,7 @@ export default [
   },
   {
     name: 'Clarinet',
-    vca: 0.7,
+    vca: 1.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0.65 },
     dco: {
@@ -871,7 +871,7 @@ export default [
   },
   {
     name: 'Oboe',
-    vca: 0.85,
+    vca: 5.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.55, delay: 0.65 },
     dco: {
@@ -900,7 +900,7 @@ export default [
   },
   {
     name: 'English Horn',
-    vca: 0.85,
+    vca: 5.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.5, delay: 0.7 },
     dco: {
@@ -929,7 +929,7 @@ export default [
   },
   {
     name: 'Funny Cat',
-    vca: 0.7,
+    vca: 3.5,
     vcaType: 'env',
     lfo: { autoTrigger: false, frequency: 0.6, delay: 0.2 },
     dco: {
@@ -958,7 +958,7 @@ export default [
   },
   {
     name: 'Wah Brass',
-    vca: 0.7,
+    vca: 2.5,
     vcaType: 'gate',
     lfo: { autoTrigger: false, frequency: 0.6, delay: 0.2 },
     dco: {
@@ -987,7 +987,7 @@ export default [
   },
   {
     name: 'Phase Combination',
-    vca: 0.7,
+    vca: -2.5,
     vcaType: 'env',
     lfo: { autoTrigger: false, frequency: 0.6, delay: 0.2 },
     dco: {
@@ -1016,14 +1016,14 @@ export default [
   },
   {
     name: 'Reed 1',
-    vca: 0.7,
+    vca: 1.5,
     vcaType: 'gate',
     lfo: { autoTrigger: false, frequency: 0.6, delay: 0.2 },
     dco: {
       range: 1,
       saw: false,
       pulse: true,
-      sub: true,
+      sub: false,
       subAmount: 0,
       noise: 0,
       pwm: 0,
@@ -1045,7 +1045,7 @@ export default [
   },
   {
     name: 'Popcorn',
-    vca: 0.7,
+    vca: 3.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0, delay: 0 },
     dco: {
@@ -1074,7 +1074,7 @@ export default [
   },
   {
     name: 'Reed 2',
-    vca: 0.7,
+    vca: 0.5,
     vcaType: 'env',
     lfo: { autoTrigger: false, frequency: 0.3, delay: 0.8 },
     dco: {
@@ -1103,7 +1103,7 @@ export default [
   },
   {
     name: 'Reed 3',
-    vca: 0.7,
+    vca: 1.5,
     vcaType: 'env',
     lfo: { autoTrigger: false, frequency: 0.6, delay: 0.2 },
     dco: {
@@ -1132,7 +1132,7 @@ export default [
   },
   {
     name: 'PWM Chorus',
-    vca: 0.7,
+    vca: -3.5,
     vcaType: 'env',
     lfo: { autoTrigger: false, frequency: 0.3, delay: 0 },
     dco: {
@@ -1161,7 +1161,7 @@ export default [
   },
   {
     name: 'Synthesizer Organ',
-    vca: 0.7,
+    vca: 0.5,
     vcaType: 'gate',
     lfo: { autoTrigger: true, frequency: 0.45, delay: 0.6 },
     dco: {
@@ -1190,7 +1190,7 @@ export default [
   },
   {
     name: 'Effect Sound 1',
-    vca: 0.7,
+    vca: 2.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.45, delay: 0.6 },
     dco: {
@@ -1219,7 +1219,7 @@ export default [
   },
   {
     name: 'Effect Sound 2',
-    vca: 0.7,
+    vca: -1.5,
     vcaType: 'gate',
     lfo: { autoTrigger: true, frequency: 0.55, delay: 0.9 },
     dco: {
@@ -1248,7 +1248,7 @@ export default [
   },
   {
     name: 'Space Harp',
-    vca: 0.7,
+    vca: 1.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.55, delay: 0 },
     dco: {
@@ -1277,7 +1277,7 @@ export default [
   },
   {
     name: 'Funk',
-    vca: 0.7,
+    vca: -3.5,
     vcaType: 'gate',
     lfo: { autoTrigger: true, frequency: 0.3, delay: 0.25 },
     dco: {
@@ -1306,7 +1306,7 @@ export default [
   },
   {
     name: 'Space Sound 1',
-    vca: 0.7,
+    vca: -2.5,
     vcaType: 'gate',
     lfo: { autoTrigger: true, frequency: 0.6, delay: 0.7 },
     dco: {
@@ -1335,7 +1335,7 @@ export default [
   },
   {
     name: 'Mysterious Invention',
-    vca: 0.7,
+    vca: 0.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.6, delay: 0.8 },
     dco: {
@@ -1364,7 +1364,7 @@ export default [
   },
   {
     name: 'Space Sound 2',
-    vca: 0.7,
+    vca: -3.5,
     vcaType: 'env',
     lfo: { autoTrigger: true, frequency: 0.3, delay: 0.3 },
     dco: {
@@ -1390,5 +1390,237 @@ export default [
     },
     env: { attack: 1, decay: 1, sustain: 1, release: 1 },
     chorus: 1,
+  },
+  {
+    name: 'Percussive Sound 1',
+    vca: 5.5,
+    vcaType: 'env',
+    lfo: { autoTrigger: true, frequency: 0, delay: 0 },
+    dco: {
+      range: 1,
+      saw: false,
+      pulse: false,
+      sub: false,
+      subAmount: 0,
+      noise: 1,
+      pwm: 0,
+      pwmMod: 'e',
+      lfo: 0,
+    },
+    hpf: 0.35,
+    vcf: {
+      type: 'moog',
+      frequency: 0.4,
+      resonance: 1,
+      modPositive: true,
+      envMod: 0.15,
+      lfoMod: 0,
+      keyMod: 1,
+    },
+    env: { attack: 0, decay: 0.3, sustain: 0, release: 0.4 },
+    chorus: 0,
+  },
+  {
+    name: 'Percussive Sound 2',
+    vca: 5.5,
+    vcaType: 'env',
+    lfo: { autoTrigger: true, frequency: 0, delay: 0 },
+    dco: {
+      range: 1,
+      saw: false,
+      pulse: false,
+      sub: false,
+      subAmount: 0,
+      noise: 0,
+      pwm: 0,
+      pwmMod: 'e',
+      lfo: 0,
+    },
+    hpf: 0.35,
+    vcf: {
+      type: 'moog',
+      frequency: 0.5,
+      resonance: 1,
+      modPositive: false,
+      envMod: 0.35,
+      lfoMod: 0,
+      keyMod: 1,
+    },
+    env: { attack: 0, decay: 0.3, sustain: 0, release: 0.4 },
+    chorus: 0,
+  },
+  {
+    name: 'Whistle',
+    vca: 3.5,
+    vcaType: 'env',
+    lfo: { autoTrigger: true, frequency: 0.55, delay: 0.5 },
+    dco: {
+      range: 1,
+      saw: false,
+      pulse: false,
+      sub: false,
+      subAmount: 0,
+      noise: 0.2,
+      pwm: 0,
+      pwmMod: 'm',
+      lfo: 0,
+    },
+    hpf: 0.35,
+    vcf: {
+      type: 'moog',
+      frequency: 0.35,
+      resonance: 1,
+      modPositive: true,
+      envMod: 0.15,
+      lfoMod: 0.2,
+      keyMod: 1,
+    },
+    env: { attack: 0.3, decay: 0, sustain: 1, release: 0.1 },
+    chorus: 0,
+  },
+  {
+    name: 'Effect Sound 3',
+    vca: 5.5,
+    vcaType: 'env',
+    lfo: { autoTrigger: true, frequency: 0.55, delay: 0.4 },
+    dco: {
+      range: 1,
+      saw: false,
+      pulse: false,
+      sub: false,
+      subAmount: 0,
+      noise: 0,
+      pwm: 0,
+      pwmMod: 'e',
+      lfo: 0,
+    },
+    hpf: 0.35,
+    vcf: {
+      type: 'moog',
+      frequency: 0.35,
+      resonance: 1,
+      modPositive: true,
+      envMod: 0,
+      lfoMod: 0.2,
+      keyMod: 1,
+    },
+    env: { attack: 0, decay: 0.4, sustain: 0.55, release: 0.7 },
+    chorus: 0,
+  },
+  {
+    name: 'UFO',
+    vca: -1.5,
+    vcaType: 'env',
+    lfo: { autoTrigger: true, frequency: 0.6, delay: 0 },
+    dco: {
+      range: 1,
+      saw: false,
+      pulse: false,
+      sub: false,
+      subAmount: 0,
+      noise: 0.2,
+      pwm: 0,
+      pwmMod: 'm',
+      lfo: 0,
+    },
+    hpf: 0,
+    vcf: {
+      type: 'moog',
+      frequency: 0,
+      resonance: 1,
+      modPositive: true,
+      envMod: 0.7,
+      lfoMod: 0.4,
+      keyMod: 1,
+    },
+    env: { attack: 0, decay: 0.6, sustain: 1, release: 0.8 },
+    chorus: 1,
+  },
+  {
+    name: 'Space Sound 3',
+    vca: 0.5,
+    vcaType: 'env',
+    lfo: { autoTrigger: true, frequency: 0.6, delay: 0 },
+    dco: {
+      range: 1,
+      saw: false,
+      pulse: false,
+      sub: false,
+      subAmount: 0,
+      noise: 0.2,
+      pwm: 0,
+      pwmMod: 'm',
+      lfo: 0,
+    },
+    hpf: 0,
+    vcf: {
+      type: 'moog',
+      frequency: 0.5,
+      resonance: 1,
+      modPositive: false,
+      envMod: 0.4,
+      lfoMod: 0,
+      keyMod: 1,
+    },
+    env: { attack: 0, decay: 1, sustain: 0, release: 0.8 },
+    chorus: 1,
+  },
+  {
+    name: 'Surf',
+    vca: 4.5,
+    vcaType: 'env',
+    lfo: { autoTrigger: true, frequency: 0, delay: 0 },
+    dco: {
+      range: 1,
+      saw: false,
+      pulse: false,
+      sub: false,
+      subAmount: 1,
+      noise: 1,
+      pwm: 0,
+      pwmMod: 'e',
+      lfo: 0,
+    },
+    hpf: 0,
+    vcf: {
+      type: 'moog',
+      frequency: 0.6,
+      resonance: 0,
+      modPositive: true,
+      envMod: 0,
+      lfoMod: 0.6,
+      keyMod: 1,
+    },
+    env: { attack: 0, decay: 0.4, sustain: 1, release: 0.8 },
+    chorus: 0,
+  },
+  {
+    name: 'Synthesizer Drum',
+    vca: 1.5,
+    vcaType: 'env',
+    lfo: { autoTrigger: false, frequency: 0, delay: 0 },
+    dco: {
+      range: 1,
+      saw: false,
+      pulse: false,
+      sub: false,
+      subAmount: 0,
+      noise: 0,
+      pwm: 0,
+      pwmMod: 'e',
+      lfo: 0,
+    },
+    hpf: 0,
+    vcf: {
+      type: 'moog',
+      frequency: 0.2,
+      resonance: 1,
+      modPositive: true,
+      envMod: 0.4,
+      lfoMod: 0,
+      keyMod: 1,
+    },
+    env: { attack: 0, decay: 0.5, sustain: 0, release: 0.6 },
+    chorus: 0,
   },
 ]
