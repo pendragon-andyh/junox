@@ -8,16 +8,16 @@ const isDev = process.env.NODE_ENV === 'development'
 module.exports = {
   devtool: isDev ? 'inline-cheap-source-map' : 'source-map',
   entry: {
-    bundle: './src/index.js'
+    bundle: './src/index.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'app.[hash].js',
-    publicPath: isDev ? '/' : '/junox/dist/'
+    publicPath: isDev ? '/' : '/junox/dist/',
   },
   resolve: {
     modules: ['node_modules', path.resolve(__dirname, 'src')],
-    extensions: ['.js']
+    extensions: ['.js'],
   },
   module: {
     rules: [
@@ -25,22 +25,22 @@ module.exports = {
         test: /\.js$/,
         exclude: /(node_modules)/,
         use: {
-          loader: 'babel-loader'
-        }
+          loader: 'babel-loader',
+        },
       },
       {
         test: /\.css$/,
         include: [/(node_modules)/, /(src)/],
         use: [
           isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
-          { loader: 'css-loader' }
-        ].filter(Boolean)
+          { loader: 'css-loader' },
+        ].filter(Boolean),
       },
       {
         test: /\.worklet\.js$/,
-        use: { loader: 'worklet-loader' }
-      }
-    ]
+        use: { loader: 'worklet-loader' },
+      },
+    ],
   },
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
@@ -50,19 +50,19 @@ module.exports = {
       inject: true,
       minify: {
         removeComments: true,
-        collapseWhitespace: true
-      }
+        collapseWhitespace: true,
+      },
     }),
     !isDev
       ? new MiniCssExtractPlugin({
-        filename: 'app.[hash].css'
-      })
-      : null
+          filename: 'app.[hash].css',
+        })
+      : null,
   ].filter(Boolean),
   optimization: {
     splitChunks: {
-      chunks: 'all'
+      chunks: 'all',
     },
-    usedExports: true
-  }
+    usedExports: true,
+  },
 }
