@@ -1,17 +1,17 @@
 # JunoX Softsynth Emulator
 
-This is a reasonably-accurate JavaScript emulation of the classic [Roland Juno-60](https://en.wikipedia.org/wiki/Roland_Juno-60) synthesizer - using the WebAudio AudioWorkletProcessor.
-
-This project was originally started by [Daniele Zannotti](https://github.com/dzannotti/junox). We originally chose the Juno-60 because it is a very simple synth that (still) manages to sound really good - and I had previously done [some analysis](https://github.com/pendragon-andyh/Juno60) of that synth.
+This is a reasonably-accurate JavaScript emulation of the classic [Roland Juno-60](https://en.wikipedia.org/wiki/Roland_Juno-60) synthesizer - using the [Web Audio](https://www.w3.org/TR/webaudio/)'s AudioWorkletProcessor and [Web MIDI](https://www.w3.org/TR/webmidi/).
 
 This branch is mainly concerned with how accurate the emulation is.
 
+This project was originally started by [Daniele Zannotti](https://github.com/dzannotti/junox). We originally chose the Juno-60 because it is a very simple synth that (still) manages to sound really good - and I had previously done [some analysis](https://github.com/pendragon-andyh/Juno60) of that synth.
+
 ## Demos
 
-You can change the sliders while you are playing.
+You can change the sliders while you are playing on both of these UIs:
 
 - The [old ReactJS-based UI](https://pendragon-andyh.github.io/junox/dist/index.html) - I have tested this on the last Chrome, Firefox and Edge browsers. The messy UI is my fault.
-- The fun [new NexusUI-based UI](https://pendragon-andyh.github.io/junox/demo/juno60-nexusUI.html) - I have tested this on Chrome and Edge. I think Firefox is havving a hissy-fit because of me using ES6 modules in the engine.
+- The fun [new NexusUI-based UI](https://pendragon-andyh.github.io/junox/demo/juno60-nexusUI.html) - I have tested this on Chrome and Edge. I think Firefox is having a hissy-fit because of me using ES6 modules in the engine.
 
 Also some useful visualizations: [DCO](https://pendragon-andyh.github.io/junox/demo/juno60-dco.html),
 [LFO](https://pendragon-andyh.github.io/junox/demo/juno60-lfo.html),
@@ -28,7 +28,7 @@ This project is a work-in-progress. My next steps are:
 
 ### User interface
 
-- I like the NexusUI implementation because it is light-weight, provides a responsive touch-based UI, allows management of patches, and is easier for me to enhance.
+- I like the [NexusUI](http://nexus-js.github.io/ui/) implementation because it is light-weight, provides a responsive touch-based UI, allows management of patches, and is easier for me to enhance.
 - Probably going to remove the ReactJS implementation.
 
 ### Performance
