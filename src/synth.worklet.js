@@ -7,6 +7,7 @@ import {
   PANIC,
   SET_PARAM,
   SET_PATCH,
+  PITCH_BEND,
 } from './synth.constants.js'
 
 class JunoxWorker extends AudioWorkletProcessor {
@@ -26,6 +27,8 @@ class JunoxWorker extends AudioWorkletProcessor {
       this.synth.noteOn(event.data.note, event.data.velocity)
     } else if (event.data.action === NOTE_OFF) {
       this.synth.noteOff(event.data.note)
+    } else if (event.data.action === PITCH_BEND) {
+      this.synth.pitchBend(event.data.value)
     } else if (event.data.action === SET_PARAM) {
       this.synth.setValue(event.data.name, event.data.value)
     } else if (event.data.action === SET_PATCH) {

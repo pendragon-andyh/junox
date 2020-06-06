@@ -82,6 +82,10 @@ export default class Junox {
     this.voices.forEach((voice) => voice.note === note && !voice.isFinished() && voice.noteOff())
   }
 
+  pitchBend(value) {
+    this.bendAmountParam.setValue(value)
+  }
+
   lfoTrigger() {
     this.lfo.trigger()
   }

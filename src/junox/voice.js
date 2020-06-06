@@ -1,6 +1,5 @@
-import { VCA_ENV, VCF_DIODELADDER } from './constants.js'
+import { VCA_ENV } from './constants.js'
 import { Juno60DCO } from './dco.js'
-import { DiodeLadder } from './diodeladder.js'
 import { Juno60Envelope } from './juno60Envelope.js'
 import { MoogLowPassFilter } from './mooglpf.js'
 import { Noise } from './noise.js'
@@ -21,10 +20,6 @@ export default class Voice {
     this.ampEnv = new Juno60Envelope(sampleRate)
 
     this.moogVCF = new MoogLowPassFilter(sampleRate)
-    this.diodeLadderVCF = new DiodeLadder(sampleRate)
-
-    // Note: This is called by noteOn()
-    // this.updatePatch(patch)
   }
 
   /**
@@ -74,14 +69,14 @@ export default class Voice {
     // The VCF is voltage controller (1 volt per octave). Calculate how much each of the
     // modulators contribute to the control voltage.
     const cutoffDetuneOctave = (filterCutoff * 200) / 12
-    const envDetineOctaves = modEnvOut * filterEnvMod * 12 // Envelope changes cutoff by upto +-12 octaves.
+    const envDetuneOctaves = modEnvOut * filterEnvMod * 12 // Envelope changes cutoff by upto +-12 octaves.
     const keyboardDetuneOctaves = filterKeyMod * this.filterNoteFactor
     const resonanceDetuneOctaves = this.patch.vcf.resonance // Resonance changes cutoff by upto an octave.
     let vcfCutoffValue =
       cutoffDetuneOctave +
       lfoDetuneOctaves +
       keyboardDetuneOctaves +
-      envDetineOctaves +
+      envDetuneOctaves +
       resonanceDetuneOctaves
 
     // Increase gain when the LPF cutoff frequency is low (the Moog LPF attenuates low
@@ -95,31 +90,35 @@ export default class Voice {
     let cutoffFrequency = 7.8 * Math.pow(2.0, vcfCutoffValue)
     cutoffFrequency = fixLpfCutoff(cutoffFrequency)
 
-    let vcfOut
-    if (this.patch.vcf.type === VCF_DIODELADDER) {
-      this.diodeLadderVCF.setCutoff(cutoffFrequency)
-      this.diodeLadderVCF.setResonance(filterResonance)
-      vcfOut = this.diodeLadderVCF.render(dcoOut)
-    } else {
-      this.moogVCF.resonance = filterResonance * 3.99
-      vcfOut = this.moogVCF.render(dcoOut, cutoffFrequency)
-    }
+    this.moogVCF.resonance = filterResonance * 3.99
+    const vcfOut = this.moogVCF.render(dcoOut, cutoffFrequency)
 
     return this.velocity * vcfOut * ampEnvOut
   }
 
   noteOn(note, velocity) {
+    // If the note is new (e.g. not a re-trigger) then initialize state.
     if (note !== this.note || this.isFinished()) {
       this.note = note
       this.dco.noteOn(note)
       this.modEnv.reset()
       this.ampEnv.reset()
       this.moogVCF.reset()
-      this.diodeLadderVCF.reset()
 
       const c4 = 60
       const fiveOctaves = 5 * 12
       this.filterNoteFactor = 5 * ((this.note - c4) / fiveOctaves)
+    }
+
+    // If the patch has no sound-source then assume that it is trying to use the filter as the source.
+    if (
+      !this.patch.dco.saw &&
+      !this.patch.dco.pulse &&
+      !this.patch.dco.subAmount &&
+      !this.patch.dco.noise
+    ) {
+      const initialExcite = this.patch.vcf.resonance * this.patch.vcf.resonance * 0.2
+      this.moogVCF.trigger(initialExcite)
     }
 
     this.velocity = velocity

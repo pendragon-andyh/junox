@@ -6,6 +6,7 @@ import {
   PANIC,
   SET_PARAM,
   SET_PATCH,
+  PITCH_BEND,
 } from './synth.constants.js'
 
 export const defaultPatch = {
@@ -38,7 +39,7 @@ export const defaultPatch = {
 }
 
 export const defaultAudioNodeOptions = {
-  numberOfInputs: 1,
+  numberOfInputs: 0,
   numberOfOutputs: 1,
   channelCountMode: 'explicit',
   channelCount: 2,
@@ -85,6 +86,13 @@ export class SynthWorkletNode extends AudioWorkletNode {
     this.port.postMessage({
       action: NOTE_OFF,
       note,
+    })
+  }
+
+  pitchBend(value) {
+    this.port.postMessage({
+      action: PITCH_BEND,
+      value,
     })
   }
 
