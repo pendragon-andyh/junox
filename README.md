@@ -1,26 +1,40 @@
 # JunoX Softsynth Emulator
 
-This is a reasonably-accurate JavaScript emulation of the classic Roland Juno-60 synthesizer - using the WebAudio AudioWorkletProcessor.
+This is a reasonably-accurate JavaScript emulation of the classic [Roland Juno-60](https://en.wikipedia.org/wiki/Roland_Juno-60) synthesizer - using the WebAudio AudioWorkletProcessor.
 
-This project was originally started by [Daniele Zannotti](https://github.com/dzannotti/junox). My branch is mainly concerned with how accurate the emulation is.
+This project was originally started by [Daniele Zannotti](https://github.com/dzannotti/junox). We originally chose the Juno-60 because it is a very simple synth that (still) manages to sound really good - and I had previously done [some analysis](https://github.com/pendragon-andyh/Juno60) of that synth.
+
+This branch is mainly concerned with how accurate the emulation is.
 
 ## Demos
 
-You can change the sliders while you are playing:
+You can change the sliders while you are playing.
 
-* The [old ReactJS-based UI](https://pendragon-andyh.github.io/junox/) - I have tested this on the last Chrome, Firefox and Edge browsers.
-* The [new NexusUI-based UI](https://pendragon-andyh.github.io/junox/demo/juno60-nexusUI.html) - I have tested this on Chrome and Edge.
+* The [old ReactJS-based UI](https://pendragon-andyh.github.io/junox/dist/index.html) - I have tested this on the last Chrome, Firefox and Edge browsers. The messy UI is my fault.
+* The fun [new NexusUI-based UI](https://pendragon-andyh.github.io/junox/demo/juno60-nexusUI.html) - I have tested this on Chrome and Edge.
 
-xxxxx
+Also some useful visualizations: [DCO](https://pendragon-andyh.github.io/junox/demo/juno60-dco.html),
+[LFO](https://pendragon-andyh.github.io/junox/demo/juno60-lfo.html),
+[Envelope](https://pendragon-andyh.github.io/junox/demo/juno60-envelope.html), and
+[Chorus](https://pendragon-andyh.github.io/junox/demo/juno60-chorus.html).
 
 ## Next steps
 
-* User interface
-  * I like the NexusUI implementation because it provides a nice touch-based UI, allows management of patches, and is easier for me to enhance.
+This project is a work-in-progress. My next steps are:
+
 * Bundling
-  * Ultimately, I want to publish the AudioWorklet for reuse by other developers - and so I want to publish the Node and Processor as an NPM package. The UI is very-much just a demo.
+  * Ultimately I want to publish the AudioWorklet Node+Processor for reuse by other developers - and so I want to publish the Node and Processor as an NPM package or as a [WAM plug-in](https://www.webaudiomodules.org/). The UI is very-much just a fun demo.
+* User interface
+  * I like the NexusUI implementation because it is light-weight, provides a responsive touch-based UI, allows management of patches, and is easier for me to enhance. Probably going to remove the ReactJS implementation.
 * Performance:
   * The start-up is a bit glitchy (because new objects are being created when the first note is played, and because the JavaScript engine needs time to optimise the code).
-  * The parameter-smoothing
+  * The parameter-smoothing uses a LPF. I want to hear if linear smoothing sounds good-enough.
+  * There are a bunch of expensive calculations (Power, Exp, etc.). Check if lookup tables would be faster, and check if we can calculate less often (i.e. eighth-sample).
+  * Use SharedAudioBuffer to communicate between the Node and Processor (instead of MessagePort).
 * Documentation:
-  * I started documenting the project over on [Daniele's repo](https://github.com/dzannotti/junox/wiki).
+  * I started documenting the project over on [Daniele's repo](https://github.com/dzannotti/junox/wiki). I have learned a lot while developing this project - it would be good to share.
+* Improve emulation and patches:
+  * The chorus and HPF can be improved.
+  * It should be simple to create additional synths (SH-101, Juno-106) based on the code. This would quickly increate the number of pre-baked patches.
+
+If anyone has ideas or feedback then I'm always happy to listen.
