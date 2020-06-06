@@ -50,6 +50,8 @@ This project is a work-in-progress. My next steps are:
 ### Code quality
 
 - The code for the NexusUI code is truely heinous (sorry). Need to refactor a little.
+- The sound-engine folder (src/junox) contains some unused files.
+- Fix-up the existing tests, and add some proper coverage.
 - I am tempted to move to TypeScript (that would have identified many of my bugs). Also, it should be a small step to go from TypeScript for the synth-engine to [AssemblyScript](https://assemblyscript.org/).
 
 If anyone has ideas or feedback then I'm always happy to listen.
