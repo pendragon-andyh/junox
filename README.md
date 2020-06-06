@@ -13,7 +13,7 @@ You can change the sliders while you are playing on both of these UIs:
 - The [old ReactJS-based UI](https://pendragon-andyh.github.io/junox/dist/index.html) - I have tested this on the last Chrome, Firefox and Edge browsers. The messy UI is my fault.
 - The fun [new NexusUI-based UI](https://pendragon-andyh.github.io/junox/demo/juno60-nexusUI.html) - I have tested this on Chrome and Edge. I think Firefox is having a hissy-fit because of me using ES6 modules in the engine.
 
-You may need to play a couple of notes before the JavaScript JIT gets going properly.
+Some of the patches have a the "sweet-spot" on the keyboard or are designed to be used with pitch-bend. You may need to play a couple of notes before the JavaScript JIT gets going properly.
 
 Also some useful visualizations: [DCO](https://pendragon-andyh.github.io/junox/demo/juno60-dco.html),
 [LFO](https://pendragon-andyh.github.io/junox/demo/juno60-lfo.html),
@@ -39,7 +39,7 @@ This project is a work-in-progress. My next steps are:
 
 - The start-up is a bit glitchy (because new objects are being created when the first note is played, and because the JavaScript JIT engine needs time to optimise the code).
 - The parameter-smoothing uses low pass filters. Check if linear-smoothing sounds good-enough.
-- There are a bunch of expensive calculations (Power, Exp, etc.). Check if lookup tables would be faster, and check if we can calculate less often (i.e. eighth-sample).
+- There are a bunch of expensive calculations (Power, Exp, etc.). Check if lookup tables would be faster, and check if we can calculate less often (i.e. every eighth-sample).
 - Use SharedAudioBuffer to communicate between the Node and Processor (instead of MessagePort).
 
 ### Documentation
