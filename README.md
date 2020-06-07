@@ -2,10 +2,6 @@
 
 This is a reasonably-accurate JavaScript emulation of the classic [Roland Juno-60](https://en.wikipedia.org/wiki/Roland_Juno-60) synthesizer - using the [Web Audio](https://www.w3.org/TR/webaudio/)'s AudioWorkletProcessor and [Web MIDI](https://www.w3.org/TR/webmidi/).
 
-This branch is mainly concerned with how accurate the emulation is.
-
-This project was originally started by [Daniele Zannotti](https://github.com/dzannotti/junox). We originally chose the Juno-60 because it is a very simple synth that (still) manages to sound really good - and I had previously done [some analysis](https://github.com/pendragon-andyh/Juno60) of that synth.
-
 ## Demos
 
 You can change the sliders while you are playing on both of these UIs:
@@ -13,7 +9,7 @@ You can change the sliders while you are playing on both of these UIs:
 - The [old ReactJS-based UI](https://pendragon-andyh.github.io/junox/dist/index.html) - I have tested this on the last Chrome, Firefox and Edge browsers. The messy UI is my fault.
 - The fun [new NexusUI-based UI](https://pendragon-andyh.github.io/junox/demo/juno60-nexusUI.html) - I have tested this on Chrome and Edge. I think Firefox is having a hissy-fit because of me using ES6 modules in the engine.
 
-Some of the patches have a the "sweet-spot" on the keyboard or are designed to be used with pitch-bend. You may need to play a couple of notes before the JavaScript JIT gets going properly.
+Some of the [patches](https://www.synthmania.com/juno-60.htm) have a the "sweet-spot" on the keyboard or are designed to be used with pitch-bend. You may need to play a couple of notes before the JavaScript JIT gets going properly.
 
 Also some useful visualizations: [DCO](https://pendragon-andyh.github.io/junox/demo/juno60-dco.html),
 [LFO](https://pendragon-andyh.github.io/junox/demo/juno60-lfo.html),
@@ -60,3 +56,7 @@ This project is a work-in-progress. My next steps are:
 - I am tempted to move to [TypeScript](https://www.typescriptlang.org/) (that would have identified many of my bugs). Also, it should be a small step to go from TypeScript for the synth-engine to [AssemblyScript](https://assemblyscript.org/).
 
 If anyone has ideas or feedback then I'm always happy to listen.
+
+## Background
+
+This project was originally started by [Daniele Zannotti](https://github.com/dzannotti/junox). We chose the Juno-60 because it is a very simple synth that (still) manages to sound really good - and I had previously done [some analysis](https://github.com/pendragon-andyh/Juno60) of that synth.
