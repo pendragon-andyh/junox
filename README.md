@@ -13,6 +13,8 @@ You can change the sliders while you are playing on both of these UIs:
 - The [old ReactJS-based UI](https://pendragon-andyh.github.io/junox/dist/index.html) - I have tested this on the last Chrome, Firefox and Edge browsers. The messy UI is my fault.
 - The fun [new NexusUI-based UI](https://pendragon-andyh.github.io/junox/demo/juno60-nexusUI.html) - I have tested this on Chrome and Edge. I think Firefox is having a hissy-fit because of me using ES6 modules in the engine.
 
+Some of the patches have a the "sweet-spot" on the keyboard or are designed to be used with pitch-bend. You may need to play a couple of notes before the JavaScript JIT gets going properly.
+
 Also some useful visualizations: [DCO](https://pendragon-andyh.github.io/junox/demo/juno60-dco.html),
 [LFO](https://pendragon-andyh.github.io/junox/demo/juno60-lfo.html),
 [Envelope](https://pendragon-andyh.github.io/junox/demo/juno60-envelope.html), and
@@ -30,12 +32,14 @@ This project is a work-in-progress. My next steps are:
 
 - I like the [NexusUI](http://nexus-js.github.io/ui/) implementation because it is light-weight, provides a responsive touch-based UI, allows management of patches, and is easier for me to enhance.
 - Probably going to remove the ReactJS implementation.
+- Add the option of recording/exporting audio (allows me to import to [Sonic Visualiser](https://www.sonicvisualiser.org/)).
+- Add option of visualizing the output spectrogram and oscilloscope.
 
 ### Performance
 
 - The start-up is a bit glitchy (because new objects are being created when the first note is played, and because the JavaScript JIT engine needs time to optimise the code).
-- The parameter-smoothing uses low pass filters. I want to hear if linear-smoothing sounds good-enough.
-- There are a bunch of expensive calculations (Power, Exp, etc.). Check if lookup tables would be faster, and check if we can calculate less often (i.e. eighth-sample).
+- The parameter-smoothing uses low pass filters. Check if linear-smoothing sounds good-enough.
+- There are a bunch of expensive calculations (Power, Exp, etc.). Check if lookup tables would be faster, and check if we can calculate less often (i.e. every eighth-sample).
 - Use SharedAudioBuffer to communicate between the Node and Processor (instead of MessagePort).
 
 ### Documentation
@@ -45,14 +49,14 @@ This project is a work-in-progress. My next steps are:
 ### Improve emulation and patches
 
 - The chorus and HPF are a bit ropey.
-- Try to decode the "bank B" patch bank.
 - It should be simple to create additional synths ([SH-101](https://en.wikipedia.org/wiki/Roland_SH-101[), [Juno-106](https://en.wikipedia.org/wiki/Roland_Juno-106)) based on the code. This would quickly increate the number of pre-baked patches.
+- Try to decode the "bank B" patch bank.
 
 ### Code quality
 
 - The code for the NexusUI code is truely heinous (sorry). Need to refactor a little.
 - The sound-engine folder (src/junox) contains some unused files.
 - Fix-up the existing tests, and add some proper coverage.
-- I am tempted to move to TypeScript (that would have identified many of my bugs). Also, it should be a small step to go from TypeScript for the synth-engine to [AssemblyScript](https://assemblyscript.org/).
+- I am tempted to move to [TypeScript](https://www.typescriptlang.org/) (that would have identified many of my bugs). Also, it should be a small step to go from TypeScript for the synth-engine to [AssemblyScript](https://assemblyscript.org/).
 
 If anyone has ideas or feedback then I'm always happy to listen.
