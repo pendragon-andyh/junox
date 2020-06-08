@@ -933,13 +933,17 @@
 
         chorusMode.value = (patch.chorus || 0).toString()
 
-        dcoBendDepth.value = ((patch.bend || {}).dcoDepth || 0.5) * 10
-        vcfBendDepth.value = ((patch.bend || {}).vcfDepth || 0.5) * 10
+        dcoBendDepth.value = getValueOrDefault((patch.bend || {}).dcoDepth, 0.5) * 10
+        vcfBendDepth.value = getValueOrDefault((patch.bend || {}).vcfDepth, 0.5) * 10
 
         // Re-enable change tracking.
         originalPatchJson = JSON.stringify(serializeFromControlsToPatch())
         patchName = patch.name
         onControlChange()
+      }
+
+      function getValueOrDefault(value, defaultValue) {
+        return value === undefined || value === null ? defaultValue : value
       }
 
       let isNexusChanging = false
