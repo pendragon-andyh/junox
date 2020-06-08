@@ -53,30 +53,42 @@
     <div class="container-fluid">
       <div id="synth-container">
         <div class="float-right d-flex">
-          <a class="btn btn-outline-dark" id="btnSavePatch" href="javascript:">
-            Save patch
-          </a>
-
-          &nbsp;
-
-          <a class="btn btn-outline-dark" id="btnMidi" href="javascript:">MIDI</a>
-          <div class="dropdown d-none" id="menuMidiOptions">
+          <div class="btn-group">
+            <button type="button" class="btn btn-outline-dark" id="btnSavePatch">Save patch</button>
             <button
-              class="btn btn-outline-dark dropdown-toggle"
               type="button"
-              id="dropdownMenuButton"
+              class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
             >
-              MIDI Options
+              <span class="sr-only">Toggle Dropdown</span>
             </button>
-            <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="javascript:">Reset patch</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="javascript:">Import patch</a>
+              <a class="dropdown-item" href="javascript:">Export patch</a>
             </div>
           </div>
+
+          &nbsp;
+
+          <button class="btn btn-outline-dark" id="btnMidi">MIDI</button>
+
+          &nbsp;
+
+          <button class="btn btn-outline-dark" id="btnRecord">
+            <div class="whenRecording">
+              Stop
+              <div class="spinner-grow spinner-grow-sm text-danger" role="status">
+                <span class="sr-only">Recording...</span>
+              </div>
+            </div>
+            <div class="whenNotRecording">
+              Record
+            </div>
+          </button>
         </div>
 
         <ul class="nav nav-tabs">
@@ -116,11 +128,7 @@
           >
             <div class="control-block d-none" id="patch-list-mine">
               <h2>My patches</h2>
-              <div class="control patch-list">
-                <div class="alert alert-info" role="alert">
-                  Coming soon!
-                </div>
-              </div>
+              <div class="control patch-list"></div>
             </div>
 
             <div class="control-block d-none" id="patch-list-juno60-factoryA">
@@ -1062,6 +1070,50 @@
 
         $('#modal-save-patch').modal('hide')
         return false
+      })
+
+      // Allow sound to be recorded.
+      let recordDest = null
+      let recordChunks = null
+      let recordRecorder = null
+      $('#btnRecord').click(function () {
+        if (recordRecorder) {
+          // Ask the existing recording-session to stop.
+          recordRecorder.stop()
+          synthNode.disconnect(recordDest)
+        } else {
+          // Plug a recording-destination into the audio graph.
+          recordDest = audioContext.createMediaStreamDestination()
+          synthNode.connect(recordDest)
+
+          // Record the output.
+          recordChunks = []
+          recordRecorder = new MediaRecorder(recordDest.stream)
+          recordRecorder.ondataavailable = function (evt) {
+            // Accumulate chunks of audio output.
+            recordChunks.push(evt.data)
+          }
+          recordRecorder.onstop = function () {
+            // Make blob out of our chunks.
+            const blob = new Blob(recordChunks, { type: 'audio/mpeg; codecs=mp3' })
+
+            // Download the blob.
+            const link = document.createElement('a')
+            link.download = 'junox-download.mp3'
+            link.href = URL.createObjectURL(blob)
+            link.click()
+            URL.revokeObjectURL(link.href)
+
+            recordChunks = null
+            recordRecorder = null
+            recordDest = null
+
+            $('#btnRecord').removeClass('recording')
+          }
+          recordRecorder.start()
+
+          $(this).addClass('recording')
+        }
       })
     </script>
   </body>

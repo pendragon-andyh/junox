@@ -293,3 +293,28 @@ header {
 .modal-body {
   background-color: #ccf;
 }
+
+#btnRecord div.whenRecording {
+  display: none;
+}
+#btnRecord.recording div.whenRecording {
+  display: block;
+  color: red;
+}
+#btnRecord div.whenNotRecording {
+  display: block;
+}
+#btnRecord.recording div.whenNotRecording {
+  display: none;
+}
+
+.dropdown-menu {
+  left: 32px !important;
+  padding: 2px;
+  border: 1px solid #666;
+}
+.dropdown-item:hover,
+.dropdown-item:focus {
+  color: #fff;
+  background-color: #6c757d;
+}
