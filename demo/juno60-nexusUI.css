@@ -318,3 +318,20 @@ header {
   color: #fff;
   background-color: #6c757d;
 }
+
+.btn-group > .btn:not(:first-child) {
+  margin-left: -2px;
+}
+
+#oscilloscope {
+  width: 70%;
+}
+#oscilloscope .control {
+  width: 100%;
+}
+#spectrogram {
+  width: 29.9%;
+}
+#spectrogram .control {
+  width: 100%;
+}
