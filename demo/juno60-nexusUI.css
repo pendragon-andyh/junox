@@ -234,13 +234,16 @@ header {
 }
 #synth-container .tab-content {
   background-color: #ddf;
-  padding: 5px;
   border: 1px solid #336;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   white-space: nowrap;
+}
+#synth-container .tab-pane{
+  position: relative;
+  width: 100%;
   overflow-x: auto;
-  overflow-y: hidden;
+  padding: 5px;
   height: 285px;
 }
 #synth-performance {
@@ -317,10 +320,6 @@ header {
 .dropdown-item:focus {
   color: #fff;
   background-color: #6c757d;
-}
-
-.btn-group > .btn:not(:first-child) {
-  margin-left: -2px;
 }
 
 #oscilloscope {

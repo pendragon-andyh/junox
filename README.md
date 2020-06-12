@@ -44,7 +44,6 @@ This project is a work-in-progress. My next steps are:
 
 ### Improve emulation and patches
 
-- The chorus and HPF are a bit ropey.
 - It should be simple to create additional synths ([SH-101](https://en.wikipedia.org/wiki/Roland_SH-101[), [Juno-106](https://en.wikipedia.org/wiki/Roland_Juno-106)) based on the code. This would quickly increate the number of pre-baked patches.
 - Try to decode the "bank B" patch bank.
 

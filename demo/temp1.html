@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chorus I+II analysis | Juno60</title>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"
+      integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <h1>Testing chorus I+II into Juno60</h1>
+
+    <fieldset>
+      <legend>Parameters</legend>
+      <div>
+        <label style="width: 150px; display: inline-block;">Orig start:</label>
+        <input id="origStart" value="86066" />
+      </div>
+      <div>
+        <label style="width: 150px; display: inline-block;">Chorus start:</label>
+        <input id="chorusStart" value="57620" />
+      </div>
+    </fieldset>
+
+    <div
+      id="graphOrig"
+      style="height: 370px; max-width: 100%; border: 1px blue solid; margin-top: 10px;"
+    ></div>
+
+    <div
+      id="graphChorus"
+      style="height: 370px; max-width: 100%; border: 1px blue solid; margin-top: 10px;"
+    ></div>
+
+    <div
+      id="graphDiff"
+      style="height: 370px; max-width: 100%; border: 1px blue solid; margin-top: 10px;"
+    ></div>
+
+    <script type="module">
+      $(function () {
+        $('#origStart').on('change', onChange)
+        $('#chorusStart').on('change', onChange)
+      })
+
+      const ac = new OfflineAudioContext(2, 44100 * 10, 44100)
+        
+      let origWave = null
+      let chorusWave = null
+
+      var origRequest = new XMLHttpRequest()
+      origRequest.open('GET', "Juno 60 PulseChorus0.wav", true)
+      origRequest.responseType = 'arraybuffer'
+      origRequest.onload = function() {
+        ac.decodeAudioData(origRequest.response, (buffer) => {
+          origWave = buffer
+          onChange()
+        })
+      }
+      origRequest.send()
+
+      var chorusRequest = new XMLHttpRequest()
+      chorusRequest.open('GET', "Juno 60 PulseChorus1+2.wav", true)
+      chorusRequest.responseType = 'arraybuffer'
+      chorusRequest.onload = function() {
+        ac.decodeAudioData(chorusRequest.response, (buffer) => {
+          chorusWave = buffer
+          onChange()
+        })
+      }
+      chorusRequest.send()
+
+      let drawHandle = null
+      function onChange() {
+        if (!origWave || !chorusWave){
+          return
+        }
+
+        const origOffset = $("#origStart").val() - 0
+        const chorusOffset = $("#chorusStart").val() - 0
+
+        // TODO
+        const origChannel0 = origWave.getChannelData(0)
+        for (let i = 0; i < origChannel0.length; i++){
+          if (Math.abs(origChannel0[i]) < 0.000005){
+            origChannel0[i] = 0
+          }
+        }
+        
+        const chorusChannel0 = chorusWave.getChannelData(0)
+        for (let i = 0; i < chorusChannel0.length; i++){
+          if (Math.abs(chorusChannel0[i]) < 0.000005){
+            chorusChannel0[i] = 0
+          }
+        }
+
+        const orig = new Float32Array(44100 * 2)
+        const chorus = new Float32Array(44100 * 2)
+        const chorusMinusOrig = new Float32Array(44100 * 2)
+        const xAxis = new Float32Array(44100 * 2)
+        for (let i = 0; i < orig.length; i++){
+          orig[i] = -origChannel0[origOffset + i]
+          chorus[i] = chorusChannel0[chorusOffset + i]
+          chorusMinusOrig[i] = chorus[i] - orig[i]
+          xAxis[i] = i / 44100
+        }
+
+        const layout = {
+          xaxis: { range: [0.0, 2.0], title: 'Time (seconds)' },
+          yaxis: { range: [-0.8, 0.8], title: 'Signal' },
+        }
+
+        const dataOrig = { x: xAxis, y: orig, fill: 'tonexty', type: 'Out', name: 'Out' }
+        Plotly.purge(document.getElementById('graphOrig'))
+        Plotly.plot(document.getElementById('graphOrig'), [dataOrig], layout, { responsive: true })
+
+        const dataChorus = { x: xAxis, y: chorus, fill: 'tonexty', type: 'Out', name: 'Out' }
+        Plotly.purge(document.getElementById('graphChorus'))
+        Plotly.plot(document.getElementById('graphChorus'), [dataChorus], layout, { responsive: true })
+
+        const dataChorusMinusOrig = { x: xAxis, y: chorusMinusOrig, fill: 'tonexty', type: 'Out', name: 'Out' }
+        Plotly.purge(document.getElementById('graphDiff'))
+        Plotly.plot(document.getElementById('graphDiff'), [dataChorusMinusOrig], layout, { responsive: true })
+
+        const peaks=[]
+        for (let i=1; i<chorusMinusOrig.length; i++){
+          if (chorusMinusOrig[i]>0.33&&chorusMinusOrig[i-1]<=0.33){
+            peaks.push(i)
+          }
+        }
+        console.log(peaks.join(","))
+      }
+    </script>
+  </body>
+</html>

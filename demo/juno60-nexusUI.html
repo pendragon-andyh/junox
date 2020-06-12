@@ -705,7 +705,7 @@
       })
 
       const piano = new Nexus.Piano('#piano', {
-        lowNote: 24,
+        lowNote: 36,
         highNote: 96,
         mode: 'button',
         size: [2582, 210],
@@ -714,7 +714,8 @@
       for (let key of piano.keys) {
         const octave = Math.floor(key.note / 12)
         const octaveNote = key.note - octave * 12
-        const keyName = pianoKeyNames[octaveNote].replace('#', '<sup>#</sup>') + octave.toString()
+        const keyName =
+          pianoKeyNames[octaveNote].replace('#', '<sup>#</sup>') + (octave - 1).toString()
         const $keySpan = $(`<span class="piano-key-name">${keyName}</span>`)
         $keySpan.appendTo(key.parent)
       }
