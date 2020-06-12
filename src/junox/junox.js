@@ -2,7 +2,7 @@ import { SmoothMoves } from './smoothMoves.js'
 import Voice from './voice.js'
 import { Chorus } from './chorus.js'
 import { LFOWithEnvelope } from './lfoWithEnvelope.js'
-import HighPassFilter from './hpf.js'
+import { SimpleSinglePoleFilter } from './simpleSinglePoleFilter.js'
 import { fastTanh, interpolatedLookup } from './utils.js'
 
 const synthStatus = {
@@ -41,11 +41,7 @@ export default class Junox {
     this.lfo = new LFOWithEnvelope(sampleRate)
     this.lfo.waveform = 'sine'
 
-    this.hpf = new HighPassFilter({
-      cutoff: 0,
-      resonance: 0.707,
-      sampleRate,
-    })
+    this.hpf = new SimpleSinglePoleFilter(sampleRate)
 
     this.chorus = new Chorus(sampleRate)
 
@@ -169,8 +165,15 @@ export default class Junox {
       }
 
       // Apply high pass filter.
-      if (this.patch.hpf > 0.1) {
-        monoOut = this.hpf.render(monoOut)
+      // Juno-60 has just 4 possible values (0, 1, 2, 3) corresponding to (none, 250, 520, 1220).
+      // Our design uses a slider (like the Juno-6) so interpolate between the Juno-60's values).
+      if (this.patch.hpf > 0.0) {
+        let lowPassOut = this.hpf.renderLP(monoOut)
+        if (this.patch.hpf < 0.25) {
+          // And gradually apply HPF between 0.0 and 0.25.
+          lowPassOut *= this.patch.hpf * 4.0
+        }
+        monoOut -= lowPassOut
       }
 
       // Apply the VCA gain.
@@ -295,7 +298,7 @@ function setLfoValuesFromSliders(lfo, rateSlider, delaySlider) {
   lfo.setValues(frequency, delayDuration, attackDuration)
 }
 
-const curveFromHpfSliderToFreq = [0, 250, 520, 1220]
+const curveFromHpfSliderToFreq = [140, 250, 520, 1220]
 
 function setHpfValuesFromSliders(hpf, rateSlider) {
   const frequency = interpolatedLookup(rateSlider, curveFromHpfSliderToFreq)
