@@ -47,14 +47,14 @@
       })
 
       const ac = new OfflineAudioContext(2, 44100 * 10, 44100)
-        
+
       let origWave = null
       let chorusWave = null
 
       var origRequest = new XMLHttpRequest()
-      origRequest.open('GET', "Juno 60 PulseChorus0.wav", true)
+      origRequest.open('GET', 'Juno 60 PulseChorus0.wav', true)
       origRequest.responseType = 'arraybuffer'
-      origRequest.onload = function() {
+      origRequest.onload = function () {
         ac.decodeAudioData(origRequest.response, (buffer) => {
           origWave = buffer
           onChange()
@@ -63,9 +63,9 @@
       origRequest.send()
 
       var chorusRequest = new XMLHttpRequest()
-      chorusRequest.open('GET', "Juno 60 PulseChorus1+2.wav", true)
+      chorusRequest.open('GET', 'Juno 60 PulseChorus1+2.wav', true)
       chorusRequest.responseType = 'arraybuffer'
-      chorusRequest.onload = function() {
+      chorusRequest.onload = function () {
         ac.decodeAudioData(chorusRequest.response, (buffer) => {
           chorusWave = buffer
           onChange()
@@ -75,24 +75,24 @@
 
       let drawHandle = null
       function onChange() {
-        if (!origWave || !chorusWave){
+        if (!origWave || !chorusWave) {
           return
         }
 
-        const origOffset = $("#origStart").val() - 0
-        const chorusOffset = $("#chorusStart").val() - 0
+        const origOffset = $('#origStart').val() - 0
+        const chorusOffset = $('#chorusStart').val() - 0
 
         // TODO
         const origChannel0 = origWave.getChannelData(0)
-        for (let i = 0; i < origChannel0.length; i++){
-          if (Math.abs(origChannel0[i]) < 0.000005){
+        for (let i = 0; i < origChannel0.length; i++) {
+          if (Math.abs(origChannel0[i]) < 0.000005) {
             origChannel0[i] = 0
           }
         }
-        
+
         const chorusChannel0 = chorusWave.getChannelData(1)
-        for (let i = 0; i < chorusChannel0.length; i++){
-          if (Math.abs(chorusChannel0[i]) < 0.000005){
+        for (let i = 0; i < chorusChannel0.length; i++) {
+          if (Math.abs(chorusChannel0[i]) < 0.000005) {
             chorusChannel0[i] = 0
           }
         }
@@ -101,7 +101,7 @@
         const chorus = new Float32Array(44100 * 2)
         const chorusMinusOrig = new Float32Array(44100 * 2)
         const xAxis = new Float32Array(44100 * 2)
-        for (let i = 0; i < orig.length; i++){
+        for (let i = 0; i < orig.length; i++) {
           orig[i] = -origChannel0[origOffset + i]
           chorus[i] = chorusChannel0[chorusOffset + i]
           chorusMinusOrig[i] = chorus[i] - orig[i]
@@ -119,19 +119,29 @@
 
         const dataChorus = { x: xAxis, y: chorus, fill: 'tonexty', type: 'Out', name: 'Out' }
         Plotly.purge(document.getElementById('graphChorus'))
-        Plotly.plot(document.getElementById('graphChorus'), [dataChorus], layout, { responsive: true })
+        Plotly.plot(document.getElementById('graphChorus'), [dataChorus], layout, {
+          responsive: true,
+        })
 
-        const dataChorusMinusOrig = { x: xAxis, y: chorusMinusOrig, fill: 'tonexty', type: 'Out', name: 'Out' }
+        const dataChorusMinusOrig = {
+          x: xAxis,
+          y: chorusMinusOrig,
+          fill: 'tonexty',
+          type: 'Out',
+          name: 'Out',
+        }
         Plotly.purge(document.getElementById('graphDiff'))
-        Plotly.plot(document.getElementById('graphDiff'), [dataChorusMinusOrig], layout, { responsive: true })
+        Plotly.plot(document.getElementById('graphDiff'), [dataChorusMinusOrig], layout, {
+          responsive: true,
+        })
 
-        const peaks=[]
-        for (let i=1; i<chorusMinusOrig.length; i++){
-          if (chorusMinusOrig[i]>0.33&&chorusMinusOrig[i-1]<=0.33){
+        const peaks = []
+        for (let i = 1; i < chorusMinusOrig.length; i++) {
+          if (chorusMinusOrig[i] > 0.33 && chorusMinusOrig[i - 1] <= 0.33) {
             peaks.push(i)
           }
         }
-        console.log(peaks.join(","))
+        console.log(peaks.join(','))
       }
     </script>
   </body>
