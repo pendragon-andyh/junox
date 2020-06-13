@@ -74,7 +74,7 @@ export default class Voice {
     const resonanceDetuneOctaves = this.patch.vcf.resonance // Resonance changes cutoff by upto an octave.
     let vcfCutoffValue =
       cutoffDetuneOctave +
-      lfoDetuneOctaves +
+      lfoDetuneOctaves * ampEnvOut + // Using env to dumb-down LFO makes UFO patch sound more natural.
       keyboardDetuneOctaves +
       envDetuneOctaves +
       resonanceDetuneOctaves
