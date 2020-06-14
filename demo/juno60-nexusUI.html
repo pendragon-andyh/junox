@@ -1123,11 +1123,13 @@
           }
           recordRecorder.onstop = function () {
             // Make blob out of our chunks.
-            const blob = new Blob(recordChunks, { type: 'audio/mpeg; codecs=mp3' })
+            // const blob = new Blob(recordChunks, { type: 'audio/mpeg; codecs=mp3' })
+            const blob = new Blob(recordChunks, { type: 'audio/mp4; codecs=flac' })
 
             // Download the blob.
             const link = document.createElement('a')
-            link.download = 'junox-download.mp3'
+            // link.download = 'junox-download.mp3'
+            link.download = 'junox-download.mp4'
             link.href = URL.createObjectURL(blob)
             link.click()
             URL.revokeObjectURL(link.href)
