@@ -35,15 +35,11 @@
 
   <body>
     <header class="navbar navbar-dark bg-primary">
-      <span class="navbar-brand mb-0 h1">JUNOX</span>
+      <span class="navbar-brand mb-0 h1">JUNOX - Juno60</span>
 
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a
-            class="btn btn-sm btn-outline-light"
-            href="https://github.com/pendragon-andyh/junox"
-            target="_blank"
-          >
+          <a class="btn btn-sm btn-outline-light" href="https://github.com/pendragon-andyh/junox" target="_blank">
             Github
           </a>
         </li>
@@ -93,39 +89,21 @@
 
         <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a
-              class="nav-link active"
-              id="synth-patches-tab"
-              data-toggle="tab"
-              href="#synth-patches"
-              >Patches</a
-            >
+            <a class="nav-link active" id="synth-patches-tab" data-toggle="tab" href="#synth-patches">Patches</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" id="synth-controls-tab" data-toggle="tab" href="#synth-controls"
-              >Controls</a
-            >
+            <a class="nav-link" id="synth-controls-tab" data-toggle="tab" href="#synth-controls">Controls</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" id="synth-sequencer-tab" data-toggle="tab" href="#synth-sequencer"
-              >Sequencer</a
-            >
+            <a class="nav-link" id="synth-sequencer-tab" data-toggle="tab" href="#synth-sequencer">Sequencer</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" id="synth-analyse-tab" data-toggle="tab" href="#synth-analyse"
-              >Analyse</a
-            >
+            <a class="nav-link" id="synth-analyse-tab" data-toggle="tab" href="#synth-analyse">Analyse</a>
           </li>
         </ul>
 
         <div class="tab-content">
-          <div
-            id="synth-patches"
-            class="tab-pane active"
-            id="home"
-            role="tabpanel"
-            aria-labelledby="synth-patches-tab"
-          >
+          <div id="synth-patches" class="tab-pane active" id="home" role="tabpanel" aria-labelledby="synth-patches-tab">
             <div class="control-block d-none" id="patch-list-mine">
               <h2>My patches</h2>
               <div class="control patch-list"></div>
@@ -146,27 +124,15 @@
             </div>
           </div>
 
-          <div
-            id="synth-controls"
-            class="tab-pane"
-            id="home"
-            role="tabpanel"
-            aria-labelledby="synth-controls-tab"
-          >
+          <div id="synth-controls" class="tab-pane" id="home" role="tabpanel" aria-labelledby="synth-controls-tab">
             <div class="control-block">
               <h2>BEND</h2>
               <div>
-                <div
-                  class="control control-slider"
-                  title="How much pitch-bend to apply to the DCO pitch"
-                >
+                <div class="control control-slider" title="How much pitch-bend to apply to the DCO pitch">
                   <label class="control-label">DCO</label>
                   <div id="dco-bend-depth"></div>
                 </div>
-                <div
-                  class="control control-slider"
-                  title="How much pitch-bend to apply to the VCF cutoff"
-                >
+                <div class="control control-slider" title="How much pitch-bend to apply to the VCF cutoff">
                   <label class="control-label">VCF</label>
                   <div id="vcf-bend-depth"></div>
                 </div>
@@ -186,12 +152,8 @@
               <div class="control control-radio-group">
                 <label class="control-label">Trig mode</label>
                 <div class="radio-buttons">
-                  <div title="Trigger the LFO when a note is played">
-                    <span id="lfo-trigger-mode-auto"></span>Auto
-                  </div>
-                  <div title="Trigger the LFO manually">
-                    <span id="lfo-trigger-mode-manual"></span>Man
-                  </div>
+                  <div title="Trigger the LFO when a note is played"><span id="lfo-trigger-mode-auto"></span>Auto</div>
+                  <div title="Trigger the LFO manually"><span id="lfo-trigger-mode-manual"></span>Man</div>
                 </div>
                 <div id="lfo-manual-trigger-wrapper" title="Manually trigger the LFO">
                   <span id="lfo-manual-trigger"></span>
@@ -209,10 +171,7 @@
                   <div><span id="dco-range-4"></span>4'</div>
                 </div>
               </div>
-              <div
-                class="control control-slider"
-                title="Depth of LFO modulation of the DCO's pitch"
-              >
+              <div class="control control-slider" title="Depth of LFO modulation of the DCO's pitch">
                 <label class="control-label">LFO</label>
                 <div id="dco-lfo-depth"></div>
               </div>
@@ -224,15 +183,9 @@
                 <div class="control control-radio-group">
                   <label class="control-label"></label>
                   <div class="radio-buttons">
-                    <div title="Modulate the pulse wave's width from the LFO">
-                      <span id="dco-pwm-source-lfo"></span>LFO
-                    </div>
-                    <div title="Manually set the pulse wave's width">
-                      <span id="dco-pwm-source-manual"></span>Man
-                    </div>
-                    <div title="Modulate the pulse wave's width from the envelope">
-                      <span id="dco-pwm-source-env"></span>Env
-                    </div>
+                    <div title="Modulate the pulse wave's width from the LFO"><span id="dco-pwm-source-lfo"></span>LFO</div>
+                    <div title="Manually set the pulse wave's width"><span id="dco-pwm-source-manual"></span>Man</div>
+                    <div title="Modulate the pulse wave's width from the envelope"><span id="dco-pwm-source-env"></span>Env</div>
                   </div>
                 </div>
                 <div class="control control-slider" title="Volume of pulse wave">
@@ -256,10 +209,7 @@
 
             <div class="control-block">
               <h2>HPF</h2>
-              <div
-                class="control control-slider hpf-width"
-                title="Cutoff frequency for the high pass filter"
-              >
+              <div class="control control-slider hpf-width" title="Cutoff frequency for the high pass filter">
                 <label class="control-label">Freq</label>
                 <div id="hpf-freq"></div>
               </div>
@@ -276,35 +226,23 @@
                 <div id="vcf-resonance"></div>
               </div>
               <div class="control control-group">
-                <div
-                  class="control control-radio-group"
-                  title="Polarity of the envelope's modulation"
-                >
+                <div class="control control-radio-group" title="Polarity of the envelope's modulation">
                   <label class="control-label"></label>
                   <div class="radio-buttons">
                     <div><span id="vcf-polarity-positive"></span>+</div>
                     <div><span id="vcf-polarity-negative"></span>-</div>
                   </div>
                 </div>
-                <div
-                  class="control control-slider"
-                  title="Amount of Envelope modulation for cutoff frequency"
-                >
+                <div class="control control-slider" title="Amount of Envelope modulation for cutoff frequency">
                   <label class="control-label">Env</label>
                   <div id="vcf-env"></div>
                 </div>
               </div>
-              <div
-                class="control control-slider"
-                title="Amount of LFO modulation for cutoff frequency"
-              >
+              <div class="control control-slider" title="Amount of LFO modulation for cutoff frequency">
                 <label class="control-label">LFO</label>
                 <div id="vcf-lfo"></div>
               </div>
-              <div
-                class="control control-slider"
-                title="Amount of keyboard-tracking for cutoff frequency"
-              >
+              <div class="control control-slider" title="Amount of keyboard-tracking for cutoff frequency">
                 <label class="control-label">Key</label>
                 <div id="vcf-key"></div>
               </div>
@@ -316,12 +254,8 @@
                 <div class="control control-radio-group">
                   <label class="control-label"></label>
                   <div class="radio-buttons">
-                    <div title="Control each note's amplitude from the envelope">
-                      <span id="vca-source-env"></span>Env
-                    </div>
-                    <div title="Control each note's amplitude from its gate signal">
-                      <span id="vca-source-gate"></span>Gate
-                    </div>
+                    <div title="Control each note's amplitude from the envelope"><span id="vca-source-env"></span>Env</div>
+                    <div title="Control each note's amplitude from its gate signal"><span id="vca-source-gate"></span>Gate</div>
                   </div>
                 </div>
                 <div class="control control-slider" title="Amplitude level">
@@ -365,13 +299,7 @@
             </div>
           </div>
 
-          <div
-            id="synth-sequencer"
-            class="tab-pane"
-            id="home"
-            role="tabpanel"
-            aria-labelledby="synth-sequencer-tab"
-          >
+          <div id="synth-sequencer" class="tab-pane" id="home" role="tabpanel" aria-labelledby="synth-sequencer-tab">
             <div class="control-block">
               <h2>Sequencer stuff</h2>
               <div class="control">
@@ -382,13 +310,7 @@
             </div>
           </div>
 
-          <div
-            id="synth-analyse"
-            class="tab-pane"
-            id="home"
-            role="tabpanel"
-            aria-labelledby="synth-analyse-tab"
-          >
+          <div id="synth-analyse" class="tab-pane" id="home" role="tabpanel" aria-labelledby="synth-analyse-tab">
             <div class="control-block" id="oscilloscope">
               <h2>Oscilloscope</h2>
               <div class="control">
@@ -412,10 +334,7 @@
               <div id="pitchBend"></div>
             </div>
 
-            <div
-              class="control control-radio-group float-right"
-              title="Visible range for the keyboard"
-            >
+            <div class="control control-radio-group float-right" title="Visible range for the keyboard">
               <label class="control-label">Octave</label>
               <div class="radio-buttons">
                 <div><span id="piano-change-octave-plus2"></span>+2</div>
@@ -432,14 +351,7 @@
         </div>
       </div>
 
-      <div
-        class="modal"
-        id="modal-midi"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="modal-midi-label"
-        aria-hidden="true"
-      >
+      <div class="modal" id="modal-midi" tabindex="-1" role="dialog" aria-labelledby="modal-midi-label" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <form id="formMidi">
@@ -473,14 +385,7 @@
       </div>
     </div>
 
-    <div
-      class="modal"
-      id="modal-save-patch"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="modal-save-patch-label"
-      aria-hidden="true"
-    >
+    <div class="modal" id="modal-save-patch" tabindex="-1" role="dialog" aria-labelledby="modal-save-patch-label" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <form id="formSavePatch">
@@ -496,14 +401,7 @@
               <div class="form-group row">
                 <label for="patchName" class="col-sm-3 col-form-label">Patch name</label>
                 <div class="col-sm-9">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="patchName"
-                    required
-                    pattern="^[A-Za-z0-9 .-]{1,24}$"
-                    maxlength="24"
-                  />
+                  <input type="text" class="form-control" id="patchName" required pattern="^[A-Za-z0-9 .-]{1,24}$" maxlength="24" />
                 </div>
               </div>
             </div>
@@ -589,18 +487,8 @@
         },
         onControlChange
       )
-      const dcoLfoDepth = ui.createSlider(
-        4,
-        'DCO LFO Modulation Depth',
-        '#dco-lfo-depth',
-        onControlChange
-      )
-      const dcoPwmDepth = ui.createSlider(
-        5,
-        'DCO PWM Modulation Depth',
-        '#dco-pwm-depth',
-        onControlChange
-      )
+      const dcoLfoDepth = ui.createSlider(4, 'DCO LFO Modulation Depth', '#dco-lfo-depth', onControlChange)
+      const dcoPwmDepth = ui.createSlider(5, 'DCO PWM Modulation Depth', '#dco-pwm-depth', onControlChange)
       const dcoPwmSource = ui.createRadioButtonGroup(
         6,
         'DCO PWM Source',
@@ -611,20 +499,10 @@
         },
         onControlChange
       )
-      const dcoPulseLevel = ui.createSlider(
-        7,
-        'DCO Pulse Level',
-        '#dco-pulse-level',
-        onControlChange
-      )
+      const dcoPulseLevel = ui.createSlider(7, 'DCO Pulse Level', '#dco-pulse-level', onControlChange)
       const dcoSawLevel = ui.createSlider(8, 'DCO Saw Level', '#dco-saw-level', onControlChange)
       const dcoSubLevel = ui.createSlider(9, 'DCO Sub Level', '#dco-sub-level', onControlChange)
-      const dcoNoiseLevel = ui.createSlider(
-        10,
-        'DCO Noise Level',
-        '#dco-noise-level',
-        onControlChange
-      )
+      const dcoNoiseLevel = ui.createSlider(10, 'DCO Noise Level', '#dco-noise-level', onControlChange)
 
       const hpfFreq = ui.createSlider(11, 'HPF Cutoff', '#hpf-freq', onControlChange)
 
@@ -639,12 +517,7 @@
         },
         onControlChange
       )
-      const vcfEnv = ui.createSlider(
-        15,
-        'VCF Envelope Modulation Depth',
-        '#vcf-env',
-        onControlChange
-      )
+      const vcfEnv = ui.createSlider(15, 'VCF Envelope Modulation Depth', '#vcf-env', onControlChange)
       const vcfLfo = ui.createSlider(16, 'VCF LFO Modulation Depth', '#vcf-lfo', onControlChange)
       const vcfKey = ui.createSlider(17, 'VCF Keyboard Tracking Depth', '#vcf-key', onControlChange)
 
@@ -661,18 +534,8 @@
 
       const envAttack = ui.createSlider(20, 'Envelope Attack Rate', '#env-attack', onControlChange)
       const envDecay = ui.createSlider(21, 'Envelope Decay Rate', '#env-decay', onControlChange)
-      const envSustain = ui.createSlider(
-        22,
-        'Envelope Sustain Level',
-        '#env-sustain',
-        onControlChange
-      )
-      const envRelease = ui.createSlider(
-        23,
-        'Envelope Release Rate',
-        '#env-release',
-        onControlChange
-      )
+      const envSustain = ui.createSlider(22, 'Envelope Sustain Level', '#env-sustain', onControlChange)
+      const envRelease = ui.createSlider(23, 'Envelope Release Rate', '#env-release', onControlChange)
 
       const chorusMode = ui.createRadioButtonGroup(
         24,
@@ -686,22 +549,18 @@
         onControlChange
       )
 
-      const dcoBendDepth = ui.createSlider(
-        24,
-        'DCO Pitch-Bend Depth',
-        '#dco-bend-depth',
-        onControlChange
-      )
-      const vcfBendDepth = ui.createSlider(
-        25,
-        'DCO Cutoff-Bend Depth',
-        '#vcf-bend-depth',
-        onControlChange
-      )
+      const dcoBendDepth = ui.createSlider(24, 'DCO Pitch-Bend Depth', '#dco-bend-depth', onControlChange)
+      const vcfBendDepth = ui.createSlider(25, 'DCO Cutoff-Bend Depth', '#vcf-bend-depth', onControlChange)
 
-      const pitchBend = ui.createBendLever(100, 'Bend lever', '#pitchBend', function () {
-        synthNode && synthNode.pitchBend(pitchBend.value * 0.1)
-      })
+      const pitchBend = ui.createSlider(
+        100,
+        'Bend lever',
+        '#pitchBend',
+        function () {
+          synthNode && synthNode.pitchBend(pitchBend.value * 0.1)
+        },
+        { minValue: -10, maxValue: 10, showValue: false, size: [50, 200] }
+      )
 
       const piano = new Nexus.Piano('#piano', {
         lowNote: 36,
@@ -713,8 +572,7 @@
       for (let key of piano.keys) {
         const octave = Math.floor(key.note / 12)
         const octaveNote = key.note - octave * 12
-        const keyName =
-          pianoKeyNames[octaveNote].replace('#', '<sup>#</sup>') + (octave - 1).toString()
+        const keyName = pianoKeyNames[octaveNote].replace('#', '<sup>#</sup>') + (octave - 1).toString()
         const $keySpan = $(`<span class="piano-key-name">${keyName}</span>`)
         $keySpan.appendTo(key.parent)
       }
@@ -797,10 +655,7 @@
         $('#btnSavePatch').toggleClass('btn-warning', currentPatchJson !== originalPatchJson)
 
         // Show/hide related stuff.
-        $('#lfo-manual-trigger-wrapper').css(
-          'display',
-          lfoTriggerMode.value.toString() === 'false' ? 'block' : 'none'
-        )
+        $('#lfo-manual-trigger-wrapper').css('display', lfoTriggerMode.value.toString() === 'false' ? 'block' : 'none')
       }
 
       function compare(a, b) {
@@ -831,9 +686,7 @@
             .data('patch', patch)
             .toggleClass('active', activePatchName === patch.name)
           if (allowDelete) {
-            $('<a class="delete-item" title="Remove this patch">X</a>').prependTo(
-              $item.addClass('can-delete-item')
-            )
+            $('<a class="delete-item" title="Remove this patch">X</a>').prependTo($item.addClass('can-delete-item'))
           }
         }
 
@@ -841,12 +694,7 @@
       }
 
       // Display the available patches.
-      buildPatchList(
-        $('#patch-list-mine'),
-        JSON.parse(localStorage.getItem('Juno60-MyPatches') || '{}'),
-        null,
-        true
-      )
+      buildPatchList($('#patch-list-mine'), JSON.parse(localStorage.getItem('Juno60-MyPatches') || '{}'), null, true)
       buildPatchList($('#patch-list-juno60-factoryA'), Juno60FactoryPatchesA, null, false)
 
       $(document.body)
@@ -1007,7 +855,7 @@
         console.log(`PitchBend - value=${bendValue}`)
         // TODO
         if (!isNexusChanging) {
-          pitchBend.value = bendValue
+          pitchBend.value = bendValue * 10
         }
       }
 
@@ -1043,10 +891,7 @@
         // Populate the drop-down list with the list of MIDI input devices.
         $midiInputPort.children().slice(1).remove()
         $.each(midiAdapter.listInputs(), (i, x) => {
-          const $portHtml = $('<option></option>')
-            .attr('value', x.id)
-            .text(x.name)
-            .appendTo($midiInputPort)
+          const $portHtml = $('<option></option>').attr('value', x.id).text(x.name).appendTo($midiInputPort)
           if (existingMidiPort === '') {
             existingMidiPort = x.id
           }
@@ -1123,11 +968,13 @@
           }
           recordRecorder.onstop = function () {
             // Make blob out of our chunks.
-            const blob = new Blob(recordChunks, { type: 'audio/mpeg; codecs=mp3' })
+            // const blob = new Blob(recordChunks, { type: 'audio/mpeg; codecs=mp3' })
+            const blob = new Blob(recordChunks, { type: 'audio/mp4; codecs=flac' })
 
             // Download the blob.
             const link = document.createElement('a')
-            link.download = 'junox-download.mp3'
+            // link.download = 'junox-download.mp3'
+            link.download = 'junox-download.mp4'
             link.href = URL.createObjectURL(blob)
             link.click()
             URL.revokeObjectURL(link.href)
