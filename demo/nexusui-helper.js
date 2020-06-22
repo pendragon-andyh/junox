@@ -11,9 +11,24 @@ export class NexusUIHelper {
   }
 
   /**
-   * @property {Map} - List of "controls", keyed by their ```controlId``` identifiers.
+   * @property {Array} - List of "controls", keyed by their ```controlId``` identifiers.
    */
-  controls = {}
+  controls = []
+
+  /**
+   * @property Global defalts for controls.
+   */
+  defaults = {
+    slider: {
+      size: [40, 150],
+      showValue: true,
+      minValue: 0.0,
+      maxValue: 10.0,
+      step: 0.1,
+      initialValue: 0.0,
+      isCentred: false,
+    },
+  }
 
   /**
    * Create a slider control.
@@ -22,72 +37,104 @@ export class NexusUIHelper {
    * @param {string} htmlId - Target HTML element id.
    * @param {Function} onControlChange - Function to be called when the value changes.
    */
-  createSlider(controlId, title, htmlId, onControlChange) {
-    const digitsControl = document.createElement('span')
-    digitsControl.innerText = '0.0'
+  createSlider(controlId, title, htmlId, onControlChange, defaults) {
+    // Coalesce defaults into a single class.
+    defaults = {
+      ...this.defaults.slider,
+      ...defaults,
+    }
 
+    // Create the required control.
     const control = new this.nexus.Slider(htmlId, {
-      size: [40, 150],
-      min: 0,
-      max: 10,
-      step: 0.1,
-    }).on('change', (v) => {
-      digitsControl.innerText = v.toFixed(1)
-      onControlChange && onControlChange(controlId, v)
+      size: defaults.size,
+      min: defaults.minValue,
+      max: defaults.maxValue,
+      step: defaults.step,
+      value: defaults.initialValue,
     })
-
-    // Insert the "digits" span just above the slider.
-    control.parent.parentElement.insertBefore(digitsControl, control.parent)
-
-    // Decorate the Nexus UI control with useful information.
-    control.controlId = controlId
-    control.title = title
-    control.canBindToMidiControl = true
 
     // Tweak the SVG emitted from NexusUI.
     for (let el of control.element.children) {
       el.style.stroke = '#669'
       el.style.strokeWidth = '1'
     }
-    control.element.children[1].style.fill = 'rgba(0, 123, 255, 0.5)'
+    if (defaults.isCentred) {
+      // Offset-from-centre slider (so hide the track).
+      control.element.children[1].style.fill = 'rgba(0, 123, 255, 0.0)'
+    } else {
+      // Normal slider (zero to maxValue).
+      control.element.children[1].style.fill = 'rgba(0, 123, 255, 0.5)'
+    }
     control.element.children[2].style.stroke = 'rgb(50, 50, 50)'
 
-    // Add to the controls collection.
-    this.controls[controlId] = control
+    // Insert the "digits" span just above the slider.
+    let digitsControl
+    const dp = defaults.step < 1 ? 1 : 0
+    if (defaults.showValue) {
+      digitsControl = document.createElement('span')
 
-    return control
-  }
+      const maxDigits = Math.max(defaults.minValue.toFixed(1).length, defaults.maxValue.toFixed(dp).length)
+      digitsControl.className = 'digits-' + maxDigits
 
-  /**
-   * Create a bend-lever control.
-   * @param {any} controlId - Unique name for the radio-button-group control.
-   * @param {string} title - Title of control.
-   * @param {string} htmlId - Target HTML element id.
-   * @param {Function} onControlChange - Function to be called when the value changes.
-   */
-  createBendLever(controlId, title, htmlId, onControlChange) {
-    const control = new this.nexus.Pan(htmlId, {
-      size: [50, 200],
-      min: -10,
-      max: +10,
-      step: 0.11,
-    }).on('change', (v) => {
+      digitsControl.innerText = defaults.initialValue.toFixed(dp)
+      control.parent.parentElement.appendChild(digitsControl)
+    }
+
+    // Respond to changes.
+    control.on('change', (v) => {
+      if (digitsControl) {
+        digitsControl.innerText = v.toFixed(dp)
+      }
       onControlChange && onControlChange(controlId, v)
     })
 
     // Decorate the Nexus UI control with useful information.
     control.controlId = controlId
     control.title = title
-    control.canBindToMidiControl = false
-
-    // Tweak the SVG emitted from NexusUI.
-    control.element.children[0].style.stroke = '#669'
-    control.element.children[0].style.strokeWidth = '1'
-    control.element.children[1].style.stroke = 'rgb(50, 50, 50)'
-    control.element.children[1].style.strokeWidth = '1'
+    control.onMidiControllerChange = (value) => {
+      const midiFactor = (defaults.maxValue - defaults.minValue) / 127
+      control.value = defaults.minValue + value * midiFactor
+    }
 
     // Add to the controls collection.
-    this.controls[controlId] = control
+    if (Number.isInteger(controlId)) {
+      this.controls[controlId] = control
+    }
+
+    return control
+  }
+
+  /**
+   * Create a toggle-switch control.
+   * @param {any} controlId - Unique name for the radio-button-group control.
+   * @param {string} title - Title of control.
+   * @param {string} htmlId - Target HTML element id.
+   * @param {Function} onControlChange - Function to be called when the value changes.
+   */
+  createToggle(controlId, title, htmlId, onControlChange) {
+    const control = new this.nexus.Button(htmlId, { size: [30, 30], mode: 'toggle' }).on('change', (v) => {
+      onControlChange && onControlChange(controlId, v)
+    })
+
+    // Decorate the Nexus UI control with useful information.
+    control.controlId = controlId
+    control.title = title
+    Object.defineProperty(control, 'value', {
+      get: () => (control.state ? 1 : 0),
+      set: (v) => {
+        control.state = v === 1
+      },
+    })
+
+    // Extend the clickable area to the parent element.
+    control.parent.parentElement.addEventListener('click', function () {
+      control.flip()
+    })
+
+    // Add to the controls collection.
+    if (Number.isInteger(controlId)) {
+      this.controls[controlId] = control
+    }
 
     return control
   }
@@ -157,7 +204,9 @@ export class NexusUIHelper {
     })
 
     // Add to the controls collection.
-    this.controls[controlId] = wrapper
+    if (Number.isInteger(controlId)) {
+      this.controls[controlId] = wrapper
+    }
 
     return wrapper
   }

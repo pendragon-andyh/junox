@@ -55,6 +55,7 @@ header {
   border-width: 0;
   padding: 0;
   height: 204px;
+  transition: opacity 0.5s;
 }
 
 .control > .control-label {
@@ -64,36 +65,50 @@ header {
 
 .control-slider > span {
   border: 1px solid #99c;
-  width: 34px;
-  height: 18px;
+  width: 36px;
+  height: 20px;
   color: #99c;
   padding: 2px 0;
   line-height: 1;
 }
+.control-slider > span.digits-5 {
+  width: 42px;
+}
+
 .control-slider > div {
   width: 20px;
 }
 
-.radio-buttons {
+.radio-buttons,
+.check-buttons {
   text-align: left;
-  margin-top: 28px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   padding: 0 3px;
   line-height: 30px;
 }
-.radio-buttons div {
+.radio-buttons div,
+.check-buttons div {
   border: 1px solid #669;
-  margin-bottom: 3px;
-  border-radius: 15px;
-  padding-right: 6px;
-  min-width: 55px;
+  margin-bottom: 1px;
+  border-radius: 6px 6px 6px 6px;
+  padding: 2px 3px 2px 4px;
+  min-width: 60px;
 }
-.radio-buttons div:hover {
+.radio-buttons div:hover,
+.check-buttons div:hover {
   background-color: rgba(0, 123, 255, 0.4);
   cursor: pointer;
 }
-.radio-buttons span {
+.radio-buttons span,
+.check-buttons span {
   float: left;
   margin: -1px 4px 0 -2px;
+}
+
+.check-buttons span {
+  pointer-events: none;
+  touch-action: none;
 }
 
 #lfo-manual-trigger-wrapper {
