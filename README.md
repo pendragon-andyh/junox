@@ -4,10 +4,9 @@ This is a reasonably-accurate JavaScript emulation of the classic [Roland Juno-6
 
 ## Demos
 
-You can change the sliders while you are playing on both of these UIs:
+You can change the sliders while you are playing:
 
-- The [old ReactJS-based UI](https://pendragon-andyh.github.io/junox/dist/index.html) - I have tested this on the last Chrome, Firefox and Edge browsers. The messy UI is my fault.
-- The fun [new NexusUI-based UI](https://pendragon-andyh.github.io/junox/demo/juno60-nexusUI.html) - I have tested this on Chrome and Edge. I think Firefox is having a hissy-fit because of me using ES6 modules in the engine.
+- [NexusUI-based UI](https://pendragon-andyh.github.io/junox/demo/juno60-nexusUI.html) - I have tested this on Chrome and Edge. I think Firefox is having a hissy-fit because of me using ES6 modules in the engine.
 
 Some of the [patches](https://www.synthmania.com/juno-60.htm) have a the "sweet-spot" on the keyboard or are designed to be used with pitch-bend. You may need to play a couple of notes before the JavaScript JIT gets going properly.
 
@@ -23,13 +22,6 @@ This project is a work-in-progress. My next steps are:
 ### Bundling
 
 - Ultimately I want to publish the AudioWorklet Node+Processor for reuse by other developers - and so I want to publish the Node and Processor as an NPM package or as a [WAM plug-in](https://www.webaudiomodules.org/). The demo UI is very-much just a bit of fun.
-
-### User interface
-
-- I like the [NexusUI](http://nexus-js.github.io/ui/) implementation because it is light-weight, provides a responsive touch-based UI, allows management of patches, and is easier for me to enhance.
-- Probably going to remove the ReactJS implementation.
-- Add the option of recording/exporting audio (allows me to import to [Sonic Visualiser](https://www.sonicvisualiser.org/)).
-- Add option of visualizing the output spectrogram and oscilloscope.
 
 ### Performance
 
@@ -50,7 +42,6 @@ This project is a work-in-progress. My next steps are:
 ### Code quality
 
 - The code for the NexusUI code is truely heinous (sorry). Need to refactor a little.
-- The sound-engine folder (src/junox) contains some unused files.
 - Fix-up the existing tests, and add some proper coverage.
 - I am tempted to move to [TypeScript](https://www.typescriptlang.org/) (that would have identified many of my bugs). Also, it should be a small step to go from TypeScript for the synth-engine to [AssemblyScript](https://assemblyscript.org/).
 

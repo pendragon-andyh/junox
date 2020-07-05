@@ -1,7 +1,3 @@
-export const SQRT2 = Math.sqrt(2.0)
-export const TWOPI = Math.PI * 2.0
-export const ONEOVERPI = 1.0 / Math.PI
-
 /**
  * Clamp a number within a specified range.
  * @param {number} val - Number to be clamped.
@@ -29,7 +25,7 @@ export function fastTanh(x) {
 /**
  * Use linear interpolation to lookup a value from an array.
  * @param {number} value - Input value (range is 0..1).
- * @param {number[]} table - List of values that form the table to be looked-up from
+ * @param {number[]} table - List of values that form the table to be looked-up from.
  */
 export function interpolatedLookup(value, table) {
   if (value <= 0.0) {

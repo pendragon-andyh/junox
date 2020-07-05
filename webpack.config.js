@@ -1,4 +1,6 @@
 const path = require('path')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+
 const isDev = process.env.NODE_ENV === 'development'
 
 module.exports = {
@@ -13,6 +15,7 @@ module.exports = {
     filename: '[name].js',
     publicPath: isDev ? '/' : '/junox/dist/',
   },
+  plugins: [new CleanWebpackPlugin()],
   resolve: {
     modules: ['node_modules', path.resolve(__dirname, 'src')],
     extensions: ['.js'],
@@ -22,9 +25,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
-        use: {
-          loader: 'babel-loader',
-        },
+        use: { loader: 'babel-loader' },
       },
       {
         test: /\.worklet\.jsxxx$/,
