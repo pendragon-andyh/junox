@@ -1,54 +1,8 @@
-import {
-  LFO_TRIGGER_OFF,
-  LFO_TRIGGER_ON,
-  NOTE_OFF,
-  NOTE_ON,
-  PANIC,
-  SET_PARAM,
-  SET_PATCH,
-  PITCH_BEND,
-} from './synth.constants.js'
+import * as CONSTANTS from './synth.constants.js'
 
-export const defaultPatch = {
-  name: 'Unspecified patch',
-  vca: 0.5,
-  vcaType: 'gate',
-  lfo: { autoTrigger: true, frequency: 0.0, delay: 0.0 },
-  dco: {
-    range: 1,
-    saw: false,
-    pulse: true,
-    sub: false,
-    subAmount: 0,
-    noise: 0,
-    pwm: 0,
-    pwmMod: 'm',
-    lfo: 0,
-  },
-  hpf: 0,
-  vcf: {
-    frequency: 1.0,
-    resonance: 0.0,
-    modPositive: true,
-    envMod: 0,
-    lfoMod: 0,
-    keyMod: 0,
-  },
-  env: { attack: 0.5, decay: 0.5, sustain: 0.5, release: 0.5 },
-  chorus: 0,
-}
-
-export const defaultAudioNodeOptions = {
-  numberOfInputs: 0,
-  numberOfOutputs: 1,
-  channelCountMode: 'explicit',
-  channelCount: 2,
-  outputChannelCount: [2],
-}
-
-export const defaultProcessorOptions = {
-  patch: defaultPatch,
-  polyphony: 6,
+export async function createJuno60(ac, processorOptions) {
+  await ac.audioWorklet.addModule('../dist/juno60processor.js')
+  return new SynthWorkletNode(ac, processorOptions)
 }
 
 export class SynthWorkletNode extends AudioWorkletNode {
@@ -76,7 +30,7 @@ export class SynthWorkletNode extends AudioWorkletNode {
 
   noteOn(note, velocity) {
     this.port.postMessage({
-      action: NOTE_ON,
+      action: CONSTANTS.NOTE_ON,
       note,
       velocity,
     })
@@ -84,21 +38,21 @@ export class SynthWorkletNode extends AudioWorkletNode {
 
   noteOff(note) {
     this.port.postMessage({
-      action: NOTE_OFF,
+      action: CONSTANTS.NOTE_OFF,
       note,
     })
   }
 
   pitchBend(value) {
     this.port.postMessage({
-      action: PITCH_BEND,
+      action: CONSTANTS.PITCH_BEND,
       value,
     })
   }
 
   setParam(name, value) {
     this.port.postMessage({
-      action: SET_PARAM,
+      action: CONSTANTS.SET_PARAM,
       name,
       value,
     })
@@ -106,22 +60,64 @@ export class SynthWorkletNode extends AudioWorkletNode {
 
   setPatch(patchData) {
     this.port.postMessage({
-      action: SET_PATCH,
+      action: CONSTANTS.SET_PATCH,
       patchData,
     })
   }
 
   lfoTrigger() {
-    this.port.postMessage({ action: LFO_TRIGGER_ON })
+    this.port.postMessage({ action: CONSTANTS.LFO_TRIGGER_ON })
   }
 
   lfoRelease() {
-    this.port.postMessage({ action: LFO_TRIGGER_OFF })
+    this.port.postMessage({ action: CONSTANTS.LFO_TRIGGER_OFF })
   }
 
   panic() {
     this.port.postMessage({
-      action: PANIC,
+      action: CONSTANTS.PANIC,
     })
   }
+}
+
+export const defaultPatch = {
+  name: 'Strings 1',
+  vca: 0.5,
+  vcaType: 'env',
+  lfo: { autoTrigger: true, frequency: 0.6, delay: 0 },
+  dco: {
+    range: 1,
+    saw: true,
+    pulse: false,
+    sub: false,
+    subAmount: 0,
+    noise: 0,
+    pwm: 0,
+    pwmMod: 'l',
+    lfo: 0,
+  },
+  hpf: 0,
+  vcf: {
+    frequency: 0.7,
+    resonance: 0,
+    modPositive: true,
+    envMod: 0,
+    lfoMod: 0,
+    keyMod: 1,
+  },
+  env: { attack: 0.4, decay: 0, sustain: 1, release: 0.45 },
+  chorus: 1,
+}
+
+export const defaultAudioNodeOptions = {
+  numberOfInputs: 0,
+  numberOfOutputs: 1,
+  channelCountMode: 'explicit',
+  channelCount: 2,
+  outputChannelCount: [2],
+}
+
+export const defaultProcessorOptions = {
+  patch: defaultPatch,
+  polyphony: 6,
 }

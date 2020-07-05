@@ -1,14 +1,5 @@
 import Junox from './junox/junox.js'
-import {
-  LFO_TRIGGER_OFF,
-  LFO_TRIGGER_ON,
-  NOTE_OFF,
-  NOTE_ON,
-  PANIC,
-  SET_PARAM,
-  SET_PATCH,
-  PITCH_BEND,
-} from './synth.constants.js'
+import * as CONSTANTS from './synth.constants.js'
 
 class JunoxWorker extends AudioWorkletProcessor {
   constructor(options) {
@@ -17,28 +8,28 @@ class JunoxWorker extends AudioWorkletProcessor {
       patch: options.processorOptions.patch,
       polyphony: options.processorOptions.polyphony,
       // eslint-disable-next-line no-undef
-      sampleRate: sampleRate || 44100,
+      sampleRate: sampleRate || 48000,
     })
     this.port.onmessage = this.handleMessage.bind(this)
   }
 
   handleMessage(event) {
-    if (event.data.action === NOTE_ON) {
+    if (event.data.action === CONSTANTS.NOTE_ON) {
       this.synth.noteOn(event.data.note, event.data.velocity)
-    } else if (event.data.action === NOTE_OFF) {
+    } else if (event.data.action === CONSTANTS.NOTE_OFF) {
       this.synth.noteOff(event.data.note)
-    } else if (event.data.action === PITCH_BEND) {
+    } else if (event.data.action === CONSTANTS.PITCH_BEND) {
       this.synth.pitchBend(event.data.value)
-    } else if (event.data.action === SET_PARAM) {
+    } else if (event.data.action === CONSTANTS.SET_PARAM) {
       this.synth.setValue(event.data.name, event.data.value)
-    } else if (event.data.action === SET_PATCH) {
+    } else if (event.data.action === CONSTANTS.SET_PATCH) {
       this.synth.patch = event.data.patchData
       this.synth.update()
-    } else if (event.data.action === LFO_TRIGGER_ON) {
+    } else if (event.data.action === CONSTANTS.LFO_TRIGGER_ON) {
       this.synth.lfoTrigger()
-    } else if (event.data.action === LFO_TRIGGER_OFF) {
+    } else if (event.data.action === CONSTANTS.LFO_TRIGGER_OFF) {
       this.synth.lfoRelease()
-    } else if (event.data.action === PANIC) {
+    } else if (event.data.action === CONSTANTS.PANIC) {
       this.synth.panic()
     } else {
       console.log('Unmanaged message', JSON.stringify(event.data))

@@ -416,11 +416,12 @@
       </div>
     </div>
 
+    <script src="../dist/juno60node.js"></script>
     <script type="module">
       import { MidiAdapter } from '../src/midiAdapter.js'
       import { MidiConsumer } from '../src/midiConsumer.js'
       import { NexusUIHelper } from './nexusui-helper.js'
-      import { defaultPatch, SynthWorkletNode } from '../src/synth.node.js'
+      //import { defaultPatch, createJuno60 } from '../dist/juno60node.js'
       import Juno60FactoryPatchesA from '../src/patches.js'
 
       const audioContext = new AudioContext()
@@ -443,10 +444,11 @@
       }
 
       let synthNode = null
-      audioContext.audioWorklet.addModule('../src/synth.worklet.js').then(() => {
-        synthNode = new SynthWorkletNode(audioContext, { patch: defaultPatch })
+      Junox.createJuno60(audioContext).then((x) => {
+        synthNode = x
         synthNode.connect(audioContext.destination)
       })
+      const defaultPatch = Junox.defaultPatch
 
       Nexus.colors.accent = 'rgb(0, 123, 255)'
       Nexus.colors.mediumLight = '#669'

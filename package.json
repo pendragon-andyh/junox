@@ -15,8 +15,8 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "eslintIgnore": [
-    "src/vendor"
+  "browserslist": [
+    "last 2 Chrome versions"
   ],
   "husky": {
     "hooks": {

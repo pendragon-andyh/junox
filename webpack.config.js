@@ -1,18 +1,16 @@
 const path = require('path')
-const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-
 const isDev = process.env.NODE_ENV === 'development'
 
 module.exports = {
   devtool: isDev ? 'inline-cheap-source-map' : 'source-map',
   entry: {
-    bundle: './src/index.js',
+    juno60node: './src/synth.node.js',
+    juno60processor: './src/synth.worklet.js',
   },
   output: {
+    library: 'Junox',
     path: path.resolve(__dirname, 'dist'),
-    filename: 'app.[hash].js',
+    filename: '[name].js',
     publicPath: isDev ? '/' : '/junox/dist/',
   },
   resolve: {
@@ -29,40 +27,15 @@ module.exports = {
         },
       },
       {
-        test: /\.css$/,
-        include: [/(node_modules)/, /(src)/],
-        use: [
-          isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
-          { loader: 'css-loader' },
-        ].filter(Boolean),
-      },
-      {
-        test: /\.worklet\.js$/,
-        use: { loader: 'worklet-loader' },
+        test: /\.worklet\.jsxxx$/,
+        use: { loader: 'worklet-loader', options: { inline: true } },
       },
     ],
   },
-  plugins: [
-    new webpack.HashedModuleIdsPlugin(),
-    new HtmlWebpackPlugin({
-      title: 'Juno 60 Synth Emulator',
-      template: 'src/index.html',
-      inject: true,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-      },
-    }),
-    !isDev
-      ? new MiniCssExtractPlugin({
-          filename: 'app.[hash].css',
-        })
-      : null,
-  ].filter(Boolean),
   optimization: {
     splitChunks: {
       chunks: 'all',
     },
-    usedExports: true,
+    usedExports: false,
   },
 }
