@@ -1,11 +1,12 @@
 import * as CONSTANTS from './synth.constants.js'
+import { Juno60FactoryPatchesA } from './patches.js'
 
-export async function createJuno60(ac, processorOptions) {
-  await ac.audioWorklet.addModule('../dist/juno60processor.js')
+async function createJuno60(ac, processorOptions) {
+  await ac.audioWorklet.addModule('../dist/synth.worklet.js')
   return new SynthWorkletNode(ac, processorOptions)
 }
 
-export class SynthWorkletNode extends AudioWorkletNode {
+class SynthWorkletNode extends AudioWorkletNode {
   constructor(context, processorOptions) {
     super(context, 'junox-synth', {
       ...defaultAudioNodeOptions,
@@ -80,7 +81,7 @@ export class SynthWorkletNode extends AudioWorkletNode {
   }
 }
 
-export const defaultPatch = {
+const defaultPatch = {
   name: 'Strings 1',
   vca: 0.5,
   vcaType: 'env',
@@ -109,7 +110,7 @@ export const defaultPatch = {
   chorus: 1,
 }
 
-export const defaultAudioNodeOptions = {
+const defaultAudioNodeOptions = {
   numberOfInputs: 0,
   numberOfOutputs: 1,
   channelCountMode: 'explicit',
@@ -117,7 +118,9 @@ export const defaultAudioNodeOptions = {
   outputChannelCount: [2],
 }
 
-export const defaultProcessorOptions = {
+const defaultProcessorOptions = {
   patch: defaultPatch,
   polyphony: 6,
 }
+
+export { createJuno60, SynthWorkletNode, defaultPatch, Juno60FactoryPatchesA }

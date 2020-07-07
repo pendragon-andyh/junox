@@ -65,5 +65,5 @@ function toJSON(results) {
       }
     })
   console.log(formatted)
-  fs.writeFileSync('src/patches.js', `export default ${JSON.stringify(formatted)}`)
+  fs.writeFileSync('src/patches.js', `export const Juno60FactoryPatchesA = ${JSON.stringify(formatted)}`)
 }
