@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack-dev-server --hot --mode development --config webpack.config.js",
+    "install": "yarn",
+    "start": "npm run build && http-server -c-1",
     "lint": "eslint src",
     "build": "esbuild --bundle --outdir=./dist/ --format=esm --sourcemap ./src/synth.worklet.js ./src/synth.node.js",
     "deploy": "gh-pages --dist .",
@@ -23,21 +24,15 @@
     "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/preset-env": "^7.10.3",
     "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.1.0",
-    "base64-inline-loader": "^1.1.1",
-    "clean-webpack-plugin": "^3.0.0",
     "cross-env": "^7.0.2",
     "csv-parser": "^2.3.3",
     "esbuild": "^0.5.23",
     "eslint": "^6.8.0",
     "eslint-plugin-flowtype": "^4.7.0",
     "gh-pages": "^2.2.0",
+    "http-server": "^0.12.3",
     "husky": "^4.2.5",
     "prettier": "^2.0.5",
-    "pretty-quick": "^2.0.1",
-    "url-loader": "^4.1.0",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "pretty-quick": "^2.0.1"
   }
 }
