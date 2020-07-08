@@ -2,6 +2,19 @@
   "name": "junox",
   "version": "0.2.0",
   "license": "GPL-3.0-or-later",
+  "repository": "github:pendragon-andyh/junox",
+  "homepage": "https://github.com/pendragon-andyh/junox",
+  "bugs": "https://github.com/pendragon-andyh/junox/issues",
+  "author": "Andy Harman <andyh.at.pendragon@gmail.com>",
+  "contributors": [
+    {
+      "name": "Daniele Zannotti"
+    }
+  ],
+  "files": [
+    "dist/"
+  ],
+  "main": "dist/synth.node.js",
   "scripts": {
     "start": "npm run build && serve",
     "lint": "eslint .",
@@ -11,18 +24,22 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged"
+      "pre-commit": "pretty-quick --staged --pattern src/**/js"
     }
   },
   "dependencies": {},
   "devDependencies": {
     "csv-parser": "^2.3.3",
     "esbuild": "^0.5.23",
-    "eslint": "^6.8.0",
+    "eslint": "^7.4.0",
     "gh-pages": "^2.2.0",
     "husky": "^4.2.5",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
     "serve": "^11.3.2"
+  },
+  "resolutions": {
+    "**/lodash": "^4.17.0",
+    "**/minimist": "^1.2.0"
   }
 }
