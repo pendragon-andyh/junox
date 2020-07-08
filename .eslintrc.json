@@ -1,11 +1,12 @@
 {
-  "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 2020,
     "sourceType": "module"
   },
-  "extends": ["plugin:flowtype/recommended"],
-  "plugins": ["flowtype"],
+  "env": {
+    "browser": true,
+    "es2020": true
+  },
   "ignorePatterns": ["**/dist/*.js"],
   "rules": {
     "semi": [2, "never"]

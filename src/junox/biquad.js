@@ -9,15 +9,15 @@ export class BiquadFilter {
   constructor(sampleRate) {
     this._oneOversampleRate = 1.0 / sampleRate
     this._piOverSampleRate = Math.PI * this.oneOverSampleRate
-  }
 
-  _a0 = 1.0
-  _a1 = 0.0
-  _a2 = 0.0
-  _b1 = 0.0
-  _b2 = 0.0
-  _z1 = 0.0
-  _z2 = 0.0
+    this._a0 = 1.0
+    this._a1 = 0.0
+    this._a2 = 0.0
+    this._b1 = 0.0
+    this._b2 = 0.0
+    this._z1 = 0.0
+    this._z2 = 0.0
+  }
 
   /**
    * Flush storage and clear feedback.

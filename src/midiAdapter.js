@@ -1,17 +1,19 @@
 export class MidiAdapter {
-  _midiAccess = null
+  constructor() {
+    this._midiAccess = null
 
-  /**
-   * @property - Currently-selected MIDI input port.
-   * @type {MIDIInput}
-   */
-  inputPort = null
+    /**
+     * @property - Currently-selected MIDI input port.
+     * @type {MIDIInput}
+     */
+    this.inputPort = null
 
-  /**
-   * @property - Currently-selected consumer of MIDI inputs.
-   * @type {MidiConsumer}
-   */
-  inputConsumer = null
+    /**
+     * @property - Currently-selected consumer of MIDI inputs.
+     * @type {MidiConsumer}
+     */
+    this.inputConsumer = null
+  }
 
   /**
    * Returns True if the instance is currently connected to MIDI.

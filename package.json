@@ -1,18 +1,14 @@
 {
   "name": "junox",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "install": "yarn",
     "start": "npm run build && http-server -c-1",
     "lint": "eslint src",
-    "build": "esbuild --bundle --outdir=./dist/ --format=esm --sourcemap ./src/synth.worklet.js ./src/synth.node.js",
+    "build": "esbuild --bundle --outdir=dist --format=esm --sourcemap ./src/synth.worklet.js ./src/synth.node.js",
     "deploy": "gh-pages --dist .",
     "convert:patches": "node patches/Juno60.js"
   },
-  "browserslist": [
-    "last 2 Chrome versions"
-  ],
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"
@@ -20,15 +16,9 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@babel/core": "^7.10.4",
-    "@babel/plugin-proposal-class-properties": "^7.10.4",
-    "@babel/preset-env": "^7.10.3",
-    "babel-eslint": "^10.1.0",
-    "cross-env": "^7.0.2",
     "csv-parser": "^2.3.3",
     "esbuild": "^0.5.23",
     "eslint": "^6.8.0",
-    "eslint-plugin-flowtype": "^4.7.0",
     "gh-pages": "^2.2.0",
     "http-server": "^0.12.3",
     "husky": "^4.2.5",

@@ -1,11 +1,5 @@
 import { LFO } from './lfo.js'
-import {
-  AbstractEnvelope,
-  DelaySegment,
-  AttackSegment,
-  DecaySegment,
-  ShutdownSegment,
-} from './abstractEnvelope.js'
+import { AbstractEnvelope, DelaySegment, AttackSegment, DecaySegment, ShutdownSegment } from './abstractEnvelope.js'
 
 /**
  * Implementation of a low frequency oscillator - with the ability to delay the onset of modulation.
@@ -19,20 +13,22 @@ export class LFOWithEnvelope extends LFO {
   constructor(sampleRate) {
     super(sampleRate)
 
-    this._env = new AbstractEnvelope()
-    this._env._segments = [
+    const segments = [
       (this._delay = new DelaySegment(sampleRate)),
       (this._attack = new AttackSegment(sampleRate, 0.03, 1.0, true)),
       (this._release = new DecaySegment(sampleRate, 0.025, 0.0, false)),
       (this._shutdown = new ShutdownSegment(sampleRate, 0.001)),
     ]
     this._release.setDuration(0.1)
+    this._env = new AbstractEnvelope(segments)
   }
 
   /**
    * Returns true if the envelope is currently active.
    */
-  isActive = () => !this._env.isFinished()
+  isActive() {
+    return !this._env.isFinished()
+  }
 
   /**
    * Trigger (or retrigger) the envelope.
