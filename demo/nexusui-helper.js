@@ -8,26 +8,26 @@ export class NexusUIHelper {
    */
   constructor(nexus) {
     this.nexus = nexus
-  }
 
-  /**
-   * @property {Array} - List of "controls", keyed by their ```controlId``` identifiers.
-   */
-  controls = []
+    /**
+     * @property {Array} - List of "controls", keyed by their ```controlId``` identifiers.
+     */
+    this.controls = []
 
-  /**
-   * @property Global defalts for controls.
-   */
-  defaults = {
-    slider: {
-      size: [40, 150],
-      showValue: true,
-      minValue: 0.0,
-      maxValue: 10.0,
-      step: 0.1,
-      initialValue: 0.0,
-      isCentred: false,
-    },
+    /**
+     * @property Global defalts for controls.
+     */
+    this.defaults = {
+      slider: {
+        size: [40, 150],
+        showValue: true,
+        minValue: 0.0,
+        maxValue: 10.0,
+        step: 0.1,
+        initialValue: 0.0,
+        isCentred: false,
+      },
+    }
   }
 
   /**

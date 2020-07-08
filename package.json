@@ -4,7 +4,7 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "start": "npm run build && http-server -c-1",
-    "lint": "eslint src",
+    "lint": "eslint .",
     "build": "esbuild --bundle --outdir=dist --format=esm --sourcemap ./src/synth.worklet.js ./src/synth.node.js",
     "deploy": "gh-pages --dist .",
     "convert:patches": "node patches/Juno60.js"
