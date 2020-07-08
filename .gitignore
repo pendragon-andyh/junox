@@ -9,8 +9,6 @@
 /coverage
 
 # production
-/dist
-stats.json
 
 # misc
 .DS_Store
