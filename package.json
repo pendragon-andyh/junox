@@ -16,15 +16,21 @@
   ],
   "main": "dist/synth.node.js",
   "scripts": {
-    "start": "npm run build && serve",
+    "start": "serve",
     "lint": "eslint .",
-    "build": "esbuild --bundle --outdir=dist --format=esm --sourcemap ./src/synth.worklet.js ./src/synth.node.js",
-    "deploy": "gh-pages --dist .",
-    "convert:patches": "node patches/Juno60.js"
+    "build:all": "npm run build:patches && npm run build:pretty && npm run build:esm",
+    "build:patches": "node patches/Juno60.js",
+    "build:pretty": "prettier --write src",
+    "build:esm": "esbuild --bundle --outdir=dist --format=esm --sourcemap ./src/synth.worklet.js ./src/synth.node.js",
+    "deploy:github": "gh-pages --dist .",
+    "yarn:install": "yarn install",
+    "yarn:install- force": "yarn install --force",
+    "yarn:upgrade-latest": "yarn upgrade-interactive --latest",
+    "yarn:audit": "yarn audit"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged --pattern src/**/js"
+      "pre-commit": "pretty-quick --staged --pattern src/**/*.js"
     }
   },
   "dependencies": {},
@@ -32,7 +38,7 @@
     "csv-parser": "^2.3.3",
     "esbuild": "^0.5.23",
     "eslint": "^7.4.0",
-    "gh-pages": "^2.2.0",
+    "gh-pages": "^3.1.0",
     "husky": "^4.2.5",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
