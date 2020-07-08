@@ -22,6 +22,7 @@
     "build:patches": "node patches/Juno60.js",
     "build:pretty": "prettier --write src",
     "build:esm": "esbuild --bundle --outdir=dist --format=esm --sourcemap ./src/synth.worklet.js ./src/synth.node.js",
+    "build:iife": "esbuild --bundle --outfile=dist/synth.node.old.js --format=iife --global-name=Junox ./dist/synth.node.js",
     "deploy:github": "gh-pages --dist .",
     "yarn:install": "yarn install",
     "yarn:install- force": "yarn install --force",
