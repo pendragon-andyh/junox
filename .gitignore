@@ -8,7 +8,8 @@
 # testing
 /coverage
 
-# production
+# Temporary file used for base64-encoding the processor.
+/dist/synth.worklet.txt
 
 # misc
 .DS_Store

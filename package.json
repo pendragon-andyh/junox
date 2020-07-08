@@ -18,10 +18,11 @@
   "scripts": {
     "start": "serve",
     "lint": "eslint .",
-    "build:all": "npm run build:patches && npm run build:pretty && npm run build:esm",
+    "build:all": "npm run build:patches && npm run build:pretty && npm run build:processor && npm run build:module && npm run build:iife",
     "build:patches": "node patches/Juno60.js",
     "build:pretty": "prettier --write src",
-    "build:esm": "esbuild --bundle --outdir=dist --format=esm --sourcemap ./src/synth.worklet.js ./src/synth.node.js",
+    "build:processor": "esbuild --bundle --outfile=dist/synth.worklet.txt --format=esm --minify --sourcemap=inline ./src/synth.worklet.js",
+    "build:module": "esbuild --bundle --outdir=dist --format=esm --loader:.txt=dataurl --sourcemap ./src/synth.node.js",
     "build:iife": "esbuild --bundle --outfile=dist/synth.node.old.js --format=iife --global-name=Junox ./dist/synth.node.js",
     "deploy:github": "gh-pages --dist .",
     "yarn:install": "yarn install",

@@ -1,9 +1,24 @@
 import * as CONSTANTS from './synth.constants.js'
 import { Juno60FactoryPatchesA } from './patches.js'
 
+// This inline-encodes the processor.
+import processorData from '../dist/synth.worklet.txt'
+
 async function createJuno60(ac, processorOptions) {
-  await ac.audioWorklet.addModule('../dist/synth.worklet.js')
+  const processorBlob = base64DataToBlob(processorData)
+  const processorUrl = URL.createObjectURL(processorBlob)
+  await ac.audioWorklet.addModule(processorUrl)
   return new SynthWorkletNode(ac, processorOptions)
+}
+
+function base64DataToBlob(dataUrl, contentType = 'application/javascript; charset=utf-8') {
+  var byteString = atob(dataUrl.split(',')[1])
+  var ab = new ArrayBuffer(byteString.length)
+  var ia = new Uint8Array(ab)
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i)
+  }
+  return new Blob([ab], { type: contentType })
 }
 
 class SynthWorkletNode extends AudioWorkletNode {
