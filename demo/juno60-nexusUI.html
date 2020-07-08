@@ -558,7 +558,7 @@
         function () {
           synthNode && synthNode.pitchBend(pitchBend.value * 0.1)
         },
-        { minValue: -10, maxValue: 10, showValue: false, size: [50, 200] }
+        { minValue: -10, maxValue: 10, isCentred: true, showValue: false, size: [50, 200] }
       )
 
       const piano = new Nexus.Piano('#piano', {
