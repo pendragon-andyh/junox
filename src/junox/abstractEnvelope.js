@@ -3,39 +3,37 @@
  * @abstract
  */
 export class AbstractEnvelope {
-  /**
-   * Set of segments that form the envelope.
-   * Must be configured in sub-classes.
-   * @protected @property
-   */
-  _segments = []
+  constructor(segments) {
+    /** @property Set of segments that form the envelope. */
+    this._segments = segments
 
-  /**
-   * Index of the current segment of the envelope (-1 = not currently active).
-   * @protected @property
-   */
-  _currentPhase = -1
+    /** @property Index of the current segment of the envelope (-1 = not currently active). */
+    this._currentPhase = -1
 
-  /**
-   * Current value of the envelope.
-   * @protected @property
-   */
-  _currentValue = 0.0
+    /** @property Current value of the envelope. */
+    this._currentValue = 0.0
+  }
 
   /**
    * Returns true if the envelope is currently active.
    */
-  isFinished = () => this._currentPhase === -1
+  isFinished() {
+    return this._currentPhase === -1
+  }
 
   /**
    * Returns true if the envelope is active, and has been released or shutdown.
    */
-  isReleased = () => this.currentPhase !== 0 && this.currentPhase !== 1
+  isReleased() {
+    return this.currentPhase !== 0 && this.currentPhase !== 1
+  }
 
   /**
    * Returns true if the envelope is currently shutting-down.
    */
-  isShuttingDown = () => this.currentPhase === this._segments.length - 1
+  isShuttingDown() {
+    return this.currentPhase === this._segments.length - 1
+  }
 
   /**
    * Trigger (or retrigger) the envelope.
@@ -149,7 +147,9 @@ export class AttackSegment {
    * @param {number} value - Value to test.
    * @returns {bool} - True if the value if the segment is now complete.
    */
-  isComplete = (value) => value > this.target
+  isComplete(value) {
+    return value > this.target
+  }
 }
 
 /**
@@ -202,7 +202,9 @@ export class DecaySegment {
    * @param {number} value - Value to test.
    * @returns {bool} - True if the value if the segment is now complete.
    */
-  isComplete = (value) => (value <= this.target && !this._isSustainAtEnd) || value < 0.02
+  isComplete(value) {
+    return (value <= this.target && !this._isSustainAtEnd) || value < 0.02
+  }
 }
 
 export class DelaySegment {
@@ -212,10 +214,9 @@ export class DelaySegment {
    */
   constructor(sampleRate) {
     this._sampleRate = sampleRate
+    this._delaySampleCount = 0
+    this._currentRemaining = 0
   }
-
-  _delaySampleCount = 0
-  _currentRemaining = 0
 
   /**
    * Configure the segment so that it will delay for the specified number of seconds.
@@ -248,7 +249,9 @@ export class DelaySegment {
    * Test if the segment is now complete.
    * @returns {bool} - True if the value if the segment is now complete.
    */
-  isComplete = () => this._currentRemaining <= 0
+  isComplete() {
+    return this._currentRemaining <= 0
+  }
 }
 
 /**
@@ -284,5 +287,7 @@ export class ShutdownSegment {
    * @param {number} value - Value to test.
    * @returns {bool} - True if the value if the segment is now complete.
    */
-  isComplete = (value) => value <= 0.0
+  isComplete(value) {
+    return value <= 0.0
+  }
 }

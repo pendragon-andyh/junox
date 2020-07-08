@@ -10,12 +10,12 @@ export class SimpleSinglePoleFilter {
    */
   constructor(sampleRate, fc = 5.0) {
     this._piOverSampleRate = Math.PI / sampleRate
+    this._a0 = 1.0
+    this._b1 = 0.0
+    this._z1 = 0.0
+
     this.setCutoff(fc)
   }
-
-  _a0 = 1.0
-  _b1 = 0.0
-  _z1 = 0.0
 
   /**
    * Flush storage and clear feedback.

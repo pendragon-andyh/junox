@@ -2,61 +2,63 @@
  * Class that can act as a consumer of MIDI/keyboard inputs.
  */
 export class MidiConsumer {
-  /**
-   * @property  Event handler-method for note-on events.
-   * @type {function} - onNoteOn(noteNumber, velocity)
-   */
-  onNoteOn = null
+  constructor() {
+    /**
+     * @property  Event handler-method for note-on events.
+     * @type {function} - onNoteOn(noteNumber, velocity)
+     */
+    this.onNoteOn = null
 
-  /**
-   * @property  Event handler-method for note-off events.
-   * @type {function} - onNoteOff(noteNumber, velocity)
-   */
-  onNoteOff = null
+    /**
+     * @property  Event handler-method for note-off events.
+     * @type {function} - onNoteOff(noteNumber, velocity)
+     */
+    this.onNoteOff = null
 
-  /**
-   * @property  Event handler-method for control-change (CC) events.
-   * @type {function} - onControlChange(controlNumber, controlValue)
-   */
-  onControlChange = null
+    /**
+     * @property  Event handler-method for control-change (CC) events.
+     * @type {function} - onControlChange(controlNumber, controlValue)
+     */
+    this.onControlChange = null
 
-  /**
-   * @property  Event handler-method for pitch-bend events.
-   * @type {function} - onPitchBend(bendValue)
-   */
-  onPitchBend = null
+    /**
+     * @property  Event handler-method for pitch-bend events.
+     * @type {function} - onPitchBend(bendValue)
+     */
+    this.onPitchBend = null
 
-  /**
-   * @property Event handler-method for "all notes off" events".
-   * @type {function} - onWatchAll()
-   */
-  onAllNotesOff = null
+    /**
+     * @property Event handler-method for "all notes off" events".
+     * @type {function} - onWatchAll()
+     */
+    this.onAllNotesOff = null
 
-  /**
-   * @property Event handler-method for watching all incoming-inputs on a MIDI port.
-   * @type {function} - onWatchAll(data)
-   */
-  onWatchAll = null
+    /**
+     * @property Event handler-method for watching all incoming-inputs on a MIDI port.
+     * @type {function} - onWatchAll(data)
+     */
+    this.onWatchAll = null
 
-  /** @private Map of all notes that are currently on */
-  _onNotes = {}
+    /** @private Map of all notes that are currently on */
+    this._onNotes = {}
 
-  /** @private Map of all notes that are currently been held by the sustain pedal */
-  _sustainedNotes = {}
+    /** @private Map of all notes that are currently been held by the sustain pedal */
+    this._sustainedNotes = {}
 
-  /** @private True if the sustain pedal is active */
-  _isSustained = false
+    /** @private True if the sustain pedal is active */
+    this._isSustained = false
 
-  /** @private Map of CC handler methods for specific controllers */
-  _controlChangeHandlers = {
-    64: function (controlValue) {
-      if (controlValue) {
-        this.sustainOn()
-      } else {
-        this.sustainOff()
-      }
-    },
-    123: this.allNotesOff,
+    /** @private Map of CC handler methods for specific controllers */
+    this._controlChangeHandlers = {
+      64: function (controlValue) {
+        if (controlValue) {
+          this.sustainOn()
+        } else {
+          this.sustainOff()
+        }
+      },
+      123: this.allNotesOff,
+    }
   }
 
   /**

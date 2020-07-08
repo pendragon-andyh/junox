@@ -1,11 +1,10 @@
 export class Noise {
-  constructor(sampleRate, fc) {
+  constructor(sampleRate, fc = 5000) {
     // Coefficients for 6db low pass output filter.
     this._b1 = -Math.exp((-2.0 * fc * Math.PI) / sampleRate)
     this._a0 = 1.0 + this._b1
+    this._z1 = 0.0
   }
-
-  _z1 = 0
 
   render() {
     // White noise.

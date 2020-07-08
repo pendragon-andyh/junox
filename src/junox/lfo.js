@@ -11,19 +11,19 @@ export class LFO {
   constructor(sampleRate) {
     this._oneOverSampleRate = 1.0 / sampleRate
     this._phaseIncrement = 0.0
+
+    /** Current phase of the LFO (0.0 to 1.0) */
+    this.currentPhase = 1.0
+
+    /** Current value of the LFO. */
+    this.currentValue = 0.0
+
+    /** Has the LFO's cycled in the latest sample? This is useful when you want to automatically retrigger the envelope. */
+    this.isRestarted = false
+
+    /** Waveform ("none", "triangle", "square", "sine", "random", "noise") */
+    this.waveform = 'triangle'
   }
-
-  /** Current phase of the LFO (0.0 to 1.0) */
-  currentPhase = 1.0
-
-  /** Current value of the LFO. */
-  currentValue = 0.0
-
-  /** Has the LFO's cycled in the latest sample? This is useful when you want to automatically retrigger the envelope. */
-  isRestarted = false
-
-  /** Waveform ("none", "triangle", "square", "sine", "random", "noise") */
-  waveform = 'triangle'
 
   /**
    * Reset the LFO (only used when the instrument is silent).

@@ -6,20 +6,20 @@ import { SimpleSinglePoleFilter } from './simpleSinglePoleFilter.js'
  */
 export class Chorus {
   /**
-   * Output from left-side of chorus.
-   */
-  leftOutput = 0.0
-
-  /**
-   * Output from right-side of chorus.
-   */
-  rightOutput = 0.0
-
-  /**
    * @constructor
    * @param {number} sampleRate
    */
   constructor(sampleRate) {
+    /**
+     * Output from left-side of chorus.
+     */
+    this.leftOutput = 0.0
+
+    /**
+     * Output from right-side of chorus.
+     */
+    this.rightOutput = 0.0
+
     this._sampleRate = sampleRate
     this._isUsed = false
     this._nextChorusMode = 0

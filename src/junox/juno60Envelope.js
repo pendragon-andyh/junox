@@ -1,9 +1,4 @@
-import {
-  AbstractEnvelope,
-  AttackSegment,
-  DecaySegment,
-  ShutdownSegment,
-} from './abstractEnvelope.js'
+import { AbstractEnvelope, AttackSegment, DecaySegment, ShutdownSegment } from './abstractEnvelope.js'
 import { interpolatedLookup } from './utils.js'
 
 const curveFromAttackSliderToDuration = [0.001, 0.03, 0.24, 0.65, 3.25]
@@ -19,13 +14,16 @@ export class Juno60Envelope extends AbstractEnvelope {
    * @param {number} sampleRate - Samples-per-second for the current audio context.
    */
   constructor(sampleRate) {
-    super()
-    this._segments = [
-      (this._attack = new AttackSegment(sampleRate, 0.632, 1.0, false)),
-      (this._decay = new DecaySegment(sampleRate, 0.025, 0.0, true)),
-      (this._release = new DecaySegment(sampleRate, 0.025, 0.0, false)),
-      (this._shutdown = new ShutdownSegment(sampleRate, 0.001)),
-    ]
+    super([
+      new AttackSegment(sampleRate, 0.632, 1.0, false),
+      new DecaySegment(sampleRate, 0.025, 0.0, true),
+      new DecaySegment(sampleRate, 0.025, 0.0, false),
+      new ShutdownSegment(sampleRate, 0.001),
+    ])
+    this._attack = this._segments[0]
+    this._decay = this._segments[1]
+    this._release = this._segments[2]
+    this._shutdown = this._segments[3]
   }
 
   /**

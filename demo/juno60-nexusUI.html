@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>Juno 60 demo</title>
 
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
 
     <link
       rel="stylesheet"
@@ -420,8 +420,7 @@
       import { MidiAdapter } from '../src/midiAdapter.js'
       import { MidiConsumer } from '../src/midiConsumer.js'
       import { NexusUIHelper } from './nexusui-helper.js'
-      import { defaultPatch, SynthWorkletNode } from '../src/synth.node.js'
-      import Juno60FactoryPatchesA from '../src/patches.js'
+      import { defaultPatch, createJuno60, Juno60FactoryPatchesA } from '../dist/synth.node.js'
 
       const audioContext = new AudioContext()
       unlockAudioContext(audioContext)
@@ -443,8 +442,8 @@
       }
 
       let synthNode = null
-      audioContext.audioWorklet.addModule('../src/synth.worklet.js').then(() => {
-        synthNode = new SynthWorkletNode(audioContext, { patch: defaultPatch })
+      createJuno60(audioContext).then((x) => {
+        synthNode = x
         synthNode.connect(audioContext.destination)
       })
 
@@ -559,7 +558,7 @@
         function () {
           synthNode && synthNode.pitchBend(pitchBend.value * 0.1)
         },
-        { minValue: -10, maxValue: 10, showValue: false, size: [50, 200] }
+        { minValue: -10, maxValue: 10, isCentred: true, showValue: false, size: [50, 200] }
       )
 
       const piano = new Nexus.Piano('#piano', {

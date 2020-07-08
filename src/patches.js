@@ -1,4 +1,4 @@
-export default [
+export const Juno60FactoryPatchesA = [
   {
     name: 'Strings 1',
     vca: 0.5,
