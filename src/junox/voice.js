@@ -1,4 +1,3 @@
-import { VCA_ENV } from './constants.js'
 import { Juno60DCO } from './dco.js'
 import { Juno60Envelope } from './juno60Envelope.js'
 import { MoogLowPassFilter } from './mooglpf.js'
@@ -111,12 +110,7 @@ export default class Voice {
     }
 
     // If the patch has no sound-source then assume that it is trying to use the filter as the source.
-    if (
-      !this.patch.dco.saw &&
-      !this.patch.dco.pulse &&
-      !this.patch.dco.subAmount &&
-      !this.patch.dco.noise
-    ) {
+    if (!this.patch.dco.saw && !this.patch.dco.pulse && !this.patch.dco.subAmount && !this.patch.dco.noise) {
       const initialExcite = this.patch.vcf.resonance * this.patch.vcf.resonance * 0.2
       this.moogVCF.trigger(initialExcite)
     }
@@ -141,7 +135,7 @@ export default class Voice {
 
     this.modEnv.setValuesFromSliders(env.attack, env.decay, env.sustain, env.release)
 
-    if (patch.vcaType === VCA_ENV) {
+    if (patch.vcaType !== 'env') {
       this.ampEnv.setValuesFromSliders(env.attack, env.decay, env.sustain, env.release)
     } else {
       this.ampEnv.setValues(0.00247, 0.0057, 0.98, 0.0057)

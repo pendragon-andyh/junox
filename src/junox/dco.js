@@ -58,10 +58,7 @@ export class Juno60DCO {
     // Pulse uses a comparator against the current phase.
     let newPulseOutput = 0.0
     if (pulseLevel > 0.0) {
-      newPulseOutput =
-        this.currentPhase > this.pulseWidth
-          ? (this.pulsePositive *= 0.998)
-          : (this.pulseNegative *= 0.998)
+      newPulseOutput = this.currentPhase > this.pulseWidth ? (this.pulsePositive *= 0.998) : (this.pulseNegative *= 0.998)
       newPulseOutput -= this.calcPolyBLEP2(this.currentPhase, phaseIncrement, this.pulseHeight)
       const x = this.currentPhase - this.pulseWidth
       newPulseOutput += this.calcPolyBLEP2(x < 0.0 ? x + 1.0 : x, phaseIncrement, this.pulseHeight)

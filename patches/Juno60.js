@@ -64,6 +64,5 @@ function toJSON(results) {
         chorus: toInteger(patch['Chorus']),
       }
     })
-  console.log(formatted)
   fs.writeFileSync('src/patches.js', `export const Juno60FactoryPatchesA = ${JSON.stringify(formatted)}`)
 }
