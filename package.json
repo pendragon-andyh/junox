@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "start": "npm run build && http-server -c-1",
+    "start": "npm run build && static -c 1",
     "lint": "eslint .",
     "build": "esbuild --bundle --outdir=dist --format=esm --sourcemap ./src/synth.worklet.js ./src/synth.node.js",
     "deploy": "gh-pages --dist .",
@@ -20,8 +20,8 @@
     "esbuild": "^0.5.23",
     "eslint": "^6.8.0",
     "gh-pages": "^2.2.0",
-    "http-server": "^0.12.3",
     "husky": "^4.2.5",
+    "node-static": "^0.7.11",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1"
   }
