@@ -1,7 +1,8 @@
 {
-  "name": "junox",
+  "name": "junox.js",
   "version": "0.2.0",
   "license": "GPL-3.0-or-later",
+  "description": "Library for adding Juno60 synthesizer sounds to web applications (using Web Audio API)",
   "main": "dist/synth.node.js",
   "module": "dist/synth.node.es.js",
   "jsnext:main": "dist/synth.node.es.js",
@@ -26,6 +27,8 @@
     "build:processor": "esbuild --bundle --outfile=dist/synth.worklet.txt --format=esm ./src/synth.worklet.js",
     "build:module": "esbuild --bundle --outfile=dist/synth.node.es.js --format=esm --loader:.txt=dataurl ./src/synth.node.js",
     "build:iife": "esbuild --bundle --outfile=dist/synth.node.js --format=iife --global-name=Junox ./dist/synth.node.es.js",
+    "test": "echo \"No test specified\"",
+    "deploy:npm": "echo \"TODO - implement https://zellwk.com/blog/publish-to-npm/\"",
     "deploy:github": "gh-pages --dist .",
     "yarn:install": "yarn install",
     "yarn:install- force": "yarn install --force",
