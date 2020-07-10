@@ -16,8 +16,8 @@ var Junox = (() => {
       __defineProperty(target, name, {get: all[name], enumerable: true});
   };
 
-  // dist/synth.node.es.js
-  var require_synth_node_es = __commonJS((exports) => {
+  // dist/synth.node.mjs
+  var require_synth_node = __commonJS((exports) => {
     __export(exports, {
       Juno60FactoryPatchesA: () => Juno60FactoryPatchesA,
       SynthWorkletNode: () => SynthWorkletNode,
@@ -769,5 +769,5 @@ var Junox = (() => {
       polyphony: 6
     };
   });
-  return require_synth_node_es();
+  return require_synth_node();
 })();

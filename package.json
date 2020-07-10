@@ -4,8 +4,8 @@
   "license": "GPL-3.0-or-later",
   "description": "Library for adding Juno60 synthesizer sounds to web applications (using Web Audio API)",
   "main": "dist/synth.node.js",
-  "module": "dist/synth.node.es.js",
-  "jsnext:main": "dist/synth.node.es.js",
+  "module": "dist/synth.node.mjs",
+  "jsnext:main": "dist/synth.node.mjs",
   "repository": "github:pendragon-andyh/junox",
   "homepage": "https://github.com/pendragon-andyh/junox",
   "bugs": "https://github.com/pendragon-andyh/junox/issues",
@@ -21,34 +21,28 @@
   "scripts": {
     "start": "serve",
     "lint": "eslint .",
-    "build:all": "npm run build:patches && npm run build:pretty && npm run build:processor && npm run build:module && npm run build:iife",
+    "build-dev": "npm run build:processor && npm run build:module",
+    "build-prod": "npm run build:patches && npm run build:pretty && npm run build:processor && npm run build:module && npm run build:iife && npm run test",
+    "build:processor": "esbuild --bundle --outfile=dist/synth.worklet.txt --format=esm ./src/synth.worklet.js",
+    "build:module": "esbuild --bundle --outfile=dist/synth.node.mjs --format=esm --loader:.txt=dataurl ./src/synth.node.js",
     "build:patches": "node patches/Juno60.js",
     "build:pretty": "prettier --write src",
-    "build:processor": "esbuild --bundle --outfile=dist/synth.worklet.txt --format=esm ./src/synth.worklet.js",
-    "build:module": "esbuild --bundle --outfile=dist/synth.node.es.js --format=esm --loader:.txt=dataurl ./src/synth.node.js",
-    "build:iife": "esbuild --bundle --outfile=dist/synth.node.js --format=iife --global-name=Junox ./dist/synth.node.es.js",
+    "build:iife": "esbuild --bundle --outfile=dist/synth.node.js --format=iife --global-name=Junox ./dist/synth.node.mjs",
     "test": "echo \"No test specified\"",
     "deploy:npm": "echo \"TODO - implement https://zellwk.com/blog/publish-to-npm/\"",
     "deploy:github": "gh-pages --dist .",
     "yarn:install": "yarn install",
-    "yarn:install- force": "yarn install --force",
+    "yarn:install-force": "yarn install --force",
     "yarn:upgrade-latest": "yarn upgrade-interactive --latest",
     "yarn:audit": "yarn audit"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged --pattern src/**/*.js"
-    }
   },
   "dependencies": {},
   "devDependencies": {
     "csv-parser": "^2.3.3",
-    "esbuild": "^0.5.23",
+    "esbuild": "^0.5.26",
     "eslint": "^7.4.0",
     "gh-pages": "^3.1.0",
-    "husky": "^4.2.5",
     "prettier": "^2.0.5",
-    "pretty-quick": "^2.0.1",
     "serve": "^11.3.2"
   },
   "resolutions": {
