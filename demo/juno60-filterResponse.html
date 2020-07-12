@@ -31,13 +31,8 @@
     ></div>
     <span id="peekFreq"></span>
 
-    <p>
-      See
-      <a href="https://github.com/pendragon-andyh/Juno60/blob/master/Chorus/README.md">analysis</a>.
-    </p>
-
     <script type="module">
-      import { MoogLowPassFilter } from '../src/junox/mooglpf.js'
+      import { LadderFilter } from '../src/junox/ladderFilter.js'
 
       $(function () {
         onChange()
@@ -60,8 +55,7 @@
       function drawOutput(cutoff, resonance) {
         const dataOut = { x: [], y: [], mode: 'line', name: 'Out' }
 
-        const lpf = new MoogLowPassFilter(48000)
-        lpf.resonance = resonance * 3.99
+        const lpf = new LadderFilter(48000)
         let peekOut = 0
         let peekFreq = cutoff / 4
 
@@ -73,7 +67,7 @@
           lpf.reset()
           for (let phase = 0.0; phase <= 2; phase += phaseIncrement) {
             const xin = phase <= 0.5 || (phase > 1 && phase <= 1.5) ? 1 : -1
-            const xout = lpf.render(xin, cutoff)
+            const xout = lpf.process(xin, lpf.calcCutoffFactor(cutoff), resonance)
 
             if (Math.abs(xout) > maxOut) {
               maxOut = Math.abs(xout)

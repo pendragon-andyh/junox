@@ -21,6 +21,7 @@
   "scripts": {
     "start": "serve",
     "lint": "eslint .",
+    "watch-dev": "chokidar \"**/*.js\" -c \"npm run build-dev\"",
     "build-dev": "npm run build:processor && npm run build:module",
     "build-prod": "npm run build:patches && npm run build:pretty && npm run build:processor && npm run build:module && npm run build:iife && npm run test",
     "build:processor": "esbuild --bundle --outfile=dist/synth.worklet.txt --format=esm ./src/synth.worklet.js",
@@ -38,10 +39,12 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "chokidar-cli": "^2.1.0",
     "csv-parser": "^2.3.3",
     "esbuild": "^0.5.26",
     "eslint": "^7.4.0",
     "gh-pages": "^3.1.0",
+    "npm-watch": "^0.6.0",
     "prettier": "^2.0.5",
     "serve": "^11.3.2"
   },
