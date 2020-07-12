@@ -1,6 +1,6 @@
 import { Juno60DCO } from './dco.js'
 import { Juno60Envelope } from './juno60Envelope.js'
-import { MoogLowPassFilter } from './mooglpf.js'
+import { LadderFilter } from './ladderFilter.js'
 import { Noise } from './noise.js'
 import { interpolatedLookup } from './utils.js'
 
@@ -18,7 +18,7 @@ export default class Voice {
     this.modEnv = new Juno60Envelope(sampleRate)
     this.ampEnv = new Juno60Envelope(sampleRate)
 
-    this.moogVCF = new MoogLowPassFilter(sampleRate)
+    this.moogVCF = new LadderFilter(sampleRate)
   }
 
   /**
@@ -70,27 +70,17 @@ export default class Voice {
     const cutoffDetuneOctave = (filterCutoff * 200) / 12
     const envDetuneOctaves = modEnvOut * filterEnvMod * 12 // Envelope changes cutoff by upto +-12 octaves.
     const keyboardDetuneOctaves = filterKeyMod * this.filterNoteFactor
-    const resonanceDetuneOctaves = this.patch.vcf.resonance // Resonance changes cutoff by upto an octave.
-    let vcfCutoffValue =
+    const resonanceDetuneOctaves = this.patch.vcf.resonance * 0.5 // Resonance changes cutoff a little.
+    const vcfCutoffValue =
       cutoffDetuneOctave +
       lfoDetuneOctaves * ampEnvOut + // Using env to dumb-down LFO makes UFO patch sound more natural.
       keyboardDetuneOctaves +
       envDetuneOctaves +
       resonanceDetuneOctaves
 
-    // Increase gain when the LPF cutoff frequency is low (the Moog LPF attenuates low
-    // frequencies a lot more than the Juno-60 LPF does).
-    if (vcfCutoffValue < 8.0) {
-      let vcfGainBodge = (8.0 - vcfCutoffValue) * 0.125
-      dcoOut *= 1.0 + vcfGainBodge * 3.0
-    }
-
-    // Convert the resulting control-voltage to the cutoff frequency.
-    let cutoffFrequency = 7.8 * Math.pow(2.0, vcfCutoffValue)
-    cutoffFrequency = fixLpfCutoff(cutoffFrequency)
-
-    this.moogVCF.resonance = filterResonance * 3.99
-    const vcfOut = this.moogVCF.render(dcoOut, cutoffFrequency)
+    // Convert the resulting control-voltage to the cutoff frequency and aply the filter.
+    const cutoffFrequency = 7.8 * Math.pow(2.0, vcfCutoffValue)
+    const vcfOut = this.moogVCF.process(dcoOut, this.moogVCF.calcCutoffFactor(cutoffFrequency), filterResonance)
 
     return this.velocity * vcfOut * ampEnvOut
   }
@@ -111,7 +101,7 @@ export default class Voice {
 
     // If the patch has no sound-source then assume that it is trying to use the filter as the source.
     if (!this.patch.dco.saw && !this.patch.dco.pulse && !this.patch.dco.subAmount && !this.patch.dco.noise) {
-      const initialExcite = this.patch.vcf.resonance * this.patch.vcf.resonance * 0.2
+      const initialExcite = this.patch.vcf.resonance * this.patch.vcf.resonance * 0.01
       this.moogVCF.trigger(initialExcite)
     }
 
@@ -135,7 +125,7 @@ export default class Voice {
 
     this.modEnv.setValuesFromSliders(env.attack, env.decay, env.sustain, env.release)
 
-    if (patch.vcaType !== 'env') {
+    if (patch.vcaType === 'env') {
       this.ampEnv.setValuesFromSliders(env.attack, env.decay, env.sustain, env.release)
     } else {
       this.ampEnv.setValues(0.00247, 0.0057, 0.98, 0.0057)
@@ -144,38 +134,3 @@ export default class Voice {
     this.patch = patch
   }
 }
-
-/**
- * The Moog filter does not have a linear response so we need to correct the cutoff frequency.
- */
-function fixLpfCutoff(fc) {
-  if (fc < 10000) {
-    return fc * interpolatedLookup(0.002 * fc, lpfCutoffCorrections)
-  }
-  return fc
-}
-
-const lpfCutoffCorrections = [
-  1,
-  4,
-  1.364446108,
-  1.30021398,
-  1.291615494,
-  1.288268551,
-  1.264147018,
-  1.225067204,
-  1.207675563,
-  1.214457029,
-  1.197350752,
-  1.170175889,
-  1.165266155,
-  1.147560592,
-  1.125353785,
-  1.111233998,
-  1.0918184,
-  1.067975101,
-  1.04060779,
-  1.026150863,
-  1.022347836,
-  1,
-]
