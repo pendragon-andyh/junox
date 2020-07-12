@@ -48,16 +48,6 @@ export class LadderFilter {
    * @param {number} mode - Filter mode (see ladderFilterModes).
    */
   process(input, cutoffFactor, resonance, mode = ladderFilterModes.LPF4) {
-    // // If cutoff frequency gets too close to the Nyquist-limit then progressively bypass the filter.
-    // let bypassFactor = 0.0
-    // if (cutoffFactor > 1.0) {
-    //   bypassFactor = (cutoffFactor - 1.0) / 1000.0
-    //   if (bypassFactor > 1.0) {
-    //     bypassFactor = 1.0
-    //   }
-    //   cutoffFactor = 1.0
-    // }
-
     const oneOverOnePlusg = 1.0 / (1.0 + cutoffFactor)
 
     // Feedforward coefficient for VA one-pole filters.
@@ -95,13 +85,7 @@ export class LadderFilter {
     this.z4 = lpf4In + lpf4Out
 
     // Implement the specified filter-mode.
-    let output = mode[4] * lpf4Out + mode[3] * lpf3Out + mode[2] * lpf2Out + mode[1] * lpf1Out + mode[0] * xin
-
-    // if (bypassFactor) {
-    //   output = input * bypassFactor + output * (1.0 - bypassFactor)
-    // }
-
-    return output
+    return mode[4] * lpf4Out + mode[3] * lpf3Out + mode[2] * lpf2Out + mode[1] * lpf1Out + mode[0] * xin
   }
 }
 
