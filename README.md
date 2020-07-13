@@ -1,52 +1,36 @@
 # JunoX Softsynth Emulator
 
-This is a reasonably-accurate JavaScript emulation of the classic [Roland Juno-60](https://en.wikipedia.org/wiki/Roland_Juno-60) synthesizer - using the [Web Audio](https://www.w3.org/TR/webaudio/)'s AudioWorkletProcessor and [Web MIDI](https://www.w3.org/TR/webmidi/).
+JavaScript library that emulates the classic [Roland Juno-60](https://en.wikipedia.org/wiki/Roland_Juno-60) synthesizer - using the [Web Audio](https://www.w3.org/TR/webaudio/)'s AudioWorkletProcessor and [Web MIDI](https://www.w3.org/TR/webmidi/).
 
 ## Demos
 
 You can change the sliders while you are playing:
 
-- [NexusUI-based UI](https://pendragon-andyh.github.io/junox/demo/juno60-nexusUI.html) - I have tested this on Chrome and Edge. I think Firefox is having a hissy-fit because of me using ES6 modules in the engine.
-
-Some of the [patches](https://www.synthmania.com/juno-60.htm) have a the "sweet-spot" on the keyboard or are designed to be used with pitch-bend. You may need to play a couple of notes before the JavaScript JIT gets going properly.
-
-Also some useful visualizations: [DCO](https://pendragon-andyh.github.io/junox/demo/juno60-dco.html),
+- [NexusUI-based UI](https://pendragon-andyh.github.io/junox/demo/juno60-nexusUI.html) - I have tested this on Chrome (PC and Android), Firefox and Edge. You may need to play a couple of notes before the JavaScript JIT gets going properly.
+- Useful visualizations: [DCO](https://pendragon-andyh.github.io/junox/demo/juno60-dco.html),
 [LFO](https://pendragon-andyh.github.io/junox/demo/juno60-lfo.html),
 [Envelope](https://pendragon-andyh.github.io/junox/demo/juno60-envelope.html), and
 [Chorus](https://pendragon-andyh.github.io/junox/demo/juno60-chorus.html).
 
+Some of the patches have a the "sweet-spot" on the keyboard or are designed to be used with pitch-bend or the VCF sliders. Examples of the original can be found [here](https://www.synthmania.com/juno-60.htm).
+
+## Features
+
+- Emulation is built using a [AudioWorklet](https://developers.google.com/web/updates/2017/12/audio-worklet). Allows very accurate low-level emulation.
+- Oscillator uses [PolyBLEP](http://metafunction.co.uk/all-about-digital-oscillators-part-2-blits-bleps/) to minimize aliasing (sawtooth, pulse and sub waveforms).
+- VCF is implemented using a Virtual Analog ladder filter.
+
 ## Next steps
 
-This project is a work-in-progress. My next steps are:
+This project is a work-in-progress:
 
-### Bundling
+- Ultimately I want to publish the AudioWorklet Node+Processor for easy reuse by other developers using an NPM package (maybe as a [WebAudio Module](https://www.webaudiomodules.org/) or [WebAudio Plug-In](https://github.com/micbuffa/WebAudioPlugins)).
+- Provide integration with a library that implements a sequencer.
+- It should be simple to create additional synths ([SH-101](https://en.wikipedia.org/wiki/Roland_SH-101[), [Juno-106](https://en.wikipedia.org/wiki/Roland_Juno-106), [JX-3P](https://en.wikipedia.org/wiki/Roland_JX-3P)) based on the code. This would quickly increate the number and variety of pre-baked patches.
+- Improve performance and documentation.
 
-- Ultimately I want to publish the AudioWorklet Node+Processor for reuse by other developers - and so I want to publish the Node and Processor as an NPM package or as a [WAM plug-in](https://www.webaudiomodules.org/). The demo UI is very-much just a bit of fun.
-
-### Performance
-
-- The start-up is a bit glitchy (because new objects are being created when the first note is played, and because the JavaScript JIT engine needs time to optimise the code).
-- The parameter-smoothing uses low pass filters. Check if linear-smoothing sounds good-enough.
-- There are a bunch of expensive calculations (Power, Exp, etc.). Check if lookup tables would be faster, and check if we can calculate less often (i.e. every eighth-sample).
-- Use SharedAudioBuffer to communicate between the Node and Processor (instead of MessagePort).
-
-### Documentation
-
-- I started documenting the project over on [Daniele's repo](https://github.com/dzannotti/junox/wiki). I have learned a lot while developing this project - it would be good to share.
-
-### Improve emulation and patches
-
-- It should be simple to create additional synths ([SH-101](https://en.wikipedia.org/wiki/Roland_SH-101[), [Juno-106](https://en.wikipedia.org/wiki/Roland_Juno-106)) based on the code. This would quickly increate the number of pre-baked patches.
-- Try to decode the "bank B" patch bank.
-
-### Code quality
-
-- The code for the NexusUI code is truely heinous (sorry). Need to refactor a little.
-- Fix-up the existing tests, and add some proper coverage.
-- I am tempted to move to [TypeScript](https://www.typescriptlang.org/) (that would have identified many of my bugs). Also, it should be a small step to go from TypeScript for the synth-engine to [AssemblyScript](https://assemblyscript.org/).
-
-If anyone has ideas or feedback then I'm always happy to listen.
+If anyone has ideas or [feedback](https://github.com/pendragon-andyh/junox/issues) then I'm always happy to listen.
 
 ## Background
 
-This project was originally started by [Daniele Zannotti](https://github.com/dzannotti/junox). We chose the Juno-60 because it is a very simple synth that (still) manages to sound really good - and I had previously done [some analysis](https://github.com/pendragon-andyh/Juno60) of that synth.
+This project was originally started by [Daniele Zannotti](https://github.com/dzannotti/junox). We chose the Juno-60 because it is a very simple synth that (still) manages to sound really good - and I had previously  [analysed](https://github.com/pendragon-andyh/Juno60) that synth.
