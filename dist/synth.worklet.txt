@@ -548,12 +548,9 @@ class Chorus {
       return;
     }
     let lfoValue = this._lfoValue + this._lfoIncrement;
-    if (lfoValue > 1) {
-      lfoValue = 2 - lfoValue;
+    if (lfoValue > 1 || lfoValue < -1) {
       this._lfoIncrement = -this._lfoIncrement;
-    } else if (lfoValue < -1) {
-      lfoValue = -2 - lfoValue;
-      this._lfoIncrement = -this._lfoIncrement;
+      lfoValue = this._lfoValue + this._lfoIncrement;
     }
     this._lfoValue = lfoValue;
     const dryOutput = input * dry;
