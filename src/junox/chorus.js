@@ -77,12 +77,9 @@ export class Chorus {
 
     // Calculate the change to the LFO.
     let lfoValue = this._lfoValue + this._lfoIncrement
-    if (lfoValue > 1.0) {
-      lfoValue = 2.0 - lfoValue
+    if (lfoValue > 1.0 || lfoValue < -1.0) {
       this._lfoIncrement = -this._lfoIncrement
-    } else if (lfoValue < -1.0) {
-      lfoValue = -2.0 - lfoValue
-      this._lfoIncrement = -this._lfoIncrement
+      lfoValue = this._lfoValue + this._lfoIncrement
     }
     this._lfoValue = lfoValue
 
