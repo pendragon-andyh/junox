@@ -189,7 +189,7 @@ header {
 }
 #piano {
   position: relative;
-  left: -333px;
+  left: -504px;
   margin: -2px 0 0;
   transition: margin-left 0.5s;
 }
