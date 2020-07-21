@@ -847,6 +847,63 @@
         }
       }
 
+      // Key mapping for normal English PC keyboard to MIDI notes.
+      // Taken from https://tutorials.renoise.com/wiki/Playing_Notes_with_the_Computer_Keyboard
+      const keyMapping = {
+        "z": 48, // C3
+        "s": 49,
+        "x": 50,
+        "d": 51,
+        "c": 52,
+        "v": 53,
+        "g": 54,
+        "b": 55,
+        "h": 56,
+        "n": 57,
+        "j": 58,
+        "m": 59,
+        ",": 60, // C4
+        "l": 61,
+        ".": 62,
+        ";": 63,
+        "/": 64,
+        "q": 60, // Another C4
+        "2": 61,
+        "w": 62,
+        "3": 63,
+        "e": 64,
+        "r": 65,
+        "5": 66,
+        "t": 67,
+        "6": 68,
+        "y": 69,
+        "7": 70,
+        "u": 71,
+        "i": 72, // C5
+        "9": 73,
+        "o": 74,
+        "0": 75,
+        "p": 76,
+        "[": 77,
+        "=": 78,
+        "]": 79, // G5
+      }
+      $(document)
+        .on("keydown", e => {
+          let noteNumber = keyMapping[e.key]
+          if (noteNumber !== undefined && e.target.tagName === "BODY"){
+            noteNumber += parseInt(pianoOctave.value, 10) * 12
+            consumer.noteOn(noteNumber, 127)
+          }
+        })
+        .on("keyup", e => {
+          let noteNumber = keyMapping[e.key]
+          if (noteNumber !== undefined && e.target.tagName === "BODY"){
+            noteNumber += parseInt(pianoOctave.value, 10) * 12
+            consumer.noteOff(noteNumber, 127)
+          }
+        })
+
       piano.on('change', (v) => {
         isNexusChanging = true
         if (v.state) {
