@@ -419,7 +419,7 @@
         if (audioContext.state === 'suspended') {
           const events = ['touchstart', 'touchend', 'mousedown', 'keydown']
 
-          console.log('Audio context - susepended until user interaction ...')
+          console.log('Audio context - suspended until user interaction ...')
           events.forEach((eventName) => document.body.addEventListener(eventName, unlock, false))
 
           function unlock() {
