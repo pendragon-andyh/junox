@@ -1,6 +1,6 @@
 {
   "name": "junox.js",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "license": "GPL-3.0-or-later",
   "description": "Library for adding Juno60 synthesizer sounds to web applications (using Web Audio API)",
   "main": "dist/synth.node.js",
