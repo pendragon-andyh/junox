@@ -30,6 +30,7 @@
     "build:iife": "esbuild --bundle --outfile=dist/synth.node.js --format=iife --global-name=Junox ./dist/synth.node.mjs",
     "lint": "eslint .",
     "test": "echo \"No test specified\"",
+    "deploy:bump-version": "npm version patch",
     "deploy:npm": "echo \"TODO - implement https://zellwk.com/blog/publish-to-npm/\"",
     "deploy:github": "gh-pages --dist .",
     "yarn:install": "yarn install",
