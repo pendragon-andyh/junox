@@ -2,7 +2,6 @@ import { Juno60DCO } from './dco.js'
 import { Juno60Envelope } from './juno60Envelope.js'
 import { LadderFilter } from './ladderFilter.js'
 import { Noise } from './noise.js'
-import { interpolatedLookup } from './utils.js'
 
 export default class Voice {
   constructor({ patch, sampleRate }) {
