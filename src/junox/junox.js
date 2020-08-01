@@ -291,9 +291,9 @@ const curveFromLfoDelaySliderToAttack = [0.001, 0.053, 0.188, 0.348, 1.15]
  * @param {number} delaySlider - Value of the delay slider (0.0 to 1.0).
  */
 function setLfoValuesFromSliders(lfo, rateSlider, delaySlider) {
-  const frequency = interpolatedLookup(rateSlider, curveFromLfoRateSliderToFreq)
-  const delayDuration = interpolatedLookup(delaySlider, curveFromLfoDelaySliderToDelay)
-  const attackDuration = interpolatedLookup(delaySlider, curveFromLfoDelaySliderToAttack)
+  const frequency = interpolatedLookup(rateSlider * curveFromLfoRateSliderToFreq.length, curveFromLfoRateSliderToFreq)
+  const delayDuration = interpolatedLookup(delaySlider * curveFromLfoDelaySliderToDelay.length, curveFromLfoDelaySliderToDelay)
+  const attackDuration = interpolatedLookup(delaySlider * curveFromLfoDelaySliderToAttack.length, curveFromLfoDelaySliderToAttack)
 
   lfo.setValues(frequency, delayDuration, attackDuration)
 }
@@ -301,6 +301,6 @@ function setLfoValuesFromSliders(lfo, rateSlider, delaySlider) {
 const curveFromHpfSliderToFreq = [140, 250, 520, 1220]
 
 function setHpfValuesFromSliders(hpf, rateSlider) {
-  const frequency = interpolatedLookup(rateSlider, curveFromHpfSliderToFreq)
+  const frequency = interpolatedLookup(rateSlider * curveFromHpfSliderToFreq.length, curveFromHpfSliderToFreq)
   hpf.setCutoff(frequency)
 }

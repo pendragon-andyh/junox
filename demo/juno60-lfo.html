@@ -69,9 +69,9 @@
         const delayValue = ($('#delayInput').val() | 0) / 100
         const waveform = $('#waveform').val()
 
-        const rate = interpolatedLookup(rateValue, curveFromRateSliderToFreq)
-        const delayDuration = interpolatedLookup(delayValue, curveFromDelaySliderToDelay)
-        const attackDuration = interpolatedLookup(delayValue, curveFromDelaySliderToAttack)
+        const rate = interpolatedLookup(rateValue * curveFromRateSliderToFreq.length, curveFromRateSliderToFreq)
+        const delayDuration = interpolatedLookup(delayValue * curveFromDelaySliderToDelay.length, curveFromDelaySliderToDelay)
+        const attackDuration = interpolatedLookup(delayValue * curveFromDelaySliderToAttack.length, curveFromDelaySliderToAttack)
 
         // Plotting graph is slow - so debounce rapid requests.
         clearTimeout(drawHandle)

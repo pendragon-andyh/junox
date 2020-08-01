@@ -134,15 +134,17 @@ class AbstractEnvelope {
     }
   }
   render() {
-    while (this._currentPhase !== -1 && this._currentPhase < this._segments.length) {
-      const segment = this._segments[this._currentPhase];
+    let currentPhase = this._currentPhase;
+    while (currentPhase >= 0 && currentPhase < this._segments.length) {
+      const segment = this._segments[currentPhase];
       const nextValue = segment.process(this._currentValue);
       if (segment.isComplete(nextValue)) {
-        this._currentPhase++;
-        if (this._currentPhase >= this._segments.length) {
+        currentPhase++;
+        if (currentPhase >= this._segments.length) {
           this._currentValue = 0;
-          this._currentPhase = -1;
+          currentPhase = -1;
         }
+        this._currentPhase = currentPhase;
       } else {
         this._currentValue = nextValue;
         break;
@@ -247,19 +249,16 @@ function fastTanh(x) {
   return x * (27 + xSquared) / (27 + 9 * xSquared);
 }
 function interpolatedLookup(value, table) {
-  if (value <= 0) {
+  const index = value | 0;
+  const indexNext = index + 1;
+  const factor = value - index;
+  if (index < 0) {
     return table[0];
   }
-  if (value >= 1) {
+  if (indexNext >= table.length) {
     return table[table.length - 1];
   }
-  value *= table.length - 1;
-  const index = value | 0;
-  const factor = value - index;
-  if (factor === 0) {
-    return table[index];
-  }
-  return table[index] * (1 - factor) + table[index + 1] * factor;
+  return table[index] * (1 - factor) + table[indexNext] * factor;
 }
 
 // src/junox/juno60Envelope.js
@@ -286,9 +285,9 @@ class Juno60Envelope extends AbstractEnvelope {
     this._release.setDuration(this._decay.target <= 0.02 ? 0.01 : releaseDuration);
   }
   setValuesFromSliders(attackSlider, decaySlider, sustainSlider, releaseSlider) {
-    const attackDuration = interpolatedLookup(attackSlider, curveFromAttackSliderToDuration);
-    const decayDuration = interpolatedLookup(decaySlider, curveFromDecaySliderToDuration);
-    const releaseDuration = interpolatedLookup(releaseSlider, curveFromReleaseSliderToDuration);
+    const attackDuration = interpolatedLookup(attackSlider * curveFromAttackSliderToDuration.length, curveFromAttackSliderToDuration);
+    const decayDuration = interpolatedLookup(decaySlider * curveFromDecaySliderToDuration.length, curveFromDecaySliderToDuration);
+    const releaseDuration = interpolatedLookup(releaseSlider * curveFromReleaseSliderToDuration.length, curveFromReleaseSliderToDuration);
     this.setValues(attackDuration, decayDuration, sustainSlider, releaseDuration);
   }
 }
@@ -914,14 +913,14 @@ const curveFromLfoRateSliderToFreq = [0.3, 0.85, 3.39, 11.49, 22.22];
 const curveFromLfoDelaySliderToDelay = [0, 0.0639, 0.85, 1.2, 2.685];
 const curveFromLfoDelaySliderToAttack = [1e-3, 0.053, 0.188, 0.348, 1.15];
 function setLfoValuesFromSliders(lfo2, rateSlider, delaySlider) {
-  const frequency = interpolatedLookup(rateSlider, curveFromLfoRateSliderToFreq);
-  const delayDuration = interpolatedLookup(delaySlider, curveFromLfoDelaySliderToDelay);
-  const attackDuration = interpolatedLookup(delaySlider, curveFromLfoDelaySliderToAttack);
+  const frequency = interpolatedLookup(rateSlider * curveFromLfoRateSliderToFreq.length, curveFromLfoRateSliderToFreq);
+  const delayDuration = interpolatedLookup(delaySlider * curveFromLfoDelaySliderToDelay.length, curveFromLfoDelaySliderToDelay);
+  const attackDuration = interpolatedLookup(delaySlider * curveFromLfoDelaySliderToAttack.length, curveFromLfoDelaySliderToAttack);
   lfo2.setValues(frequency, delayDuration, attackDuration);
 }
 const curveFromHpfSliderToFreq = [140, 250, 520, 1220];
 function setHpfValuesFromSliders(hpf, rateSlider) {
-  const frequency = interpolatedLookup(rateSlider, curveFromHpfSliderToFreq);
+  const frequency = interpolatedLookup(rateSlider * curveFromHpfSliderToFreq.length, curveFromHpfSliderToFreq);
   hpf.setCutoff(frequency);
 }
 

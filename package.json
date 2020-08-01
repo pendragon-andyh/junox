@@ -1,6 +1,6 @@
 {
   "name": "junox.js",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "license": "GPL-3.0-or-later",
   "description": "Library for adding Juno60 synthesizer sounds to web applications (using Web Audio API)",
   "main": "dist/synth.node.js",
@@ -29,7 +29,7 @@
     "build:patches": "node patches/Juno60.js",
     "build:pretty": "prettier --write src",
     "lint": "eslint .",
-    "test": "echo \"No test specified\"",
+    "test": "pta",
     "deploy:bump-version": "npm version patch",
     "deploy:npm": "echo \"TODO - implement https://zellwk.com/blog/publish-to-npm/\"",
     "deploy:github": "gh-pages --dist .",
@@ -46,7 +46,9 @@
     "eslint": "^7.6.0",
     "gh-pages": "^3.1.0",
     "prettier": "^2.0.5",
-    "serve": "^11.3.2"
+    "pta": "^0.1.3",
+    "serve": "^11.3.2",
+    "zora": "^4.0.0"
   },
   "resolutions": {
     "**/lodash": "4.17.19",

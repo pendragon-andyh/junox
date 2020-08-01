@@ -78,20 +78,22 @@ export class AbstractEnvelope {
    * Calculate the next value of the envelope.
    */
   render() {
-    while (this._currentPhase !== -1 && this._currentPhase < this._segments.length) {
+    let currentPhase = this._currentPhase
+    while (currentPhase >= 0 && currentPhase < this._segments.length) {
       // Calculate the next value of the current segment.
-      const segment = this._segments[this._currentPhase]
+      const segment = this._segments[currentPhase]
       const nextValue = segment.process(this._currentValue)
       if (segment.isComplete(nextValue)) {
         // Switch to next phase of the envelope.
-        this._currentPhase++
-        if (this._currentPhase >= this._segments.length) {
+        currentPhase++
+        if (currentPhase >= this._segments.length) {
           // All phases are complete, so update to "not-active".
           this._currentValue = 0.0
-          this._currentPhase = -1
+          currentPhase = -1
         }
+        this._currentPhase = currentPhase
       } else {
-        // Otherwise the calculate value was good.
+        // Otherwise the calculated value was good.
         this._currentValue = nextValue
         break
       }
