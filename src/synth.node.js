@@ -91,7 +91,7 @@ class SynthWorkletNode extends AudioWorkletNode {
 
   panic() {
     this.port.postMessage({
-      action: CONSTANTS.PANIC,
+      action: CONSTANTS.ALL_NOTES_OFF,
     })
   }
 }
