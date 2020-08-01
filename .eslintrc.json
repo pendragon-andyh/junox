@@ -5,7 +5,8 @@
   },
   "env": {
     "browser": true,
-    "es2020": true
+    "es2020": true,
+    "jest": true
   },
   "rules": {
     "semi": [2, "never"]

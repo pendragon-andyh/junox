@@ -48,9 +48,15 @@ export class Juno60Envelope extends AbstractEnvelope {
    * @param {number} releaseSlider - Value of the release slider (0.0 to 1.0).
    */
   setValuesFromSliders(attackSlider, decaySlider, sustainSlider, releaseSlider) {
-    const attackDuration = interpolatedLookup(attackSlider, curveFromAttackSliderToDuration)
-    const decayDuration = interpolatedLookup(decaySlider, curveFromDecaySliderToDuration)
-    const releaseDuration = interpolatedLookup(releaseSlider, curveFromReleaseSliderToDuration)
+    const attackDuration = interpolatedLookup(
+      attackSlider * curveFromAttackSliderToDuration.length,
+      curveFromAttackSliderToDuration
+    )
+    const decayDuration = interpolatedLookup(decaySlider * curveFromDecaySliderToDuration.length, curveFromDecaySliderToDuration)
+    const releaseDuration = interpolatedLookup(
+      releaseSlider * curveFromReleaseSliderToDuration.length,
+      curveFromReleaseSliderToDuration
+    )
 
     this.setValues(attackDuration, decayDuration, sustainSlider, releaseDuration)
   }

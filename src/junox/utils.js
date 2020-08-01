@@ -24,23 +24,21 @@ export function fastTanh(x) {
 
 /**
  * Use linear interpolation to lookup a value from an array.
- * @param {number} value - Input value (range is 0..1).
- * @param {number[]} table - List of values that form the table to be looked-up from.
+ * @param {number} value - Input value (range is 0..[length of array]).
+ * @param {Float64Array} table - The table to be looked-up from.
  */
 export function interpolatedLookup(value, table) {
-  if (value <= 0.0) {
+  const index = value | 0
+  const indexNext = index + 1
+  const factor = value - index
+
+  if (index < 0) {
     return table[0]
   }
-  if (value >= 1.0) {
+
+  if (indexNext >= table.length) {
     return table[table.length - 1]
   }
 
-  value *= table.length - 1
-  const index = value | 0
-  const factor = value - index
-  if (factor === 0) {
-    return table[index]
-  }
-
-  return table[index] * (1.0 - factor) + table[index + 1] * factor
+  return table[index] * (1.0 - factor) + table[indexNext] * factor
 }
