@@ -42,7 +42,7 @@
   "devDependencies": {
     "chokidar-cli": "^2.1.0",
     "csv-parser": "^2.3.3",
-    "esbuild": "^0.6.13",
+    "esbuild": "^0.6.14",
     "eslint": "^7.6.0",
     "gh-pages": "^3.1.0",
     "prettier": "^2.0.5",
