@@ -1,8 +1,11 @@
 export const NOTE_ON = 'note-on'
 export const NOTE_OFF = 'note-off'
+export const SUSTAIN_ON = 'sustain-on'
+export const SUSTAIN_OFF = 'sustain-off'
 export const SET_PARAM = 'set-param'
 export const SET_PATCH = 'set-patch'
+export const ALL_NOTES_OFF = 'all-notes-off'
+
 export const LFO_TRIGGER_ON = 'lfo-trigger-on'
 export const LFO_TRIGGER_OFF = 'lfo-trigger-off'
 export const PITCH_BEND = 'pitch-bend'
-export const ALL_NOTES_OFF = 'all-notes-off'

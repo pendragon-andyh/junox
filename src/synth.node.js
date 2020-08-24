@@ -1,24 +1,16 @@
 import * as CONSTANTS from './synth.constants.js'
 import { Juno60FactoryPatchesA } from './patches.js'
 
-// This inline-encodes the processor.
+// Inline the bundled processor-code as a string.
 import processorData from '../dist/synth.worklet.txt'
 
-async function createJuno60(ac, processorOptions) {
-  const processorBlob = base64DataToBlob(processorData)
-  const processorUrl = URL.createObjectURL(processorBlob)
-  await ac.audioWorklet.addModule(processorUrl)
-  return new SynthWorkletNode(ac, processorOptions)
-}
+// Then we convert that string into an encoded URL.
+const processorBlob = base64DataToBlob(processorData)
+const processorUrl = URL.createObjectURL(processorBlob)
 
-function base64DataToBlob(dataUrl, contentType = 'application/javascript; charset=utf-8') {
-  var byteString = atob(dataUrl.split(',')[1])
-  var ab = new ArrayBuffer(byteString.length)
-  var ia = new Uint8Array(ab)
-  for (var i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i)
-  }
-  return new Blob([ab], { type: contentType })
+async function createJuno60(ac, patch = defaultPatch, processorOptions = {}) {
+  await ac.audioWorklet.addModule(processorUrl)
+  return new SynthWorkletNode(ac, { patch, ...processorOptions })
 }
 
 class SynthWorkletNode extends AudioWorkletNode {
@@ -136,6 +128,23 @@ const defaultAudioNodeOptions = {
 const defaultProcessorOptions = {
   patch: defaultPatch,
   polyphony: 6,
+}
+
+function clonePatch(patchData) {
+  return {
+    ...patchData,
+    patchValues: Float64Array.from(patchData.values),
+  }
+}
+
+function base64DataToBlob(dataUrl, contentType = 'application/javascript; charset=utf-8') {
+  var byteString = atob(dataUrl.split(',')[1])
+  var ab = new ArrayBuffer(byteString.length)
+  var ia = new Uint8Array(ab)
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i)
+  }
+  return new Blob([ab], { type: contentType })
 }
 
 export { createJuno60, SynthWorkletNode, defaultPatch, Juno60FactoryPatchesA }
