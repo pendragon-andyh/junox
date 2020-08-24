@@ -232,7 +232,10 @@ export class JunoxWorkletController {
 export class VoiceAllocatorForPoly1 {
   allocate(controller, synthProfile) {
     // Steal voices if too many notes requested.
-    while (controller.notesQueuedForVoiceAllocation.length > controller.voicesShuttingDown.length + controller.voicesAvailable.length) {
+    while (
+      controller.notesQueuedForVoiceAllocation.length >
+      controller.voicesShuttingDown.length + controller.voicesAvailable.length
+    ) {
       // Prefer to steal released-voices first, then pressed-voices.
       if (!controller.stealVoiceFrom(controller.voicesReleased) && !controller.stealVoiceFrom(controller.voicesPressed)) {
         // Otherwise discard surplus waiting notes.
@@ -250,14 +253,8 @@ export class VoiceAllocatorForPoly1 {
   }
 }
 
-export class VoiceAllocatorForPoly2 {
-  
-}
+export class VoiceAllocatorForPoly2 {}
 
-export class VoiceAllocatorForMono {
-  
-}
+export class VoiceAllocatorForMono {}
 
-export class VoiceAllocatorForUnison {
-  
-}
+export class VoiceAllocatorForUnison {}
