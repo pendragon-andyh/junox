@@ -17,7 +17,7 @@ Some of the patches have a the "sweet-spot" on the keyboard or are designed to b
 ## Features
 
 - Emulation is built using a [AudioWorklet](https://developers.google.com/web/updates/2017/12/audio-worklet). Allows very accurate low-level emulation.
-- Oscillator uses [PolyBLEP](http://metafunction.co.uk/all-about-digital-oscillators-part-2-blits-bleps/) to minimize aliasing (sawtooth, pulse and sub waveforms).
+- Oscillator uses [PolyBLEP](https://www.metafunction.co.uk/post/all-about-digital-oscillators-part-2-blits-bleps) to minimize aliasing (sawtooth, pulse and sub waveforms).
 - VCF is implemented using a Virtual Analog ladder filter.
 
 ## Next steps
