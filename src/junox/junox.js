@@ -3,7 +3,7 @@ import Voice from './voice.js'
 import { Chorus } from './chorus.js'
 import { LFOWithEnvelope } from './lfoWithEnvelope.js'
 import { SimpleSinglePoleFilter } from './simpleSinglePoleFilter.js'
-import { fastTanh, interpolatedLookup } from './utils.js'
+import { fastTanh, interpolatedLookup } from './utils.mjs'
 
 const synthStatus = {
   SILENT: 0,

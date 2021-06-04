@@ -97,7 +97,7 @@ export const ladderFilterModes = {
   LPF2: Float64Array.from([0.0, 0.0, 1.0, 0.0, 0.0]),
   LPF4: Float64Array.from([0.0, 0.0, 0.0, 0.0, 1.0]),
   BPF2: Float64Array.from([0.0, 2.0, -2.0, 0.0, 0.0]),
-  BPF2: Float64Array.from([0.0, 0.0, 4.0, -8.0, 4.0]),
+  BPF4: Float64Array.from([0.0, 0.0, 4.0, -8.0, 4.0]),
   HPF2: Float64Array.from([1.0, -2.0, 1.0, 0.0, 0.0]),
   HPF4: Float64Array.from([1.0, -4.0, 6.0, -4.0, 1.0]),
 }

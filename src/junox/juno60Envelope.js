@@ -1,5 +1,5 @@
 import { AbstractEnvelope, AttackSegment, DecaySegment, ShutdownSegment } from './abstractEnvelope.js'
-import { interpolatedLookup } from './utils.js'
+import { interpolatedLookup } from './utils.mjs'
 
 const curveFromAttackSliderToDuration = [0.001, 0.03, 0.24, 0.65, 3.25]
 const curveFromDecaySliderToDuration = [0.002, 0.096, 0.984, 4.449, 19.783]
