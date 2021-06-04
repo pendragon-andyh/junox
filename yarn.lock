@@ -1089,11 +1089,6 @@ uri-js@^4.2.2:
   dependencies:
     punycode "^2.1.0"
 
-uvo@^3.1.11:
-  version "3.1.11"
-  resolved "https://registry.yarnpkg.com/uvo/-/uvo-3.1.11.tgz#99cf45f86f6b0aedc095c089c9cb827744ba87d6"
-  integrity sha512-otNjJcDGEuoHe4h12hYpTWyJpJBQ59VEQZlEuV2T4JdLXhuBdehh2IbUueZMqInJQryPgbKqMCkUu82lTjAUEw==
-
 uvu@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/uvu/-/uvu-0.5.1.tgz#938b85f96b8a478e585363ad1849933b6c481b28"
