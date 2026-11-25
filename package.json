@@ -23,7 +23,7 @@
     "build-dev": "npm run build:processor && npm run build:module",
     "build-prod": "npm run build:patches && npm run build:pretty && npm run lint && npm run build:processor && npm run build:module && npm run build:iife && npm run test",
     "build:processor": "esbuild --bundle --outfile=dist/synth.worklet.txt --format=esm ./src/synth.worklet.js",
-    "build:module": "esbuild --bundle --outfile=dist/synth.node.mjs --format=esm --loader:.txt=dataurl ./src/synth.node.js",
+    "build:module": "esbuild --bundle --outfile=dist/synth.node.mjs --format=esm --loader:.txt=text ./src/synth.node.js",
     "build:iife": "esbuild --bundle --outfile=dist/synth.node.js --format=iife --global-name=Junox ./dist/synth.node.mjs",
     "build:patches": "node patches/Juno60.js",
     "build:pretty": "prettier --write src",
@@ -32,22 +32,24 @@
     "deploy:bump-version": "npm version patch",
     "deploy:npm": "echo \"TODO - implement https://zellwk.com/blog/publish-to-npm/\"",
     "deploy:github": "gh-pages --dist .",
-    "yarn:install": "yarn install",
-    "yarn:install-force": "yarn install --force",
-    "yarn:upgrade-latest": "yarn upgrade-interactive --latest",
-    "yarn:audit": "yarn audit"
+    "npm:install": "npm install",
+    "npm:install-force": "npm install --force",
+    "npm:upgrade-latest": "npm update",
+    "npm:audit": "npm audit"
   },
-  "dependencies": {},
   "devDependencies": {
     "csv-parser": "^3.0.0",
-    "esbuild": "^0.12.8",
+    "esbuild": "^0.28.2",
     "eslint": "^7.28.0",
     "gh-pages": "^5.0.0",
     "prettier": "^2.3.1",
     "uvu": "^0.5.1"
   },
-  "resolutions": {
-    "**/lodash": "4.17.21",
-    "**/minimist": "^1.2.0"
+  "overrides": {
+    "lodash": "4.17.21",
+    "minimist": "^1.2.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
   }
 }

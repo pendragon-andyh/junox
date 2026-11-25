@@ -172,12 +172,14 @@ export class Chorus {
     this._averageRightSamples = averageRightDelay * this._sampleRate
     this._maxRightOffset = maxRightOffset * this._sampleRate * (isStereo ? -1 : 1)
 
-    // Transition to desired wet/dry ration.
+    // Transition to desired wet/dry ratio.
     this._dryTarget = dry
     if (!this._isUsed) {
-      this._dryChange = dry
+      this._dryCurrent = dry
+      this._dryChange = 0.0
+    } else {
+      this._dryChange = (dry - this._dryCurrent) / 1000
     }
-    this._dryChange = (dry - this._dryCurrent) / 1000
 
     // Value-change between each "tick" of triangle-wave LFO.
     this._lfoIncrement = (Math.sign(this._lfoIncrement) * 4 * freq) / this._sampleRate

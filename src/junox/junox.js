@@ -52,7 +52,7 @@ export default class Junox {
     this.status = synthStatus.NOTES_ACTIVE
 
     // If note already playing then retrigger.
-    const voiceIndex = this.voices.findIndex((voice) => voice.note === note)
+    const voiceIndex = this.voices.findIndex((voice) => voice.note === note && !voice.isShuttingDown())
     if (voiceIndex >= 0) {
       this.voices[voiceIndex].noteOn(note, velocity)
       return
@@ -66,12 +66,19 @@ export default class Junox {
     const newVoice = new Voice({ patch: this.patch, sampleRate: this.sampleRate })
     newVoice.noteOn(note, velocity)
 
-    if (this.voices.length < this.maxVoices) {
-      this.voices.push(newVoice)
-      return
+    const activeVoices = this.voices.filter((voice) => !voice.isShuttingDown())
+    if (activeVoices.length >= this.maxVoices) {
+      const releasedVoices = activeVoices.filter((voice) => voice.isReleased())
+      const candidates = releasedVoices.length ? releasedVoices : activeVoices
+      let victim = candidates[0]
+      for (let i = 1; i < candidates.length; i++) {
+        if (candidates[i].getLevel() < victim.getLevel()) {
+          victim = candidates[i]
+        }
+      }
+      victim.shutdown()
     }
-    // TODO: recycle voice at minimum volume
-    this.voices[0] = newVoice
+    this.voices.push(newVoice)
   }
 
   noteOff(note) {

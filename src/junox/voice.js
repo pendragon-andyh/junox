@@ -115,6 +115,23 @@ export default class Voice {
     this.ampEnv.release()
   }
 
+  shutdown() {
+    this.modEnv.shutdown()
+    this.ampEnv.shutdown()
+  }
+
+  isReleased() {
+    return this.ampEnv.isReleased()
+  }
+
+  isShuttingDown() {
+    return this.ampEnv.isShuttingDown()
+  }
+
+  getLevel() {
+    return this.ampEnv._currentValue
+  }
+
   isFinished() {
     return this.ampEnv.isFinished()
   }

@@ -33,4 +33,4 @@ If anyone has ideas or [feedback](https://github.com/pendragon-andyh/junox/issue
 
 ## Background
 
-This project was originally started by [Daniele Zannotti](https://github.com/dzannotti/junox). We chose the Juno-60 because it is a very simple synth that (still) manages to sound really good - and I had previously  [analysed](https://github.com/pendragon-andyh/Juno60) that synth.
+This project was originally started by [Daniele Zannotti](https://github.com/dzannotti/junox). We chose the Juno-60 because it is a very simple synth that (still) manages to sound really good - and I had previously [analysed](https://github.com/pendragon-andyh/Juno60) that synth.

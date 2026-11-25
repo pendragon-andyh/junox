@@ -16,8 +16,8 @@
     <link rel="stylesheet" href="juno60-nexusUI.css" />
 
     <script
-      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      src="https://code.jquery.com/jquery-4.1.0.slim.min.js"
+      integrity="sha384-93zDwyBtpgzWRkh9XZg/1NkOu32G1MAPods6KLt+XmtfciH5DSFeTj7hM8xq7CFG"
       crossorigin="anonymous"
     ></script>
     <script
@@ -417,15 +417,18 @@
 
       function unlockAudioContext(audioContext) {
         if (audioContext.state === 'suspended') {
-          const events = ['touchstart', 'touchend', 'mousedown', 'keydown']
+          const events = ['pointerdown', 'touchstart', 'touchend', 'mousedown', 'keydown', 'click']
 
           console.log('Audio context - suspended until user interaction ...')
-          events.forEach((eventName) => document.body.addEventListener(eventName, unlock, false))
+          events.forEach((eventName) => document.addEventListener(eventName, unlock, true))
 
           function unlock() {
-            events.forEach((eventName) => document.body.removeEventListener(eventName, unlock))
-            console.log('Audio context - unlocked ...')
-            audioContext.resume()
+            audioContext.resume().then(() => {
+              if (audioContext.state === 'running') {
+                events.forEach((eventName) => document.removeEventListener(eventName, unlock, true))
+                console.log('Audio context - unlocked ...')
+              }
+            })
           }
         }
       }
@@ -823,6 +826,9 @@
       const consumer = new MidiConsumer()
       consumer.onNoteOn = (noteNumber, velocity) => {
         console.log(`NoteOn - note=${noteNumber}`)
+        if (audioContext.state === 'suspended') {
+          audioContext.resume()
+        }
         synthNode && synthNode.noteOn(noteNumber, velocity / 127)
         if (!isNexusChanging) {
           if (noteNumber >= piano.range.low && noteNumber <= piano.range.high) {

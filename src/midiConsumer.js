@@ -67,7 +67,7 @@ export class MidiConsumer {
    * @param {number} handler - Handler-function for handling the specified control-change.
    */
   registerControlChangeHandler(controlNumber, handler) {
-    this._sustainedNotes[controlNumber] = handler
+    this._controlChangeHandlers[controlNumber] = handler
   }
 
   /**

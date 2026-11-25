@@ -4,8 +4,8 @@ import { Juno60FactoryPatchesA } from './patches.js'
 // Inline the bundled processor-code as a string.
 import processorData from '../dist/synth.worklet.txt'
 
-// Then we convert that string into an encoded URL.
-const processorBlob = base64DataToBlob(processorData)
+// Then we convert that string into a Blob URL.
+const processorBlob = new Blob([processorData], { type: 'application/javascript; charset=utf-8' })
 const processorUrl = URL.createObjectURL(processorBlob)
 
 async function createJuno60(ac, patch = defaultPatch, processorOptions = {}) {
@@ -135,16 +135,6 @@ function clonePatch(patchData) {
     ...patchData,
     patchValues: Float64Array.from(patchData.values),
   }
-}
-
-function base64DataToBlob(dataUrl, contentType = 'application/javascript; charset=utf-8') {
-  var byteString = atob(dataUrl.split(',')[1])
-  var ab = new ArrayBuffer(byteString.length)
-  var ia = new Uint8Array(ab)
-  for (var i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i)
-  }
-  return new Blob([ab], { type: contentType })
 }
 
 export { createJuno60, SynthWorkletNode, defaultPatch, Juno60FactoryPatchesA }

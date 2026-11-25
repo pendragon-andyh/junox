@@ -25,14 +25,14 @@ export class AbstractEnvelope {
    * Returns true if the envelope is active, and has been released or shutdown.
    */
   isReleased() {
-    return this.currentPhase !== 0 && this.currentPhase !== 1
+    return this._currentPhase !== 0 && this._currentPhase !== 1
   }
 
   /**
    * Returns true if the envelope is currently shutting-down.
    */
   isShuttingDown() {
-    return this.currentPhase === this._segments.length - 1
+    return this._currentPhase === this._segments.length - 1
   }
 
   /**
@@ -281,7 +281,7 @@ export class ShutdownSegment {
    */
   process(previousValue) {
     const result = previousValue - this._shutdownRate
-    return this.value < 0.0 ? 0.0 : result
+    return result < 0.0 ? 0.0 : result
   }
 
   /**
