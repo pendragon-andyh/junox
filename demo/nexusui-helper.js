@@ -165,7 +165,6 @@ export class NexusUIHelper {
       }
 
       // If the button is clicked then handle the processing.
-      // eslint-disable-next-line no-loop-func
       control.on('change', (state) => {
         if (state ^ (value === vcopy)) {
           setValue(vcopy)

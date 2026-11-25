@@ -37,10 +37,9 @@
     "npm:audit": "npm audit"
   },
   "devDependencies": {
-    "csv-parser": "^3.0.0",
     "esbuild": "^0.28.2",
     "eslint": "^10.15.0",
-    "gh-pages": "^5.0.0"
+    "gh-pages": "^6.3.0"
   },
   "allowScripts": {
     "esbuild@0.28.2": true
