@@ -2,7 +2,6 @@ import { Juno60DCO } from './dco.js'
 import { Juno60Envelope } from './juno60Envelope.js'
 import { LadderFilter } from './ladderFilter.js'
 import { Noise } from './noise.js'
-import { interpolatedLookup } from './utils.js'
 
 export default class Voice {
   constructor({ patch, sampleRate }) {
@@ -114,6 +113,23 @@ export default class Voice {
   noteOff() {
     this.modEnv.release()
     this.ampEnv.release()
+  }
+
+  shutdown() {
+    this.modEnv.shutdown()
+    this.ampEnv.shutdown()
+  }
+
+  isReleased() {
+    return this.ampEnv.isReleased()
+  }
+
+  isShuttingDown() {
+    return this.ampEnv.isShuttingDown()
+  }
+
+  getLevel() {
+    return this.ampEnv._currentValue
   }
 
   isFinished() {

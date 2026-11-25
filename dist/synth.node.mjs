@@ -1,653 +1,644 @@
 // src/synth.constants.js
-const NOTE_ON = "note-on";
-const NOTE_OFF = "note-off";
-const SET_PARAM = "set-param";
-const SET_PATCH = "set-patch";
-const LFO_TRIGGER_ON = "lfo-trigger-on";
-const LFO_TRIGGER_OFF = "lfo-trigger-off";
-const PITCH_BEND = "pitch-bend";
-const PANIC = "panic";
+var NOTE_ON = "note-on";
+var NOTE_OFF = "note-off";
+var SET_PARAM = "set-param";
+var SET_PATCH = "set-patch";
+var ALL_NOTES_OFF = "all-notes-off";
+var LFO_TRIGGER_ON = "lfo-trigger-on";
+var LFO_TRIGGER_OFF = "lfo-trigger-off";
+var PITCH_BEND = "pitch-bend";
 
 // src/patches.js
-const Juno60FactoryPatchesA = [
+var Juno60FactoryPatchesA = [
   {
     name: "Strings 1",
     vca: 0.5,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.6, delay: 0},
-    dco: {range: 1, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "l", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.6, delay: 0 },
+    dco: { range: 1, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "l", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.7, resonance: 0, modPositive: true, envMod: 0, lfoMod: 0, keyMod: 1},
-    env: {attack: 0.4, decay: 0, sustain: 1, release: 0.45},
+    vcf: { type: "moog", frequency: 0.7, resonance: 0, modPositive: true, envMod: 0, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0.4, decay: 0, sustain: 1, release: 0.45 },
     chorus: 1
   },
   {
     name: "Strings 2",
     vca: 0.3,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.4, delay: 0},
-    dco: {range: 1, saw: true, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0.6, pwmMod: "l", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.4, delay: 0 },
+    dco: { range: 1, saw: true, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0.6, pwmMod: "l", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.7, resonance: 0, modPositive: true, envMod: 0, lfoMod: 0, keyMod: 1},
-    env: {attack: 0.4, decay: 0, sustain: 1, release: 0.45},
+    vcf: { type: "moog", frequency: 0.7, resonance: 0, modPositive: true, envMod: 0, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0.4, decay: 0, sustain: 1, release: 0.45 },
     chorus: 2
   },
   {
     name: "Strings 3",
     vca: 0.3,
     vcaType: "env",
-    lfo: {autoTrigger: false, frequency: 0.3, delay: 0.8},
-    dco: {range: 1, saw: true, pulse: true, sub: true, subAmount: 1, noise: 0, pwm: 0.7, pwmMod: "l", lfo: 0},
+    lfo: { autoTrigger: false, frequency: 0.3, delay: 0.8 },
+    dco: { range: 1, saw: true, pulse: true, sub: true, subAmount: 1, noise: 0, pwm: 0.7, pwmMod: "l", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.5, resonance: 0, modPositive: true, envMod: 0, lfoMod: 0, keyMod: 1},
-    env: {attack: 0.3, decay: 0, sustain: 1, release: 0.6},
+    vcf: { type: "moog", frequency: 0.5, resonance: 0, modPositive: true, envMod: 0, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0.3, decay: 0, sustain: 1, release: 0.6 },
     chorus: 2
   },
   {
     name: "Organ 1",
     vca: 0.5,
     vcaType: "gate",
-    lfo: {autoTrigger: true, frequency: 0.2, delay: 0.8},
-    dco: {range: 1, saw: false, pulse: true, sub: true, subAmount: 1, noise: 0, pwm: 0.5, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.2, delay: 0.8 },
+    dco: { range: 1, saw: false, pulse: true, sub: true, subAmount: 1, noise: 0, pwm: 0.5, pwmMod: "m", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.4, resonance: 0.6, modPositive: true, envMod: 0.45, lfoMod: 0, keyMod: 1},
-    env: {attack: 0, decay: 0, sustain: 0, release: 0},
+    vcf: { type: "moog", frequency: 0.4, resonance: 0.6, modPositive: true, envMod: 0.45, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0, decay: 0, sustain: 0, release: 0 },
     chorus: 1
   },
   {
     name: "Organ 2",
     vca: 0.5,
     vcaType: "gate",
-    lfo: {autoTrigger: true, frequency: 0.5, delay: 0.4},
-    dco: {range: 1, saw: false, pulse: true, sub: true, subAmount: 0.8, noise: 0, pwm: 0.55, pwmMod: "l", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.5, delay: 0.4 },
+    dco: { range: 1, saw: false, pulse: true, sub: true, subAmount: 0.8, noise: 0, pwm: 0.55, pwmMod: "l", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.35, resonance: 0.55, modPositive: true, envMod: 0.4, lfoMod: 0, keyMod: 1},
-    env: {attack: 0, decay: 0.1, sustain: 0, release: 0.1},
+    vcf: { type: "moog", frequency: 0.35, resonance: 0.55, modPositive: true, envMod: 0.4, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0, decay: 0.1, sustain: 0, release: 0.1 },
     chorus: 1
   },
   {
     name: "Organ 3",
     vca: 0.5,
     vcaType: "gate",
-    lfo: {autoTrigger: true, frequency: 0.5, delay: 0.4},
-    dco: {range: 2, saw: false, pulse: true, sub: true, subAmount: 0.8, noise: 0, pwm: 0.55, pwmMod: "l", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.5, delay: 0.4 },
+    dco: { range: 2, saw: false, pulse: true, sub: true, subAmount: 0.8, noise: 0, pwm: 0.55, pwmMod: "l", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.35, resonance: 0.55, modPositive: true, envMod: 0.35, lfoMod: 0, keyMod: 1},
-    env: {attack: 0, decay: 0.1, sustain: 0, release: 0.1},
+    vcf: { type: "moog", frequency: 0.35, resonance: 0.55, modPositive: true, envMod: 0.35, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0, decay: 0.1, sustain: 0, release: 0.1 },
     chorus: 2
   },
   {
     name: "Brass",
     vca: 0.7,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.5, delay: 0.65},
-    dco: {range: 1, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0.15},
+    lfo: { autoTrigger: true, frequency: 0.5, delay: 0.65 },
+    dco: { range: 1, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0.15 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0, resonance: 0, modPositive: true, envMod: 0.85, lfoMod: 0, keyMod: 0.4},
-    env: {attack: 0.25, decay: 0.4, sustain: 0.6, release: 0.2},
+    vcf: { type: "moog", frequency: 0, resonance: 0, modPositive: true, envMod: 0.85, lfoMod: 0, keyMod: 0.4 },
+    env: { attack: 0.25, decay: 0.4, sustain: 0.6, release: 0.2 },
     chorus: 1
   },
   {
     name: "Phase Brass",
     vca: 0.4,
     vcaType: "gate",
-    lfo: {autoTrigger: true, frequency: 0.6, delay: 0},
-    dco: {range: 1, saw: true, pulse: true, sub: false, subAmount: 1, noise: 0, pwm: 1, pwmMod: "e", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.6, delay: 0 },
+    dco: { range: 1, saw: true, pulse: true, sub: false, subAmount: 1, noise: 0, pwm: 1, pwmMod: "e", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.3, resonance: 0.1, modPositive: true, envMod: 0.55, lfoMod: 0, keyMod: 1},
-    env: {attack: 0.2, decay: 0.4, sustain: 0.4, release: 0.3},
+    vcf: { type: "moog", frequency: 0.3, resonance: 0.1, modPositive: true, envMod: 0.55, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0.2, decay: 0.4, sustain: 0.4, release: 0.3 },
     chorus: 1
   },
   {
     name: "Piano 1",
     vca: 0.7,
     vcaType: "env",
-    lfo: {autoTrigger: false, frequency: 0.6, delay: 0.3},
-    dco: {range: 1, saw: false, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0.6, pwmMod: "m", lfo: 0.45},
+    lfo: { autoTrigger: false, frequency: 0.6, delay: 0.3 },
+    dco: { range: 1, saw: false, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0.6, pwmMod: "m", lfo: 0.45 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.1, resonance: 0, modPositive: true, envMod: 0.7, lfoMod: 0, keyMod: 0.4},
-    env: {attack: 0, decay: 0.8, sustain: 0.15, release: 0.3},
+    vcf: { type: "moog", frequency: 0.1, resonance: 0, modPositive: true, envMod: 0.7, lfoMod: 0, keyMod: 0.4 },
+    env: { attack: 0, decay: 0.8, sustain: 0.15, release: 0.3 },
     chorus: 0
   },
   {
     name: "Piano 2",
     vca: 0.8,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.4, delay: 0},
-    dco: {range: 2, saw: false, pulse: true, sub: true, subAmount: 0.45, noise: 0, pwm: 0.4, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.4, delay: 0 },
+    dco: { range: 2, saw: false, pulse: true, sub: true, subAmount: 0.45, noise: 0, pwm: 0.4, pwmMod: "m", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.35, resonance: 0, modPositive: true, envMod: 0.25, lfoMod: 0.2, keyMod: 0.8},
-    env: {attack: 0, decay: 0.75, sustain: 0, release: 0.35},
+    vcf: { type: "moog", frequency: 0.35, resonance: 0, modPositive: true, envMod: 0.25, lfoMod: 0.2, keyMod: 0.8 },
+    env: { attack: 0, decay: 0.75, sustain: 0, release: 0.35 },
     chorus: 0
   },
   {
     name: "Celesta",
     vca: 0.6,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.35, delay: 0.6},
-    dco: {range: 1, saw: true, pulse: true, sub: false, subAmount: 1, noise: 0, pwm: 0.5, pwmMod: "e", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.35, delay: 0.6 },
+    dco: { range: 1, saw: true, pulse: true, sub: false, subAmount: 1, noise: 0, pwm: 0.5, pwmMod: "e", lfo: 0 },
     hpf: 0.35,
-    vcf: {type: "moog", frequency: 0.35, resonance: 0.8, modPositive: true, envMod: 0, lfoMod: 0, keyMod: 1},
-    env: {attack: 0, decay: 0.65, sustain: 0.2, release: 0.55},
+    vcf: { type: "moog", frequency: 0.35, resonance: 0.8, modPositive: true, envMod: 0, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0, decay: 0.65, sustain: 0.2, release: 0.55 },
     chorus: 0
   },
   {
     name: "Mellow Piano",
     vca: 0.7,
     vcaType: "env",
-    lfo: {autoTrigger: false, frequency: 0.5, delay: 0},
-    dco: {range: 1, saw: false, pulse: true, sub: false, subAmount: 1, noise: 0, pwm: 0.5, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: false, frequency: 0.5, delay: 0 },
+    dco: { range: 1, saw: false, pulse: true, sub: false, subAmount: 1, noise: 0, pwm: 0.5, pwmMod: "m", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.3, resonance: 0, modPositive: true, envMod: 0.25, lfoMod: 0.1, keyMod: 0.9},
-    env: {attack: 0.1, decay: 0.75, sustain: 0.2, release: 0.85},
+    vcf: { type: "moog", frequency: 0.3, resonance: 0, modPositive: true, envMod: 0.25, lfoMod: 0.1, keyMod: 0.9 },
+    env: { attack: 0.1, decay: 0.75, sustain: 0.2, release: 0.85 },
     chorus: 1
   },
   {
     name: "Harpsichord 1",
     vca: 0.4,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.5, delay: 0.4},
-    dco: {range: 2, saw: false, pulse: true, sub: true, subAmount: 0.7, noise: 0, pwm: 0.3, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.5, delay: 0.4 },
+    dco: { range: 2, saw: false, pulse: true, sub: true, subAmount: 0.7, noise: 0, pwm: 0.3, pwmMod: "m", lfo: 0 },
     hpf: 0.35,
-    vcf: {type: "moog", frequency: 0.3, resonance: 0, modPositive: true, envMod: 0.5, lfoMod: 0, keyMod: 0.7},
-    env: {attack: 0, decay: 0.6, sustain: 0.35, release: 0.25},
+    vcf: { type: "moog", frequency: 0.3, resonance: 0, modPositive: true, envMod: 0.5, lfoMod: 0, keyMod: 0.7 },
+    env: { attack: 0, decay: 0.6, sustain: 0.35, release: 0.25 },
     chorus: 1
   },
   {
     name: "Harpsichord 2",
     vca: 0.5,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.55, delay: 0.6},
-    dco: {range: 2, saw: false, pulse: true, sub: true, subAmount: 0.85, noise: 0, pwm: 0.2, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.55, delay: 0.6 },
+    dco: { range: 2, saw: false, pulse: true, sub: true, subAmount: 0.85, noise: 0, pwm: 0.2, pwmMod: "m", lfo: 0 },
     hpf: 0.35,
-    vcf: {type: "moog", frequency: 0.5, resonance: 0.25, modPositive: true, envMod: 0.3, lfoMod: 0, keyMod: 1},
-    env: {attack: 0, decay: 0.5, sustain: 0.15, release: 0.5},
+    vcf: { type: "moog", frequency: 0.5, resonance: 0.25, modPositive: true, envMod: 0.3, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0, decay: 0.5, sustain: 0.15, release: 0.5 },
     chorus: 2
   },
   {
     name: "Guitar",
     vca: 0.9,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.6, delay: 0.6},
-    dco: {range: 1, saw: false, pulse: true, sub: false, subAmount: 1, noise: 0, pwm: 0.6, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.6, delay: 0.6 },
+    dco: { range: 1, saw: false, pulse: true, sub: false, subAmount: 1, noise: 0, pwm: 0.6, pwmMod: "m", lfo: 0 },
     hpf: 0.65,
-    vcf: {type: "moog", frequency: 0.3, resonance: 0, modPositive: true, envMod: 0.45, lfoMod: 0.15, keyMod: 0.5},
-    env: {attack: 0, decay: 0.55, sustain: 0.35, release: 0.65},
+    vcf: { type: "moog", frequency: 0.3, resonance: 0, modPositive: true, envMod: 0.45, lfoMod: 0.15, keyMod: 0.5 },
+    env: { attack: 0, decay: 0.55, sustain: 0.35, release: 0.65 },
     chorus: 0
   },
   {
     name: "Synthesizer Harp",
     vca: 0.6,
     vcaType: "env",
-    lfo: {autoTrigger: false, frequency: 0.3, delay: 0.8},
-    dco: {range: 1, saw: true, pulse: false, sub: false, subAmount: 1, noise: 0, pwm: 0, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: false, frequency: 0.3, delay: 0.8 },
+    dco: { range: 1, saw: true, pulse: false, sub: false, subAmount: 1, noise: 0, pwm: 0, pwmMod: "m", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.3, resonance: 0, modPositive: true, envMod: 0.5, lfoMod: 0, keyMod: 0.8},
-    env: {attack: 0, decay: 0.55, sustain: 0.3, release: 0.5},
+    vcf: { type: "moog", frequency: 0.3, resonance: 0, modPositive: true, envMod: 0.5, lfoMod: 0, keyMod: 0.8 },
+    env: { attack: 0, decay: 0.55, sustain: 0.3, release: 0.5 },
     chorus: 1
   },
   {
     name: "Bass 1",
     vca: 0.5,
     vcaType: "gate",
-    lfo: {autoTrigger: true, frequency: 0.5, delay: 0.6},
-    dco: {range: 0.5, saw: true, pulse: true, sub: true, subAmount: 0.3, noise: 0, pwm: 0.5, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.5, delay: 0.6 },
+    dco: { range: 0.5, saw: true, pulse: true, sub: true, subAmount: 0.3, noise: 0, pwm: 0.5, pwmMod: "m", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.3, resonance: 0.25, modPositive: true, envMod: 0.35, lfoMod: 0, keyMod: 0},
-    env: {attack: 0, decay: 0.4, sustain: 0.1, release: 0.25},
+    vcf: { type: "moog", frequency: 0.3, resonance: 0.25, modPositive: true, envMod: 0.35, lfoMod: 0, keyMod: 0 },
+    env: { attack: 0, decay: 0.4, sustain: 0.1, release: 0.25 },
     chorus: 1
   },
   {
     name: "Bass 2",
     vca: 0.4,
     vcaType: "gate",
-    lfo: {autoTrigger: true, frequency: 0.5, delay: 0.6},
-    dco: {range: 0.5, saw: true, pulse: true, sub: false, subAmount: 0.3, noise: 0, pwm: 0.5, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.5, delay: 0.6 },
+    dco: { range: 0.5, saw: true, pulse: true, sub: false, subAmount: 0.3, noise: 0, pwm: 0.5, pwmMod: "m", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.3, resonance: 0.5, modPositive: true, envMod: 0.45, lfoMod: 0, keyMod: 0.5},
-    env: {attack: 0, decay: 0.3, sustain: 0.35, release: 0.25},
+    vcf: { type: "moog", frequency: 0.3, resonance: 0.5, modPositive: true, envMod: 0.45, lfoMod: 0, keyMod: 0.5 },
+    env: { attack: 0, decay: 0.3, sustain: 0.35, release: 0.25 },
     chorus: 1
   },
   {
     name: "Clavichord 1",
     vca: 0.7,
     vcaType: "env",
-    lfo: {autoTrigger: false, frequency: 0.6, delay: 0.25},
-    dco: {range: 0.5, saw: false, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0.8, pwmMod: "m", lfo: 0.4},
+    lfo: { autoTrigger: false, frequency: 0.6, delay: 0.25 },
+    dco: { range: 0.5, saw: false, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0.8, pwmMod: "m", lfo: 0.4 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0, resonance: 0.3, modPositive: true, envMod: 0.8, lfoMod: 0, keyMod: 0.6},
-    env: {attack: 0, decay: 0.5, sustain: 0.35, release: 0.15},
+    vcf: { type: "moog", frequency: 0, resonance: 0.3, modPositive: true, envMod: 0.8, lfoMod: 0, keyMod: 0.6 },
+    env: { attack: 0, decay: 0.5, sustain: 0.35, release: 0.15 },
     chorus: 1
   },
   {
     name: "Clavichord 2",
     vca: 1,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.1, delay: 0},
-    dco: {range: 0.5, saw: false, pulse: true, sub: false, subAmount: 1, noise: 0, pwm: 0.8, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.1, delay: 0 },
+    dco: { range: 0.5, saw: false, pulse: true, sub: false, subAmount: 1, noise: 0, pwm: 0.8, pwmMod: "m", lfo: 0 },
     hpf: 0.35,
-    vcf: {type: "moog", frequency: 0.55, resonance: 0.7, modPositive: true, envMod: 0.2, lfoMod: 0.25, keyMod: 0.7},
-    env: {attack: 0, decay: 0.45, sustain: 0.2, release: 0.2},
+    vcf: { type: "moog", frequency: 0.55, resonance: 0.7, modPositive: true, envMod: 0.2, lfoMod: 0.25, keyMod: 0.7 },
+    env: { attack: 0, decay: 0.45, sustain: 0.2, release: 0.2 },
     chorus: 0
   },
   {
     name: "Pizzicato Sound 1",
     vca: 0.8,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.5, delay: 0.6},
-    dco: {range: 1, saw: false, pulse: true, sub: false, subAmount: 0.3, noise: 0, pwm: 0.35, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.5, delay: 0.6 },
+    dco: { range: 1, saw: false, pulse: true, sub: false, subAmount: 0.3, noise: 0, pwm: 0.35, pwmMod: "m", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.45, resonance: 0.3, modPositive: true, envMod: 0.3, lfoMod: 0.3, keyMod: 1},
-    env: {attack: 0, decay: 0.2, sustain: 0.35, release: 0.55},
+    vcf: { type: "moog", frequency: 0.45, resonance: 0.3, modPositive: true, envMod: 0.3, lfoMod: 0.3, keyMod: 1 },
+    env: { attack: 0, decay: 0.2, sustain: 0.35, release: 0.55 },
     chorus: 1
   },
   {
     name: "Pizzicato Sound 2",
     vca: 0.6,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.5, delay: 0.6},
-    dco: {range: 2, saw: false, pulse: true, sub: true, subAmount: 0.3, noise: 0, pwm: 0.2, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.5, delay: 0.6 },
+    dco: { range: 2, saw: false, pulse: true, sub: true, subAmount: 0.3, noise: 0, pwm: 0.2, pwmMod: "m", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.5, resonance: 0.3, modPositive: true, envMod: 0.3, lfoMod: 0, keyMod: 1},
-    env: {attack: 0, decay: 0.3, sustain: 0.3, release: 0.4},
+    vcf: { type: "moog", frequency: 0.5, resonance: 0.3, modPositive: true, envMod: 0.3, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0, decay: 0.3, sustain: 0.3, release: 0.4 },
     chorus: 2
   },
   {
     name: "Xylophone",
     vca: 1,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.5, delay: 0},
-    dco: {range: 2, saw: false, pulse: false, sub: true, subAmount: 1, noise: 0, pwm: 0.5, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.5, delay: 0 },
+    dco: { range: 2, saw: false, pulse: false, sub: true, subAmount: 1, noise: 0, pwm: 0.5, pwmMod: "m", lfo: 0 },
     hpf: 0.35,
-    vcf: {type: "moog", frequency: 0.4, resonance: 0.5, modPositive: true, envMod: 0.3, lfoMod: 0, keyMod: 0.6},
-    env: {attack: 0, decay: 0.35, sustain: 0, release: 0.35},
+    vcf: { type: "moog", frequency: 0.4, resonance: 0.5, modPositive: true, envMod: 0.3, lfoMod: 0, keyMod: 0.6 },
+    env: { attack: 0, decay: 0.35, sustain: 0, release: 0.35 },
     chorus: 0
   },
   {
     name: "Glockenspiel",
     vca: 0.9,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.5, delay: 0},
-    dco: {range: 2, saw: false, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.5, delay: 0 },
+    dco: { range: 2, saw: false, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0 },
     hpf: 0.35,
-    vcf: {type: "moog", frequency: 0.45, resonance: 0.5, modPositive: true, envMod: 0.3, lfoMod: 0, keyMod: 0.6},
-    env: {attack: 0, decay: 0.3, sustain: 0.25, release: 0.5},
+    vcf: { type: "moog", frequency: 0.45, resonance: 0.5, modPositive: true, envMod: 0.3, lfoMod: 0, keyMod: 0.6 },
+    env: { attack: 0, decay: 0.3, sustain: 0.25, release: 0.5 },
     chorus: 0
   },
   {
     name: "Violine",
     vca: 0.7,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.6, delay: 0.6},
-    dco: {range: 1, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "l", lfo: 0.2},
+    lfo: { autoTrigger: true, frequency: 0.6, delay: 0.6 },
+    dco: { range: 1, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "l", lfo: 0.2 },
     hpf: 0.35,
-    vcf: {type: "moog", frequency: 0.65, resonance: 0, modPositive: true, envMod: 0, lfoMod: 0, keyMod: 1},
-    env: {attack: 0.4, decay: 0, sustain: 1, release: 0.4},
+    vcf: { type: "moog", frequency: 0.65, resonance: 0, modPositive: true, envMod: 0, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0.4, decay: 0, sustain: 1, release: 0.4 },
     chorus: 0
   },
   {
     name: "Trumpet",
     vca: 0.7,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.25, delay: 0.65},
-    dco: {range: 1, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0.15},
+    lfo: { autoTrigger: true, frequency: 0.25, delay: 0.65 },
+    dco: { range: 1, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0.15 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0, resonance: 0, modPositive: true, envMod: 0.85, lfoMod: 0, keyMod: 0.4},
-    env: {attack: 0.25, decay: 0.4, sustain: 0.6, release: 0.2},
+    vcf: { type: "moog", frequency: 0, resonance: 0, modPositive: true, envMod: 0.85, lfoMod: 0, keyMod: 0.4 },
+    env: { attack: 0.25, decay: 0.4, sustain: 0.6, release: 0.2 },
     chorus: 0
   },
   {
     name: "Horn",
     vca: 0.7,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.25, delay: 0.7},
-    dco: {range: 1, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.25, delay: 0.7 },
+    dco: { range: 1, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.2, resonance: 0, modPositive: true, envMod: 0.55, lfoMod: 0.2, keyMod: 0.4},
-    env: {attack: 0.4, decay: 0.5, sustain: 0.6, release: 0.3},
+    vcf: { type: "moog", frequency: 0.2, resonance: 0, modPositive: true, envMod: 0.55, lfoMod: 0.2, keyMod: 0.4 },
+    env: { attack: 0.4, decay: 0.5, sustain: 0.6, release: 0.3 },
     chorus: 0
   },
   {
     name: "Tuba",
     vca: 1,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.25, delay: 0.7},
-    dco: {range: 0.5, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0.15},
+    lfo: { autoTrigger: true, frequency: 0.25, delay: 0.7 },
+    dco: { range: 0.5, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0.15 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.15, resonance: 0, modPositive: true, envMod: 0.6, lfoMod: 0, keyMod: 0.4},
-    env: {attack: 0.3, decay: 0.4, sustain: 0.4, release: 0.3},
+    vcf: { type: "moog", frequency: 0.15, resonance: 0, modPositive: true, envMod: 0.6, lfoMod: 0, keyMod: 0.4 },
+    env: { attack: 0.3, decay: 0.4, sustain: 0.4, release: 0.3 },
     chorus: 0
   },
   {
     name: "Flute",
     vca: 1,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.55, delay: 0.5},
-    dco: {range: 2, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0.15, pwm: 0, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.55, delay: 0.5 },
+    dco: { range: 2, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0.15, pwm: 0, pwmMod: "m", lfo: 0 },
     hpf: 0.35,
-    vcf: {type: "moog", frequency: 0.5, resonance: 0, modPositive: true, envMod: 0, lfoMod: 0.2, keyMod: 0.6},
-    env: {attack: 0.2, decay: 0.6, sustain: 0.5, release: 0.25},
+    vcf: { type: "moog", frequency: 0.5, resonance: 0, modPositive: true, envMod: 0, lfoMod: 0.2, keyMod: 0.6 },
+    env: { attack: 0.2, decay: 0.6, sustain: 0.5, release: 0.25 },
     chorus: 0
   },
   {
     name: "Clarinet",
     vca: 0.6,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.5, delay: 0.65},
-    dco: {range: 1, saw: false, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0.15},
+    lfo: { autoTrigger: true, frequency: 0.5, delay: 0.65 },
+    dco: { range: 1, saw: false, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0.15 },
     hpf: 0.35,
-    vcf: {type: "moog", frequency: 0.5, resonance: 0.3, modPositive: true, envMod: 0.25, lfoMod: 0, keyMod: 0.6},
-    env: {attack: 0.25, decay: 0.6, sustain: 0.6, release: 0.25},
+    vcf: { type: "moog", frequency: 0.5, resonance: 0.3, modPositive: true, envMod: 0.25, lfoMod: 0, keyMod: 0.6 },
+    env: { attack: 0.25, decay: 0.6, sustain: 0.6, release: 0.25 },
     chorus: 0
   },
   {
     name: "Oboe",
     vca: 1,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.55, delay: 0.65},
-    dco: {range: 1, saw: false, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0.65, pwmMod: "m", lfo: 0.15},
+    lfo: { autoTrigger: true, frequency: 0.55, delay: 0.65 },
+    dco: { range: 1, saw: false, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0.65, pwmMod: "m", lfo: 0.15 },
     hpf: 1,
-    vcf: {type: "moog", frequency: 0.45, resonance: 0.5, modPositive: true, envMod: 0.25, lfoMod: 0, keyMod: 0.5},
-    env: {attack: 0.2, decay: 0.6, sustain: 0.6, release: 0.25},
+    vcf: { type: "moog", frequency: 0.45, resonance: 0.5, modPositive: true, envMod: 0.25, lfoMod: 0, keyMod: 0.5 },
+    env: { attack: 0.2, decay: 0.6, sustain: 0.6, release: 0.25 },
     chorus: 0
   },
   {
     name: "English Horn",
     vca: 1,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.5, delay: 0.7},
-    dco: {range: 0.5, saw: false, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0.65, pwmMod: "m", lfo: 0.2},
+    lfo: { autoTrigger: true, frequency: 0.5, delay: 0.7 },
+    dco: { range: 0.5, saw: false, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0.65, pwmMod: "m", lfo: 0.2 },
     hpf: 1,
-    vcf: {type: "moog", frequency: 0.5, resonance: 0.7, modPositive: true, envMod: 0, lfoMod: 0.15, keyMod: 0.5},
-    env: {attack: 0.2, decay: 0.6, sustain: 0.6, release: 0.25},
+    vcf: { type: "moog", frequency: 0.5, resonance: 0.7, modPositive: true, envMod: 0, lfoMod: 0.15, keyMod: 0.5 },
+    env: { attack: 0.2, decay: 0.6, sustain: 0.6, release: 0.25 },
     chorus: 0
   },
   {
     name: "Funny Cat",
     vca: 0.8,
     vcaType: "env",
-    lfo: {autoTrigger: false, frequency: 0.6, delay: 0.2},
-    dco: {range: 1, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0.3},
+    lfo: { autoTrigger: false, frequency: 0.6, delay: 0.2 },
+    dco: { range: 1, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0.3 },
     hpf: 0.35,
-    vcf: {type: "moog", frequency: 0.15, resonance: 0.75, modPositive: true, envMod: 0.5, lfoMod: 0.2, keyMod: 0.5},
-    env: {attack: 0.25, decay: 0.4, sustain: 1, release: 0.1},
+    vcf: { type: "moog", frequency: 0.15, resonance: 0.75, modPositive: true, envMod: 0.5, lfoMod: 0.2, keyMod: 0.5 },
+    env: { attack: 0.25, decay: 0.4, sustain: 1, release: 0.1 },
     chorus: 0
   },
   {
     name: "Wah Brass",
     vca: 0.7,
     vcaType: "gate",
-    lfo: {autoTrigger: false, frequency: 0.6, delay: 0.2},
-    dco: {range: 1, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0.3},
+    lfo: { autoTrigger: false, frequency: 0.6, delay: 0.2 },
+    dco: { range: 1, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0.3 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.3, resonance: 0.7, modPositive: true, envMod: 0.45, lfoMod: 0, keyMod: 0.6},
-    env: {attack: 0.3, decay: 0.3, sustain: 0.4, release: 0.2},
+    vcf: { type: "moog", frequency: 0.3, resonance: 0.7, modPositive: true, envMod: 0.45, lfoMod: 0, keyMod: 0.6 },
+    env: { attack: 0.3, decay: 0.3, sustain: 0.4, release: 0.2 },
     chorus: 0
   },
   {
     name: "Phase Combination",
     vca: 0.3,
     vcaType: "env",
-    lfo: {autoTrigger: false, frequency: 0.6, delay: 0.2},
-    dco: {range: 1, saw: true, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0.8, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: false, frequency: 0.6, delay: 0.2 },
+    dco: { range: 1, saw: true, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0.8, pwmMod: "m", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.6, resonance: 0.2, modPositive: true, envMod: 0.3, lfoMod: 0, keyMod: 0.2},
-    env: {attack: 0, decay: 0.7, sustain: 0.2, release: 0.2},
+    vcf: { type: "moog", frequency: 0.6, resonance: 0.2, modPositive: true, envMod: 0.3, lfoMod: 0, keyMod: 0.2 },
+    env: { attack: 0, decay: 0.7, sustain: 0.2, release: 0.2 },
     chorus: 1
   },
   {
     name: "Reed 1",
     vca: 0.6,
     vcaType: "gate",
-    lfo: {autoTrigger: false, frequency: 0.6, delay: 0.2},
-    dco: {range: 1, saw: false, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0.4},
+    lfo: { autoTrigger: false, frequency: 0.6, delay: 0.2 },
+    dco: { range: 1, saw: false, pulse: true, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "m", lfo: 0.4 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.1, resonance: 0.6, modPositive: true, envMod: 0.7, lfoMod: 0, keyMod: 0.5},
-    env: {attack: 0, decay: 0.85, sustain: 0.5, release: 0.1},
+    vcf: { type: "moog", frequency: 0.1, resonance: 0.6, modPositive: true, envMod: 0.7, lfoMod: 0, keyMod: 0.5 },
+    env: { attack: 0, decay: 0.85, sustain: 0.5, release: 0.1 },
     chorus: 1
   },
   {
     name: "Popcorn",
     vca: 0.8,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0, delay: 0},
-    dco: {range: 2, saw: false, pulse: false, sub: true, subAmount: 1, noise: 0, pwm: 0, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0, delay: 0 },
+    dco: { range: 2, saw: false, pulse: false, sub: true, subAmount: 1, noise: 0, pwm: 0, pwmMod: "m", lfo: 0 },
     hpf: 0.35,
-    vcf: {type: "moog", frequency: 0.25, resonance: 0.2, modPositive: true, envMod: 0.55, lfoMod: 0, keyMod: 1},
-    env: {attack: 0, decay: 0.3, sustain: 0.2, release: 0},
+    vcf: { type: "moog", frequency: 0.25, resonance: 0.2, modPositive: true, envMod: 0.55, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0, decay: 0.3, sustain: 0.2, release: 0 },
     chorus: 0
   },
   {
     name: "Reed 2",
     vca: 0.5,
     vcaType: "env",
-    lfo: {autoTrigger: false, frequency: 0.3, delay: 0.8},
-    dco: {range: 2, saw: false, pulse: false, sub: true, subAmount: 1, noise: 0, pwm: 0, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: false, frequency: 0.3, delay: 0.8 },
+    dco: { range: 2, saw: false, pulse: false, sub: true, subAmount: 1, noise: 0, pwm: 0, pwmMod: "m", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.2, resonance: 0, modPositive: true, envMod: 0.6, lfoMod: 0, keyMod: 0.8},
-    env: {attack: 0, decay: 0.55, sustain: 0.3, release: 0.6},
+    vcf: { type: "moog", frequency: 0.2, resonance: 0, modPositive: true, envMod: 0.6, lfoMod: 0, keyMod: 0.8 },
+    env: { attack: 0, decay: 0.55, sustain: 0.3, release: 0.6 },
     chorus: 1
   },
   {
     name: "Reed 3",
     vca: 0.6,
     vcaType: "env",
-    lfo: {autoTrigger: false, frequency: 0.6, delay: 0.2},
-    dco: {range: 2, saw: false, pulse: false, sub: true, subAmount: 1, noise: 0, pwm: 0.5, pwmMod: "m", lfo: 0.2},
+    lfo: { autoTrigger: false, frequency: 0.6, delay: 0.2 },
+    dco: { range: 2, saw: false, pulse: false, sub: true, subAmount: 1, noise: 0, pwm: 0.5, pwmMod: "m", lfo: 0.2 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.3, resonance: 0.2, modPositive: true, envMod: 0.3, lfoMod: 0, keyMod: 1},
-    env: {attack: 0.25, decay: 0, sustain: 1, release: 0.2},
+    vcf: { type: "moog", frequency: 0.3, resonance: 0.2, modPositive: true, envMod: 0.3, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0.25, decay: 0, sustain: 1, release: 0.2 },
     chorus: 0
   },
   {
     name: "PWM Chorus",
     vca: 0.2,
     vcaType: "env",
-    lfo: {autoTrigger: false, frequency: 0.3, delay: 0},
-    dco: {range: 1, saw: false, pulse: true, sub: true, subAmount: 1, noise: 0, pwm: 0.5, pwmMod: "l", lfo: 0},
+    lfo: { autoTrigger: false, frequency: 0.3, delay: 0 },
+    dco: { range: 1, saw: false, pulse: true, sub: true, subAmount: 1, noise: 0, pwm: 0.5, pwmMod: "l", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.8, resonance: 0, modPositive: true, envMod: 0, lfoMod: 0, keyMod: 1},
-    env: {attack: 0.3, decay: 0, sustain: 1, release: 0.4},
+    vcf: { type: "moog", frequency: 0.8, resonance: 0, modPositive: true, envMod: 0, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0.3, decay: 0, sustain: 1, release: 0.4 },
     chorus: 2
   },
   {
     name: "Synthesizer Organ",
     vca: 0.5,
     vcaType: "gate",
-    lfo: {autoTrigger: true, frequency: 0.45, delay: 0.6},
-    dco: {range: 1, saw: false, pulse: true, sub: true, subAmount: 0.75, noise: 0, pwm: 0.65, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.45, delay: 0.6 },
+    dco: { range: 1, saw: false, pulse: true, sub: true, subAmount: 0.75, noise: 0, pwm: 0.65, pwmMod: "m", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.25, resonance: 0, modPositive: true, envMod: 0.5, lfoMod: 0.2, keyMod: 0.7},
-    env: {attack: 0, decay: 0.2, sustain: 0.5, release: 0.25},
+    vcf: { type: "moog", frequency: 0.25, resonance: 0, modPositive: true, envMod: 0.5, lfoMod: 0.2, keyMod: 0.7 },
+    env: { attack: 0, decay: 0.2, sustain: 0.5, release: 0.25 },
     chorus: 2
   },
   {
     name: "Effect Sound 1",
     vca: 0.7,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.45, delay: 0.6},
-    dco: {range: 2, saw: true, pulse: true, sub: true, subAmount: 0.7, noise: 0, pwm: 1, pwmMod: "m", lfo: 0.15},
+    lfo: { autoTrigger: true, frequency: 0.45, delay: 0.6 },
+    dco: { range: 2, saw: true, pulse: true, sub: true, subAmount: 0.7, noise: 0, pwm: 1, pwmMod: "m", lfo: 0.15 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.65, resonance: 0, modPositive: false, envMod: 0.45, lfoMod: 0, keyMod: 0.7},
-    env: {attack: 0, decay: 0.5, sustain: 0, release: 0.55},
+    vcf: { type: "moog", frequency: 0.65, resonance: 0, modPositive: false, envMod: 0.45, lfoMod: 0, keyMod: 0.7 },
+    env: { attack: 0, decay: 0.5, sustain: 0, release: 0.55 },
     chorus: 1
   },
   {
     name: "Effect Sound 2",
     vca: 0.4,
     vcaType: "gate",
-    lfo: {autoTrigger: true, frequency: 0.55, delay: 0.9},
-    dco: {range: 1, saw: true, pulse: false, sub: true, subAmount: 0.65, noise: 0, pwm: 0.3, pwmMod: "l", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.55, delay: 0.9 },
+    dco: { range: 1, saw: true, pulse: false, sub: true, subAmount: 0.65, noise: 0, pwm: 0.3, pwmMod: "l", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.65, resonance: 0.3, modPositive: false, envMod: 0.4, lfoMod: 0, keyMod: 0.1},
-    env: {attack: 0.65, decay: 0.55, sustain: 0.2, release: 0.65},
+    vcf: { type: "moog", frequency: 0.65, resonance: 0.3, modPositive: false, envMod: 0.4, lfoMod: 0, keyMod: 0.1 },
+    env: { attack: 0.65, decay: 0.55, sustain: 0.2, release: 0.65 },
     chorus: 1
   },
   {
     name: "Space Harp",
     vca: 0.6,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.55, delay: 0},
-    dco: {range: 1, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "e", lfo: 0.2},
+    lfo: { autoTrigger: true, frequency: 0.55, delay: 0 },
+    dco: { range: 1, saw: true, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "e", lfo: 0.2 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.65, resonance: 0.5, modPositive: true, envMod: 0.55, lfoMod: 0, keyMod: 1},
-    env: {attack: 0, decay: 0.8, sustain: 0.8, release: 0.9},
+    vcf: { type: "moog", frequency: 0.65, resonance: 0.5, modPositive: true, envMod: 0.55, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0, decay: 0.8, sustain: 0.8, release: 0.9 },
     chorus: 1
   },
   {
     name: "Funk",
     vca: 0.2,
     vcaType: "gate",
-    lfo: {autoTrigger: true, frequency: 0.3, delay: 0.25},
-    dco: {range: 1, saw: true, pulse: true, sub: true, subAmount: 1, noise: 0, pwm: 0.6, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.3, delay: 0.25 },
+    dco: { range: 1, saw: true, pulse: true, sub: true, subAmount: 1, noise: 0, pwm: 0.6, pwmMod: "m", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.75, resonance: 0.6, modPositive: false, envMod: 0.5, lfoMod: 0, keyMod: 0.45},
-    env: {attack: 0.6, decay: 0.5, sustain: 0, release: 0},
+    vcf: { type: "moog", frequency: 0.75, resonance: 0.6, modPositive: false, envMod: 0.5, lfoMod: 0, keyMod: 0.45 },
+    env: { attack: 0.6, decay: 0.5, sustain: 0, release: 0 },
     chorus: 1
   },
   {
     name: "Space Sound 1",
     vca: 0.3,
     vcaType: "gate",
-    lfo: {autoTrigger: true, frequency: 0.6, delay: 0.7},
-    dco: {range: 1, saw: false, pulse: true, sub: true, subAmount: 1, noise: 0, pwm: 0.45, pwmMod: "m", lfo: 0.2},
+    lfo: { autoTrigger: true, frequency: 0.6, delay: 0.7 },
+    dco: { range: 1, saw: false, pulse: true, sub: true, subAmount: 1, noise: 0, pwm: 0.45, pwmMod: "m", lfo: 0.2 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.65, resonance: 0.7, modPositive: false, envMod: 0.55, lfoMod: 0, keyMod: 1},
-    env: {attack: 0, decay: 0.8, sustain: 0, release: 0.3},
+    vcf: { type: "moog", frequency: 0.65, resonance: 0.7, modPositive: false, envMod: 0.55, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0, decay: 0.8, sustain: 0, release: 0.3 },
     chorus: 1
   },
   {
     name: "Mysterious Invention",
     vca: 0.5,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.6, delay: 0.8},
-    dco: {range: 1, saw: true, pulse: true, sub: false, subAmount: 1, noise: 0, pwm: 0.8, pwmMod: "e", lfo: 0.2},
+    lfo: { autoTrigger: true, frequency: 0.6, delay: 0.8 },
+    dco: { range: 1, saw: true, pulse: true, sub: false, subAmount: 1, noise: 0, pwm: 0.8, pwmMod: "e", lfo: 0.2 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.8, resonance: 0.7, modPositive: false, envMod: 0.6, lfoMod: 0.25, keyMod: 0},
-    env: {attack: 0, decay: 1, sustain: 0, release: 1},
+    vcf: { type: "moog", frequency: 0.8, resonance: 0.7, modPositive: false, envMod: 0.6, lfoMod: 0.25, keyMod: 0 },
+    env: { attack: 0, decay: 1, sustain: 0, release: 1 },
     chorus: 0
   },
   {
     name: "Space Sound 2",
     vca: 0.2,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.3, delay: 0.3},
-    dco: {range: 1, saw: true, pulse: true, sub: false, subAmount: 0.8, noise: 0, pwm: 0.6, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.3, delay: 0.3 },
+    dco: { range: 1, saw: true, pulse: true, sub: false, subAmount: 0.8, noise: 0, pwm: 0.6, pwmMod: "m", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.2, resonance: 0.85, modPositive: true, envMod: 0.6, lfoMod: 0, keyMod: 1},
-    env: {attack: 1, decay: 1, sustain: 1, release: 1},
+    vcf: { type: "moog", frequency: 0.2, resonance: 0.85, modPositive: true, envMod: 0.6, lfoMod: 0, keyMod: 1 },
+    env: { attack: 1, decay: 1, sustain: 1, release: 1 },
     chorus: 1
   },
   {
     name: "Percussive Sound 1",
     vca: 1,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0, delay: 0},
-    dco: {range: 2, saw: false, pulse: false, sub: false, subAmount: 0, noise: 1, pwm: 0, pwmMod: "e", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0, delay: 0 },
+    dco: { range: 2, saw: false, pulse: false, sub: false, subAmount: 0, noise: 1, pwm: 0, pwmMod: "e", lfo: 0 },
     hpf: 0.35,
-    vcf: {type: "moog", frequency: 0.4, resonance: 1, modPositive: true, envMod: 0.15, lfoMod: 0, keyMod: 1},
-    env: {attack: 0, decay: 0.3, sustain: 0, release: 0.4},
+    vcf: { type: "moog", frequency: 0.4, resonance: 1, modPositive: true, envMod: 0.15, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0, decay: 0.3, sustain: 0, release: 0.4 },
     chorus: 0
   },
   {
     name: "Percussive Sound 2",
     vca: 1,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0, delay: 0},
-    dco: {range: 1, saw: false, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "e", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0, delay: 0 },
+    dco: { range: 1, saw: false, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "e", lfo: 0 },
     hpf: 0.35,
-    vcf: {type: "moog", frequency: 0.5, resonance: 1, modPositive: false, envMod: 0.35, lfoMod: 0, keyMod: 1},
-    env: {attack: 0, decay: 0.3, sustain: 0, release: 0.4},
+    vcf: { type: "moog", frequency: 0.5, resonance: 1, modPositive: false, envMod: 0.35, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0, decay: 0.3, sustain: 0, release: 0.4 },
     chorus: 0
   },
   {
     name: "Whistle",
     vca: 0.8,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.55, delay: 0.5},
-    dco: {range: 2, saw: false, pulse: false, sub: false, subAmount: 0, noise: 0.2, pwm: 0, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.55, delay: 0.5 },
+    dco: { range: 2, saw: false, pulse: false, sub: false, subAmount: 0, noise: 0.2, pwm: 0, pwmMod: "m", lfo: 0 },
     hpf: 0.35,
-    vcf: {type: "moog", frequency: 0.35, resonance: 1, modPositive: true, envMod: 0.15, lfoMod: 0.2, keyMod: 1},
-    env: {attack: 0.3, decay: 0, sustain: 1, release: 0.1},
+    vcf: { type: "moog", frequency: 0.35, resonance: 1, modPositive: true, envMod: 0.15, lfoMod: 0.2, keyMod: 1 },
+    env: { attack: 0.3, decay: 0, sustain: 1, release: 0.1 },
     chorus: 0
   },
   {
     name: "Effect Sound 3",
     vca: 1,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.55, delay: 0.4},
-    dco: {range: 1, saw: false, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "e", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.55, delay: 0.4 },
+    dco: { range: 1, saw: false, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "e", lfo: 0 },
     hpf: 0.35,
-    vcf: {type: "moog", frequency: 0.35, resonance: 1, modPositive: true, envMod: 0, lfoMod: 0.2, keyMod: 1},
-    env: {attack: 0, decay: 0.4, sustain: 0.55, release: 0.7},
+    vcf: { type: "moog", frequency: 0.35, resonance: 1, modPositive: true, envMod: 0, lfoMod: 0.2, keyMod: 1 },
+    env: { attack: 0, decay: 0.4, sustain: 0.55, release: 0.7 },
     chorus: 0
   },
   {
     name: "UFO",
     vca: 0.4,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.6, delay: 0},
-    dco: {range: 2, saw: false, pulse: false, sub: false, subAmount: 0, noise: 0.2, pwm: 0, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.6, delay: 0 },
+    dco: { range: 2, saw: false, pulse: false, sub: false, subAmount: 0, noise: 0.2, pwm: 0, pwmMod: "m", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0, resonance: 1, modPositive: true, envMod: 0.7, lfoMod: 0.4, keyMod: 1},
-    env: {attack: 0, decay: 0.6, sustain: 1, release: 0.8},
+    vcf: { type: "moog", frequency: 0, resonance: 1, modPositive: true, envMod: 0.7, lfoMod: 0.4, keyMod: 1 },
+    env: { attack: 0, decay: 0.6, sustain: 1, release: 0.8 },
     chorus: 1
   },
   {
     name: "Space Sound 3",
     vca: 0.5,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0.6, delay: 0},
-    dco: {range: 2, saw: false, pulse: false, sub: false, subAmount: 0, noise: 0.2, pwm: 0, pwmMod: "m", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0.6, delay: 0 },
+    dco: { range: 2, saw: false, pulse: false, sub: false, subAmount: 0, noise: 0.2, pwm: 0, pwmMod: "m", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.5, resonance: 1, modPositive: false, envMod: 0.4, lfoMod: 0, keyMod: 1},
-    env: {attack: 0, decay: 1, sustain: 0, release: 0.8},
+    vcf: { type: "moog", frequency: 0.5, resonance: 1, modPositive: false, envMod: 0.4, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0, decay: 1, sustain: 0, release: 0.8 },
     chorus: 1
   },
   {
     name: "Surf",
     vca: 0.9,
     vcaType: "env",
-    lfo: {autoTrigger: true, frequency: 0, delay: 0},
-    dco: {range: 1, saw: false, pulse: false, sub: false, subAmount: 1, noise: 1, pwm: 0, pwmMod: "e", lfo: 0},
+    lfo: { autoTrigger: true, frequency: 0, delay: 0 },
+    dco: { range: 1, saw: false, pulse: false, sub: false, subAmount: 1, noise: 1, pwm: 0, pwmMod: "e", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.6, resonance: 0, modPositive: true, envMod: 0, lfoMod: 0.6, keyMod: 1},
-    env: {attack: 0, decay: 0.4, sustain: 1, release: 0.8},
+    vcf: { type: "moog", frequency: 0.6, resonance: 0, modPositive: true, envMod: 0, lfoMod: 0.6, keyMod: 1 },
+    env: { attack: 0, decay: 0.4, sustain: 1, release: 0.8 },
     chorus: 0
   },
   {
     name: "Synthesizer Drum",
     vca: 0.6,
     vcaType: "env",
-    lfo: {autoTrigger: false, frequency: 0, delay: 0},
-    dco: {range: 1, saw: false, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "e", lfo: 0},
+    lfo: { autoTrigger: false, frequency: 0, delay: 0 },
+    dco: { range: 1, saw: false, pulse: false, sub: false, subAmount: 0, noise: 0, pwm: 0, pwmMod: "e", lfo: 0 },
     hpf: 0,
-    vcf: {type: "moog", frequency: 0.2, resonance: 1, modPositive: true, envMod: 0.4, lfoMod: 0, keyMod: 1},
-    env: {attack: 0, decay: 0.5, sustain: 0, release: 0.6},
+    vcf: { type: "moog", frequency: 0.2, resonance: 1, modPositive: true, envMod: 0.4, lfoMod: 0, keyMod: 1 },
+    env: { attack: 0, decay: 0.5, sustain: 0, release: 0.6 },
     chorus: 0
   }
 ];
 
 // dist/synth.worklet.txt
-var synth_worklet_default = "data:text/plain;charset=utf-8;base64,Ly8gc3JjL2p1bm94L3Ntb290aE1vdmVzLmpzCmNsYXNzIFNtb290aE1vdmVzIHsKICBjb25zdHJ1Y3Rvcih2YWx1ZSwgc2FtcGxlUmF0ZTIsIGZjID0gNSkgewogICAgdGhpcy5iMSA9IC1NYXRoLmV4cCgtMiAqIGZjICogTWF0aC5QSSAvIHNhbXBsZVJhdGUyKTsKICAgIHRoaXMuYTAgPSAxICsgdGhpcy5iMTsKICAgIHRoaXMudGFyZ2V0VmFsdWUgPSB2YWx1ZTsKICAgIHRoaXMuaXNTdGFydGVkID0gZmFsc2U7CiAgICB0aGlzLnoxID0gMDsKICAgIHRoaXMucmVzZXQoKTsKICB9CiAgc2V0VmFsdWUodmFsdWUsIHVzZVNtb290aGluZykgewogICAgdGhpcy50YXJnZXRWYWx1ZSA9IHZhbHVlOwogICAgaWYgKCF0aGlzLmlzU3RhcnRlZCB8fCAhdXNlU21vb3RoaW5nKSB7CiAgICAgIHRoaXMucmVzZXQoKTsKICAgICAgcmV0dXJuOwogICAgfQogIH0KICByZXNldCgpIHsKICAgIHRoaXMuejEgPSB0aGlzLnRhcmdldFZhbHVlICogdGhpcy5hMCAtIHRoaXMudGFyZ2V0VmFsdWU7CiAgICB0aGlzLmlzU3RhcnRlZCA9IGZhbHNlOwogIH0KICBnZXROZXh0VmFsdWUoKSB7CiAgICB0aGlzLmlzU3RhcnRlZCA9IHRydWU7CiAgICBjb25zdCB4b3V0ID0gdGhpcy50YXJnZXRWYWx1ZSAqIHRoaXMuYTAgLSB0aGlzLnoxOwogICAgdGhpcy56MSA9IHRoaXMuYjEgKiB4b3V0OwogICAgcmV0dXJuIHhvdXQ7CiAgfQp9CgovLyBzcmMvanVub3gvZGNvLmpzCmNsYXNzIEp1bm82MERDTyB7CiAgY29uc3RydWN0b3Ioc2FtcGxlUmF0ZTIpIHsKICAgIHRoaXMuc2FtcGxlUmF0ZSA9IHNhbXBsZVJhdGUyOwogICAgdGhpcy5jdXJyZW50UGhhc2UgPSAwOwogICAgdGhpcy5waGFzZUluY3JlbWVudCA9IDA7CiAgICB0aGlzLnB1bHNlV2lkdGggPSAwLjU7CiAgICB0aGlzLnB1bHNlUG9zaXRpdmUgPSAxOwogICAgdGhpcy5wdWxzZU5lZ2F0aXZlID0gLTE7CiAgICB0aGlzLnB1bHNlSGVpZ2h0ID0gMTsKICAgIHRoaXMuc3ViT3V0cHV0ID0gMTsKICB9CiAgbm90ZU9uKG5vdGVOdW1iZXIpIHsKICAgIGNvbnN0IG5vdGVGcmVxdWVuY3kgPSBNYXRoLnBvdygyLCAobm90ZU51bWJlciAtIDY5KSAvIDEyKSAqIDQ0MjsKICAgIHRoaXMucGhhc2VJbmNyZW1lbnQgPSBub3RlRnJlcXVlbmN5IC8gdGhpcy5zYW1wbGVSYXRlOwogICAgdGhpcy5jdXJyZW50UGhhc2UgPSAxLjE7CiAgfQogIHJlbmRlcihkZXR1bmVGYWN0b3IsIHB1bHNlV2lkdGgsIHNhd0xldmVsLCBwdWxzZUxldmVsLCBzdWJMZXZlbCkgewogICAgY29uc3QgcGhhc2VJbmNyZW1lbnQgPSB0aGlzLnBoYXNlSW5jcmVtZW50ICogZGV0dW5lRmFjdG9yOwogICAgY29uc3Qgb3JpZ1BoYXNlID0gdGhpcy5jdXJyZW50UGhhc2U7CiAgICB0aGlzLmN1cnJlbnRQaGFzZSArPSBwaGFzZUluY3JlbWVudDsKICAgIGlmICh0aGlzLmN1cnJlbnRQaGFzZSA+IDEpIHsKICAgICAgdGhpcy5jdXJyZW50UGhhc2UgLT0gMTsKICAgICAgdGhpcy5wdWxzZVdpZHRoID0gMC41IC0gMC40NSAqIHB1bHNlV2lkdGg7CiAgICAgIHRoaXMucHVsc2VQb3NpdGl2ZSA9IDEgLSBwdWxzZVdpZHRoICogMC45NTsKICAgICAgdGhpcy5wdWxzZU5lZ2F0aXZlID0gLTE7CiAgICAgIHRoaXMucHVsc2VIZWlnaHQgPSAwLjQ1ICogKHRoaXMucHVsc2VQb3NpdGl2ZSAtIHRoaXMucHVsc2VOZWdhdGl2ZSk7CiAgICB9CiAgICBsZXQgbmV3U2F3T3V0cHV0ID0gMDsKICAgIGlmIChzYXdMZXZlbCA+IDApIHsKICAgICAgbmV3U2F3T3V0cHV0ID0gdGhpcy5jdXJyZW50UGhhc2UgKyB0aGlzLmN1cnJlbnRQaGFzZSAtIDE7CiAgICAgIG5ld1Nhd091dHB1dCAtPSB0aGlzLmNhbGNQb2x5QkxFUDIodGhpcy5jdXJyZW50UGhhc2UsIHBoYXNlSW5jcmVtZW50LCAxKTsKICAgIH0KICAgIGxldCBuZXdQdWxzZU91dHB1dCA9IDA7CiAgICBpZiAocHVsc2VMZXZlbCA+IDApIHsKICAgICAgbmV3UHVsc2VPdXRwdXQgPSB0aGlzLmN1cnJlbnRQaGFzZSA+IHRoaXMucHVsc2VXaWR0aCA/IHRoaXMucHVsc2VQb3NpdGl2ZSAqPSAwLjk5OCA6IHRoaXMucHVsc2VOZWdhdGl2ZSAqPSAwLjk5ODsKICAgICAgbmV3UHVsc2VPdXRwdXQgLT0gdGhpcy5jYWxjUG9seUJMRVAyKHRoaXMuY3VycmVudFBoYXNlLCBwaGFzZUluY3JlbWVudCwgdGhpcy5wdWxzZUhlaWdodCk7CiAgICAgIGNvbnN0IHggPSB0aGlzLmN1cnJlbnRQaGFzZSAtIHRoaXMucHVsc2VXaWR0aDsKICAgICAgbmV3UHVsc2VPdXRwdXQgKz0gdGhpcy5jYWxjUG9seUJMRVAyKHggPCAwID8geCArIDEgOiB4LCBwaGFzZUluY3JlbWVudCwgdGhpcy5wdWxzZUhlaWdodCk7CiAgICB9CiAgICBsZXQgbmV3U3ViT3V0cHV0ID0gdGhpcy5zdWJPdXRwdXQgKj0gMC45OTg7CiAgICBsZXQgeSA9IHRoaXMuY3VycmVudFBoYXNlIC0gMC41OwogICAgaWYgKHkgPCBwaGFzZUluY3JlbWVudCAmJiB5ID4gLXBoYXNlSW5jcmVtZW50KSB7CiAgICAgIGlmICh5IDwgMCkgewogICAgICAgIHkgKz0gMTsKICAgICAgfQogICAgICBjb25zdCBvcmlnU3ViT3V0cHV0ID0gbmV3U3ViT3V0cHV0OwogICAgICBpZiAodGhpcy5jdXJyZW50UGhhc2UgPj0gMC41ICYmIG9yaWdQaGFzZSA8IDAuNSkgewogICAgICAgIHRoaXMuc3ViT3V0cHV0ID0gbmV3U3ViT3V0cHV0ID0gbmV3U3ViT3V0cHV0ID4gMCA/IC0xIDogMTsKICAgICAgfQogICAgICBuZXdTdWJPdXRwdXQgLT0gdGhpcy5jYWxjUG9seUJMRVAyKHksIHBoYXNlSW5jcmVtZW50LCBvcmlnU3ViT3V0cHV0KTsKICAgIH0KICAgIHJldHVybiBuZXdTYXdPdXRwdXQgKiBzYXdMZXZlbCArIG5ld1B1bHNlT3V0cHV0ICogcHVsc2VMZXZlbCArIG5ld1N1Yk91dHB1dCAqIHN1YkxldmVsOwogIH0KICBjYWxjUG9seUJMRVAyKHBoYXNlLCBpbmMsIGhlaWdodCkgewogICAgbGV0IHJlc3VsdCA9IDA7CiAgICBpZiAocGhhc2UgPCBpbmMpIHsKICAgICAgY29uc3QgdCA9IHBoYXNlIC8gaW5jOwogICAgICByZXN1bHQgPSBoZWlnaHQgKiAodCArIHQgLSB0ICogdCAtIDEpOwogICAgfSBlbHNlIGlmIChwaGFzZSArIGluYyA+IDEpIHsKICAgICAgY29uc3QgdCA9IChwaGFzZSAtIDEpIC8gaW5jOwogICAgICByZXN1bHQgPSBoZWlnaHQgKiAodCAqIHQgKyAodCArIHQpICsgMSk7CiAgICB9CiAgICByZXR1cm4gcmVzdWx0OwogIH0KfQoKLy8gc3JjL2p1bm94L2Fic3RyYWN0RW52ZWxvcGUuanMKY2xhc3MgQWJzdHJhY3RFbnZlbG9wZSB7CiAgY29uc3RydWN0b3Ioc2VnbWVudHMpIHsKICAgIHRoaXMuX3NlZ21lbnRzID0gc2VnbWVudHM7CiAgICB0aGlzLl9jdXJyZW50UGhhc2UgPSAtMTsKICAgIHRoaXMuX2N1cnJlbnRWYWx1ZSA9IDA7CiAgfQogIGlzRmluaXNoZWQoKSB7CiAgICByZXR1cm4gdGhpcy5fY3VycmVudFBoYXNlID09PSAtMTsKICB9CiAgaXNSZWxlYXNlZCgpIHsKICAgIHJldHVybiB0aGlzLmN1cnJlbnRQaGFzZSAhPT0gMCAmJiB0aGlzLmN1cnJlbnRQaGFzZSAhPT0gMTsKICB9CiAgaXNTaHV0dGluZ0Rvd24oKSB7CiAgICByZXR1cm4gdGhpcy5jdXJyZW50UGhhc2UgPT09IHRoaXMuX3NlZ21lbnRzLmxlbmd0aCAtIDE7CiAgfQogIHRyaWdnZXIoKSB7CiAgICB0aGlzLl9jdXJyZW50UGhhc2UgPSAwOwogICAgZm9yIChsZXQgc2VnbWVudCBvZiB0aGlzLl9zZWdtZW50cykgewogICAgICBzZWdtZW50LnJlc2V0KCk7CiAgICB9CiAgfQogIHJlbGVhc2UoKSB7CiAgICBpZiAodGhpcy5fY3VycmVudFBoYXNlICE9PSAtMSkgewogICAgICB0aGlzLl9jdXJyZW50UGhhc2UgPSB0aGlzLl9zZWdtZW50cy5sZW5ndGggLSAyOwogICAgfQogIH0KICBzaHV0ZG93bigpIHsKICAgIGlmICh0aGlzLl9jdXJyZW50UGhhc2UgIT09IC0xKSB7CiAgICAgIHRoaXMuX2N1cnJlbnRQaGFzZSA9IHRoaXMuX3NlZ21lbnRzLmxlbmd0aCAtIDE7CiAgICB9CiAgfQogIHJlc2V0KCkgewogICAgdGhpcy5fY3VycmVudFBoYXNlID0gLTE7CiAgICB0aGlzLl9jdXJyZW50VmFsdWUgPSAwOwogICAgZm9yIChsZXQgaSA9IDA7IGkgPCB0aGlzLl9zZWdtZW50cy5sZW5ndGg7IGkrKykgewogICAgICB0aGlzLl9zZWdtZW50c1tpXS5yZXNldCgpOwogICAgfQogIH0KICByZW5kZXIoKSB7CiAgICBsZXQgY3VycmVudFBoYXNlID0gdGhpcy5fY3VycmVudFBoYXNlOwogICAgd2hpbGUgKGN1cnJlbnRQaGFzZSA+PSAwICYmIGN1cnJlbnRQaGFzZSA8IHRoaXMuX3NlZ21lbnRzLmxlbmd0aCkgewogICAgICBjb25zdCBzZWdtZW50ID0gdGhpcy5fc2VnbWVudHNbY3VycmVudFBoYXNlXTsKICAgICAgY29uc3QgbmV4dFZhbHVlID0gc2VnbWVudC5wcm9jZXNzKHRoaXMuX2N1cnJlbnRWYWx1ZSk7CiAgICAgIGlmIChzZWdtZW50LmlzQ29tcGxldGUobmV4dFZhbHVlKSkgewogICAgICAgIGN1cnJlbnRQaGFzZSsrOwogICAgICAgIGlmIChjdXJyZW50UGhhc2UgPj0gdGhpcy5fc2VnbWVudHMubGVuZ3RoKSB7CiAgICAgICAgICB0aGlzLl9jdXJyZW50VmFsdWUgPSAwOwogICAgICAgICAgY3VycmVudFBoYXNlID0gLTE7CiAgICAgICAgfQogICAgICAgIHRoaXMuX2N1cnJlbnRQaGFzZSA9IGN1cnJlbnRQaGFzZTsKICAgICAgfSBlbHNlIHsKICAgICAgICB0aGlzLl9jdXJyZW50VmFsdWUgPSBuZXh0VmFsdWU7CiAgICAgICAgYnJlYWs7CiAgICAgIH0KICAgIH0KICAgIHJldHVybiB0aGlzLl9jdXJyZW50VmFsdWU7CiAgfQp9CmNsYXNzIEF0dGFja1NlZ21lbnQgewogIGNvbnN0cnVjdG9yKHNhbXBsZVJhdGUyLCBhdHRhY2tUQ08sIHRhcmdldCwgaXNTdXN0YWluQXRFbmQpIHsKICAgIHRoaXMuX3NhbXBsZVJhdGUgPSBzYW1wbGVSYXRlMjsKICAgIHRoaXMuX2F0dGFja1RDTyA9IGF0dGFja1RDTzsKICAgIHRoaXMuX2F0dGFja0NvZWZmID0gMDsKICAgIHRoaXMuX2F0dGFja09mZnNldCA9IDA7CiAgICB0aGlzLl9pc1N1c3RhaW5BdEVuZCA9IGlzU3VzdGFpbkF0RW5kOwogICAgdGhpcy50YXJnZXQgPSB0YXJnZXQ7CiAgfQogIHNldER1cmF0aW9uKGR1cmF0aW9uKSB7CiAgICBjb25zdCBzYW1wbGVzID0gdGhpcy5fc2FtcGxlUmF0ZSAqIGR1cmF0aW9uOwogICAgdGhpcy5fYXR0YWNrQ29lZmYgPSBNYXRoLmV4cCgtTWF0aC5sb2coKDEgKyB0aGlzLl9hdHRhY2tUQ08pIC8gdGhpcy5fYXR0YWNrVENPKSAvIHNhbXBsZXMpOwogICAgdGhpcy5fYXR0YWNrT2Zmc2V0ID0gKDEgKyB0aGlzLl9hdHRhY2tUQ08pICogKDEgLSB0aGlzLl9hdHRhY2tDb2VmZik7CiAgfQogIHJlc2V0KCkgewogIH0KICBwcm9jZXNzKHByZXZpb3VzVmFsdWUpIHsKICAgIGNvbnN0IHJlc3VsdCA9IHByZXZpb3VzVmFsdWUgKiB0aGlzLl9hdHRhY2tDb2VmZiArIHRoaXMuX2F0dGFja09mZnNldDsKICAgIHJldHVybiByZXN1bHQgPiB0aGlzLnRhcmdldCAmJiB0aGlzLl9pc1N1c3RhaW5BdEVuZCA/IHRoaXMudGFyZ2V0IDogcmVzdWx0OwogIH0KICBpc0NvbXBsZXRlKHZhbHVlKSB7CiAgICByZXR1cm4gdmFsdWUgPiB0aGlzLnRhcmdldDsKICB9Cn0KY2xhc3MgRGVjYXlTZWdtZW50IHsKICBjb25zdHJ1Y3RvcihzYW1wbGVSYXRlMiwgZGVjYXlUQ08sIHRhcmdldCwgaXNTdXN0YWluQXRFbmQpIHsKICAgIHRoaXMuX3NhbXBsZVJhdGUgPSBzYW1wbGVSYXRlMjsKICAgIHRoaXMuX2RlY2F5VENPID0gZGVjYXlUQ087CiAgICB0aGlzLl9kZWNheUNvZWZmID0gMDsKICAgIHRoaXMuX2RlY2F5T2Zmc2V0ID0gMDsKICAgIHRoaXMuX2lzU3VzdGFpbkF0RW5kID0gaXNTdXN0YWluQXRFbmQ7CiAgICB0aGlzLnRhcmdldCA9IHRhcmdldDsKICB9CiAgc2V0RHVyYXRpb24oc2Vjb25kcykgewogICAgY29uc3Qgc2FtcGxlcyA9IHRoaXMuX3NhbXBsZVJhdGUgKiBzZWNvbmRzOwogICAgdGhpcy5fZGVjYXlDb2VmZiA9IE1hdGguZXhwKC1NYXRoLmxvZygoMSArIHRoaXMuX2RlY2F5VENPKSAvIHRoaXMuX2RlY2F5VENPKSAvIHNhbXBsZXMpOwogICAgdGhpcy5fZGVjYXlPZmZzZXQgPSAodGhpcy50YXJnZXQgLSB0aGlzLl9kZWNheVRDTykgKiAoMSAtIHRoaXMuX2RlY2F5Q29lZmYpOwogIH0KICByZXNldCgpIHsKICB9CiAgcHJvY2VzcyhwcmV2aW91c1ZhbHVlKSB7CiAgICBjb25zdCByZXN1bHQgPSBwcmV2aW91c1ZhbHVlICogdGhpcy5fZGVjYXlDb2VmZiArIHRoaXMuX2RlY2F5T2Zmc2V0OwogICAgcmV0dXJuIHJlc3VsdCA8IHRoaXMudGFyZ2V0ICYmIHRoaXMuX2lzU3VzdGFpbkF0RW5kID8gdGhpcy50YXJnZXQgOiByZXN1bHQ7CiAgfQogIGlzQ29tcGxldGUodmFsdWUpIHsKICAgIHJldHVybiB2YWx1ZSA8PSB0aGlzLnRhcmdldCAmJiAhdGhpcy5faXNTdXN0YWluQXRFbmQgfHwgdmFsdWUgPCAwLjAyOwogIH0KfQpjbGFzcyBEZWxheVNlZ21lbnQgewogIGNvbnN0cnVjdG9yKHNhbXBsZVJhdGUyKSB7CiAgICB0aGlzLl9zYW1wbGVSYXRlID0gc2FtcGxlUmF0ZTI7CiAgICB0aGlzLl9kZWxheVNhbXBsZUNvdW50ID0gMDsKICAgIHRoaXMuX2N1cnJlbnRSZW1haW5pbmcgPSAwOwogIH0KICBzZXREdXJhdGlvbihkdXJhdGlvbikgewogICAgY29uc3QgZGVsYXlTYW1wbGVDb3VudCA9IHRoaXMuX3NhbXBsZVJhdGUgKiBkdXJhdGlvbiB8IDA7CiAgICB0aGlzLl9jdXJyZW50UmVtYWluaW5nICs9IGRlbGF5U2FtcGxlQ291bnQgLSB0aGlzLl9kZWxheVNhbXBsZUNvdW50OwogICAgdGhpcy5fZGVsYXlTYW1wbGVDb3VudCA9IGRlbGF5U2FtcGxlQ291bnQ7CiAgfQogIHJlc2V0KCkgewogICAgdGhpcy5fY3VycmVudFJlbWFpbmluZyA9IHRoaXMuX2RlbGF5U2FtcGxlQ291bnQ7CiAgfQogIHByb2Nlc3MocHJldmlvdXNWYWx1ZSkgewogICAgdGhpcy5fY3VycmVudFJlbWFpbmluZy0tOwogICAgcmV0dXJuIHByZXZpb3VzVmFsdWU7CiAgfQogIGlzQ29tcGxldGUoKSB7CiAgICByZXR1cm4gdGhpcy5fY3VycmVudFJlbWFpbmluZyA8PSAwOwogIH0KfQpjbGFzcyBTaHV0ZG93blNlZ21lbnQgewogIGNvbnN0cnVjdG9yKHNhbXBsZVJhdGUyLCBzZWNvbmRzKSB7CiAgICB0aGlzLl9zaHV0ZG93blJhdGUgPSAxIC8gKHNlY29uZHMgKiBzYW1wbGVSYXRlMik7CiAgfQogIHJlc2V0KCkgewogIH0KICBwcm9jZXNzKHByZXZpb3VzVmFsdWUpIHsKICAgIGNvbnN0IHJlc3VsdCA9IHByZXZpb3VzVmFsdWUgLSB0aGlzLl9zaHV0ZG93blJhdGU7CiAgICByZXR1cm4gdGhpcy52YWx1ZSA8IDAgPyAwIDogcmVzdWx0OwogIH0KICBpc0NvbXBsZXRlKHZhbHVlKSB7CiAgICByZXR1cm4gdmFsdWUgPD0gMDsKICB9Cn0KCi8vIHNyYy9qdW5veC91dGlscy5qcwpmdW5jdGlvbiBmYXN0VGFuaCh4KSB7CiAgaWYgKHggPCAtMykgewogICAgcmV0dXJuIC0xOwogIH0gZWxzZSBpZiAoeCA+IDMpIHsKICAgIHJldHVybiAxOwogIH0KICBjb25zdCB4U3F1YXJlZCA9IHggKiB4OwogIHJldHVybiB4ICogKDI3ICsgeFNxdWFyZWQpIC8gKDI3ICsgOSAqIHhTcXVhcmVkKTsKfQpmdW5jdGlvbiBpbnRlcnBvbGF0ZWRMb29rdXAodmFsdWUsIHRhYmxlKSB7CiAgY29uc3QgaW5kZXggPSB2YWx1ZSB8IDA7CiAgY29uc3QgaW5kZXhOZXh0ID0gaW5kZXggKyAxOwogIGNvbnN0IGZhY3RvciA9IHZhbHVlIC0gaW5kZXg7CiAgaWYgKGluZGV4IDwgMCkgewogICAgcmV0dXJuIHRhYmxlWzBdOwogIH0KICBpZiAoaW5kZXhOZXh0ID49IHRhYmxlLmxlbmd0aCkgewogICAgcmV0dXJuIHRhYmxlW3RhYmxlLmxlbmd0aCAtIDFdOwogIH0KICByZXR1cm4gdGFibGVbaW5kZXhdICogKDEgLSBmYWN0b3IpICsgdGFibGVbaW5kZXhOZXh0XSAqIGZhY3RvcjsKfQoKLy8gc3JjL2p1bm94L2p1bm82MEVudmVsb3BlLmpzCmNvbnN0IGN1cnZlRnJvbUF0dGFja1NsaWRlclRvRHVyYXRpb24gPSBbMWUtMywgMC4wMywgMC4yNCwgMC42NSwgMy4yNV07CmNvbnN0IGN1cnZlRnJvbURlY2F5U2xpZGVyVG9EdXJhdGlvbiA9IFsyZS0zLCAwLjA5NiwgMC45ODQsIDQuNDQ5LCAxOS43ODNdOwpjb25zdCBjdXJ2ZUZyb21SZWxlYXNlU2xpZGVyVG9EdXJhdGlvbiA9IFsyZS0zLCAwLjA5NiwgMC45ODQsIDQuNDQ5LCAxOS43ODNdOwpjbGFzcyBKdW5vNjBFbnZlbG9wZSBleHRlbmRzIEFic3RyYWN0RW52ZWxvcGUgewogIGNvbnN0cnVjdG9yKHNhbXBsZVJhdGUyKSB7CiAgICBzdXBlcihbCiAgICAgIG5ldyBBdHRhY2tTZWdtZW50KHNhbXBsZVJhdGUyLCAwLjYzMiwgMSwgZmFsc2UpLAogICAgICBuZXcgRGVjYXlTZWdtZW50KHNhbXBsZVJhdGUyLCAwLjAyNSwgMCwgdHJ1ZSksCiAgICAgIG5ldyBEZWNheVNlZ21lbnQoc2FtcGxlUmF0ZTIsIDAuMDI1LCAwLCBmYWxzZSksCiAgICAgIG5ldyBTaHV0ZG93blNlZ21lbnQoc2FtcGxlUmF0ZTIsIDFlLTMpCiAgICBdKTsKICAgIHRoaXMuX2F0dGFjayA9IHRoaXMuX3NlZ21lbnRzWzBdOwogICAgdGhpcy5fZGVjYXkgPSB0aGlzLl9zZWdtZW50c1sxXTsKICAgIHRoaXMuX3JlbGVhc2UgPSB0aGlzLl9zZWdtZW50c1syXTsKICAgIHRoaXMuX3NodXRkb3duID0gdGhpcy5fc2VnbWVudHNbM107CiAgfQogIHNldFZhbHVlcyhhdHRhY2tEdXJhdGlvbiwgZGVjYXlEdXJhdGlvbiwgc3VzdGFpbkxldmVsLCByZWxlYXNlRHVyYXRpb24pIHsKICAgIHRoaXMuX2F0dGFjay5zZXREdXJhdGlvbihhdHRhY2tEdXJhdGlvbik7CiAgICB0aGlzLl9kZWNheS50YXJnZXQgPSBNYXRoLm1heCgwLjAyLCBzdXN0YWluTGV2ZWwpOwogICAgdGhpcy5fZGVjYXkuc2V0RHVyYXRpb24oZGVjYXlEdXJhdGlvbik7CiAgICB0aGlzLl9yZWxlYXNlLnNldER1cmF0aW9uKHRoaXMuX2RlY2F5LnRhcmdldCA8PSAwLjAyID8gMC4wMSA6IHJlbGVhc2VEdXJhdGlvbik7CiAgfQogIHNldFZhbHVlc0Zyb21TbGlkZXJzKGF0dGFja1NsaWRlciwgZGVjYXlTbGlkZXIsIHN1c3RhaW5TbGlkZXIsIHJlbGVhc2VTbGlkZXIpIHsKICAgIGNvbnN0IGF0dGFja0R1cmF0aW9uID0gaW50ZXJwb2xhdGVkTG9va3VwKGF0dGFja1NsaWRlciAqIGN1cnZlRnJvbUF0dGFja1NsaWRlclRvRHVyYXRpb24ubGVuZ3RoLCBjdXJ2ZUZyb21BdHRhY2tTbGlkZXJUb0R1cmF0aW9uKTsKICAgIGNvbnN0IGRlY2F5RHVyYXRpb24gPSBpbnRlcnBvbGF0ZWRMb29rdXAoZGVjYXlTbGlkZXIgKiBjdXJ2ZUZyb21EZWNheVNsaWRlclRvRHVyYXRpb24ubGVuZ3RoLCBjdXJ2ZUZyb21EZWNheVNsaWRlclRvRHVyYXRpb24pOwogICAgY29uc3QgcmVsZWFzZUR1cmF0aW9uID0gaW50ZXJwb2xhdGVkTG9va3VwKHJlbGVhc2VTbGlkZXIgKiBjdXJ2ZUZyb21SZWxlYXNlU2xpZGVyVG9EdXJhdGlvbi5sZW5ndGgsIGN1cnZlRnJvbVJlbGVhc2VTbGlkZXJUb0R1cmF0aW9uKTsKICAgIHRoaXMuc2V0VmFsdWVzKGF0dGFja0R1cmF0aW9uLCBkZWNheUR1cmF0aW9uLCBzdXN0YWluU2xpZGVyLCByZWxlYXNlRHVyYXRpb24pOwogIH0KfQoKLy8gc3JjL2p1bm94L2xhZGRlckZpbHRlci5qcwpjbGFzcyBMYWRkZXJGaWx0ZXIgewogIGNvbnN0cnVjdG9yKHNhbXBsZVJhdGUyKSB7CiAgICB0aGlzLnJlc2V0KCk7CiAgICB0aGlzLm55cXVpc3RMaW1pdCA9IHNhbXBsZVJhdGUyICogMC41OwogICAgdGhpcy5waU92ZXJTYW1wbGVSYXRlID0gTWF0aC5QSSAvIHNhbXBsZVJhdGUyOwogIH0KICByZXNldCgpIHsKICAgIHRoaXMuejEgPSAwOwogICAgdGhpcy56MiA9IDA7CiAgICB0aGlzLnozID0gMDsKICAgIHRoaXMuejQgPSAwOwogIH0KICBjYWxjQ3V0b2ZmRmFjdG9yKGZjKSB7CiAgICBpZiAoZmMgPiB0aGlzLm55cXVpc3RMaW1pdCkgewogICAgICBmYyA9IHRoaXMubnlxdWlzdExpbWl0OwogICAgfQogICAgcmV0dXJuIE1hdGgudGFuKGZjICogdGhpcy5waU92ZXJTYW1wbGVSYXRlKTsKICB9CiAgdHJpZ2dlcihpbml0aWFsRXhjaXRlKSB7CiAgICB0aGlzLno0ICs9IGluaXRpYWxFeGNpdGU7CiAgfQogIHByb2Nlc3MoaW5wdXQsIGN1dG9mZkZhY3RvciwgcmVzb25hbmNlLCBtb2RlID0gbGFkZGVyRmlsdGVyTW9kZXMuTFBGNCkgewogICAgY29uc3Qgb25lT3Zlck9uZVBsdXNnID0gMSAvICgxICsgY3V0b2ZmRmFjdG9yKTsKICAgIGNvbnN0IGFscGhhID0gY3V0b2ZmRmFjdG9yICogb25lT3Zlck9uZVBsdXNnOwogICAgY29uc3QgYmV0YTQgPSBvbmVPdmVyT25lUGx1c2c7CiAgICBjb25zdCBiZXRhMyA9IGJldGE0ICogYWxwaGE7CiAgICBjb25zdCBiZXRhMiA9IGJldGEzICogYWxwaGE7CiAgICBjb25zdCBiZXRhMSA9IGJldGEyICogYWxwaGE7CiAgICBjb25zdCBmZWVkYmFjayA9IGJldGExICogdGhpcy56MSArIGJldGEyICogdGhpcy56MiArIGJldGEzICogdGhpcy56MyArIGJldGE0ICogdGhpcy56NDsKICAgIGNvbnN0IGsgPSA0ICogcmVzb25hbmNlOwogICAgY29uc3QgeGluID0gKGlucHV0IC0gayAqIGZlZWRiYWNrKSAvICgxICsgayAqIGFscGhhICogYWxwaGEgKiBhbHBoYSAqIGFscGhhKTsKICAgIGNvbnN0IGxwZjFJbiA9ICh4aW4gLSB0aGlzLnoxKSAqIGFscGhhOwogICAgY29uc3QgbHBmMU91dCA9IGxwZjFJbiArIHRoaXMuejE7CiAgICB0aGlzLnoxID0gbHBmMUluICsgbHBmMU91dDsKICAgIGNvbnN0IGxwZjJJbiA9IChscGYxT3V0IC0gdGhpcy56MikgKiBhbHBoYTsKICAgIGNvbnN0IGxwZjJPdXQgPSBscGYySW4gKyB0aGlzLnoyOwogICAgdGhpcy56MiA9IGxwZjJJbiArIGxwZjJPdXQ7CiAgICBjb25zdCBscGYzSW4gPSAobHBmMk91dCAtIHRoaXMuejMpICogYWxwaGE7CiAgICBjb25zdCBscGYzT3V0ID0gbHBmM0luICsgdGhpcy56MzsKICAgIHRoaXMuejMgPSBscGYzSW4gKyBscGYzT3V0OwogICAgY29uc3QgbHBmNEluID0gKGxwZjNPdXQgLSB0aGlzLno0KSAqIGFscGhhOwogICAgY29uc3QgbHBmNE91dCA9IGxwZjRJbiArIHRoaXMuejQ7CiAgICB0aGlzLno0ID0gbHBmNEluICsgbHBmNE91dDsKICAgIHJldHVybiBtb2RlWzRdICogbHBmNE91dCArIG1vZGVbM10gKiBscGYzT3V0ICsgbW9kZVsyXSAqIGxwZjJPdXQgKyBtb2RlWzFdICogbHBmMU91dCArIG1vZGVbMF0gKiB4aW47CiAgfQp9CmNvbnN0IGxhZGRlckZpbHRlck1vZGVzID0gewogIExQRjI6IEZsb2F0NjRBcnJheS5mcm9tKFswLCAwLCAxLCAwLCAwXSksCiAgTFBGNDogRmxvYXQ2NEFycmF5LmZyb20oWzAsIDAsIDAsIDAsIDFdKSwKICBCUEYyOiBGbG9hdDY0QXJyYXkuZnJvbShbMCwgMiwgLTIsIDAsIDBdKSwKICBCUEYyOiBGbG9hdDY0QXJyYXkuZnJvbShbMCwgMCwgNCwgLTgsIDRdKSwKICBIUEYyOiBGbG9hdDY0QXJyYXkuZnJvbShbMSwgLTIsIDEsIDAsIDBdKSwKICBIUEY0OiBGbG9hdDY0QXJyYXkuZnJvbShbMSwgLTQsIDYsIC00LCAxXSkKfTsKbGFkZGVyRmlsdGVyTW9kZXMuYWxsID0gWwogIGxhZGRlckZpbHRlck1vZGVzLkxQRjIsCiAgbGFkZGVyRmlsdGVyTW9kZXMuTFBGNCwKICBsYWRkZXJGaWx0ZXJNb2Rlcy5CUEYyLAogIGxhZGRlckZpbHRlck1vZGVzLkJQRjQsCiAgbGFkZGVyRmlsdGVyTW9kZXMuSFBGMiwKICBsYWRkZXJGaWx0ZXJNb2Rlcy5IUEY0Cl07CgovLyBzcmMvanVub3gvbm9pc2UuanMKY2xhc3MgTm9pc2UgewogIGNvbnN0cnVjdG9yKHNhbXBsZVJhdGUyLCBmYyA9IDVlMykgewogICAgdGhpcy5fYjEgPSAtTWF0aC5leHAoLTIgKiBmYyAqIE1hdGguUEkgLyBzYW1wbGVSYXRlMik7CiAgICB0aGlzLl9hMCA9IDEgKyB0aGlzLl9iMTsKICAgIHRoaXMuX3oxID0gMDsKICB9CiAgcmVuZGVyKCkgewogICAgY29uc3QgeGluID0gTWF0aC5yYW5kb20oKSAqIDIgLSAxOwogICAgY29uc3QgeG91dCA9IHhpbiAqIHRoaXMuX2EwIC0gdGhpcy5fejE7CiAgICB0aGlzLl96MSA9IHRoaXMuX2IxICogeG91dDsKICAgIHJldHVybiB4b3V0OwogIH0KfQoKLy8gc3JjL2p1bm94L3ZvaWNlLmpzCmNsYXNzIFZvaWNlIHsKICBjb25zdHJ1Y3Rvcih7cGF0Y2gsIHNhbXBsZVJhdGU6IHNhbXBsZVJhdGUyfSkgewogICAgdGhpcy5wYXRjaCA9IHBhdGNoOwogICAgdGhpcy5zYW1wbGVSYXRlID0gc2FtcGxlUmF0ZTI7CiAgICB0aGlzLm5vdGUgPSAtMTsKICAgIHRoaXMudmVsb2NpdHkgPSAwOwogICAgdGhpcy5maWx0ZXJOb3RlRmFjdG9yID0gMDsKICAgIHRoaXMuZGNvID0gbmV3IEp1bm82MERDTyhzYW1wbGVSYXRlMik7CiAgICB0aGlzLm5vaXNlID0gbmV3IE5vaXNlKHNhbXBsZVJhdGUyLCA1ZTMpOwogICAgdGhpcy5tb2RFbnYgPSBuZXcgSnVubzYwRW52ZWxvcGUoc2FtcGxlUmF0ZTIpOwogICAgdGhpcy5hbXBFbnYgPSBuZXcgSnVubzYwRW52ZWxvcGUoc2FtcGxlUmF0ZTIpOwogICAgdGhpcy5tb29nVkNGID0gbmV3IExhZGRlckZpbHRlcihzYW1wbGVSYXRlMik7CiAgfQogIHJlbmRlcihsZm9PdXQsIGRldHVuZUZhY3RvciwgcHdtRGVwdGgsIHNhd0xldmVsLCBwdWxzZUxldmVsLCBzdWJMZXZlbCwgbm9pc2VMZXZlbCwgZmlsdGVyQ3V0b2ZmLCBmaWx0ZXJSZXNvbmFuY2UsIGZpbHRlckVudk1vZCwgbGZvRGV0dW5lT2N0YXZlcywgZmlsdGVyS2V5TW9kKSB7CiAgICBjb25zdCBtb2RFbnZPdXQgPSB0aGlzLm1vZEVudi5yZW5kZXIoKTsKICAgIGNvbnN0IGFtcEVudk91dCA9IHRoaXMuYW1wRW52LnJlbmRlcigpOwogICAgbGV0IHB1bHNlV2lkdGggPSBwd21EZXB0aDsKICAgIGlmICh0aGlzLnBhdGNoLmRjby5wd21Nb2QgPT09ICJsIikgewogICAgICBwdWxzZVdpZHRoICo9IGxmb091dCAqIDAuNSArIDAuNTsKICAgIH0gZWxzZSBpZiAodGhpcy5wYXRjaC5kY28ucHdtTW9kID09PSAiZSIpIHsKICAgICAgcHVsc2VXaWR0aCAqPSBtb2RFbnZPdXQ7CiAgICB9CiAgICBsZXQgZGNvT3V0ID0gdGhpcy5kY28ucmVuZGVyKGRldHVuZUZhY3RvciwgcHVsc2VXaWR0aCwgc2F3TGV2ZWwsIHB1bHNlTGV2ZWwsIHN1YkxldmVsKTsKICAgIGlmIChub2lzZUxldmVsID4gMCkgewogICAgICBkY29PdXQgKz0gdGhpcy5ub2lzZS5yZW5kZXIoKSAqIG5vaXNlTGV2ZWw7CiAgICB9CiAgICBjb25zdCBjdXRvZmZEZXR1bmVPY3RhdmUgPSBmaWx0ZXJDdXRvZmYgKiAyMDAgLyAxMjsKICAgIGNvbnN0IGVudkRldHVuZU9jdGF2ZXMgPSBtb2RFbnZPdXQgKiBmaWx0ZXJFbnZNb2QgKiAxMjsKICAgIGNvbnN0IGtleWJvYXJkRGV0dW5lT2N0YXZlcyA9IGZpbHRlcktleU1vZCAqIHRoaXMuZmlsdGVyTm90ZUZhY3RvcjsKICAgIGNvbnN0IHJlc29uYW5jZURldHVuZU9jdGF2ZXMgPSB0aGlzLnBhdGNoLnZjZi5yZXNvbmFuY2UgKiAwLjU7CiAgICBjb25zdCB2Y2ZDdXRvZmZWYWx1ZSA9IGN1dG9mZkRldHVuZU9jdGF2ZSArIGxmb0RldHVuZU9jdGF2ZXMgKiBhbXBFbnZPdXQgKyBrZXlib2FyZERldHVuZU9jdGF2ZXMgKyBlbnZEZXR1bmVPY3RhdmVzICsgcmVzb25hbmNlRGV0dW5lT2N0YXZlczsKICAgIGNvbnN0IGN1dG9mZkZyZXF1ZW5jeSA9IDcuOCAqIE1hdGgucG93KDIsIHZjZkN1dG9mZlZhbHVlKTsKICAgIGNvbnN0IHZjZk91dCA9IHRoaXMubW9vZ1ZDRi5wcm9jZXNzKGRjb091dCwgdGhpcy5tb29nVkNGLmNhbGNDdXRvZmZGYWN0b3IoY3V0b2ZmRnJlcXVlbmN5KSwgZmlsdGVyUmVzb25hbmNlKTsKICAgIHJldHVybiB0aGlzLnZlbG9jaXR5ICogdmNmT3V0ICogYW1wRW52T3V0OwogIH0KICBub3RlT24obm90ZSwgdmVsb2NpdHkpIHsKICAgIGlmIChub3RlICE9PSB0aGlzLm5vdGUgfHwgdGhpcy5pc0ZpbmlzaGVkKCkpIHsKICAgICAgdGhpcy5ub3RlID0gbm90ZTsKICAgICAgdGhpcy5kY28ubm90ZU9uKG5vdGUpOwogICAgICB0aGlzLm1vZEVudi5yZXNldCgpOwogICAgICB0aGlzLmFtcEVudi5yZXNldCgpOwogICAgICB0aGlzLm1vb2dWQ0YucmVzZXQoKTsKICAgICAgY29uc3QgYzQgPSA2MDsKICAgICAgY29uc3QgZml2ZU9jdGF2ZXMgPSA1ICogMTI7CiAgICAgIHRoaXMuZmlsdGVyTm90ZUZhY3RvciA9IDUgKiAoKHRoaXMubm90ZSAtIGM0KSAvIGZpdmVPY3RhdmVzKTsKICAgIH0KICAgIGlmICghdGhpcy5wYXRjaC5kY28uc2F3ICYmICF0aGlzLnBhdGNoLmRjby5wdWxzZSAmJiAhdGhpcy5wYXRjaC5kY28uc3ViQW1vdW50ICYmICF0aGlzLnBhdGNoLmRjby5ub2lzZSkgewogICAgICBjb25zdCBpbml0aWFsRXhjaXRlID0gdGhpcy5wYXRjaC52Y2YucmVzb25hbmNlICogdGhpcy5wYXRjaC52Y2YucmVzb25hbmNlICogMC4wMTsKICAgICAgdGhpcy5tb29nVkNGLnRyaWdnZXIoaW5pdGlhbEV4Y2l0ZSk7CiAgICB9CiAgICB0aGlzLnZlbG9jaXR5ID0gdmVsb2NpdHk7CiAgICB0aGlzLnVwZGF0ZVBhdGNoKHRoaXMucGF0Y2gpOwogICAgdGhpcy5tb2RFbnYudHJpZ2dlcigpOwogICAgdGhpcy5hbXBFbnYudHJpZ2dlcigpOwogIH0KICBub3RlT2ZmKCkgewogICAgdGhpcy5tb2RFbnYucmVsZWFzZSgpOwogICAgdGhpcy5hbXBFbnYucmVsZWFzZSgpOwogIH0KICBpc0ZpbmlzaGVkKCkgewogICAgcmV0dXJuIHRoaXMuYW1wRW52LmlzRmluaXNoZWQoKTsKICB9CiAgdXBkYXRlUGF0Y2gocGF0Y2gpIHsKICAgIGNvbnN0IGVudiA9IHBhdGNoLmVudjsKICAgIHRoaXMubW9kRW52LnNldFZhbHVlc0Zyb21TbGlkZXJzKGVudi5hdHRhY2ssIGVudi5kZWNheSwgZW52LnN1c3RhaW4sIGVudi5yZWxlYXNlKTsKICAgIGlmIChwYXRjaC52Y2FUeXBlID09PSAiZW52IikgewogICAgICB0aGlzLmFtcEVudi5zZXRWYWx1ZXNGcm9tU2xpZGVycyhlbnYuYXR0YWNrLCBlbnYuZGVjYXksIGVudi5zdXN0YWluLCBlbnYucmVsZWFzZSk7CiAgICB9IGVsc2UgewogICAgICB0aGlzLmFtcEVudi5zZXRWYWx1ZXMoMjQ3ZS01LCA1N2UtNCwgMC45OCwgNTdlLTQpOwogICAgfQogICAgdGhpcy5wYXRjaCA9IHBhdGNoOwogIH0KfQoKLy8gc3JjL2p1bm94L3JpbmdCdWZmZXIuanMKY2xhc3MgUmluZ0J1ZmZlciB7CiAgY29uc3RydWN0b3IobWF4QnVmZmVyU2l6ZSkgewogICAgdGhpcy5idWZmZXIgPSBuZXcgRmxvYXQzMkFycmF5KG1heEJ1ZmZlclNpemUpOwogICAgdGhpcy53cml0ZUluZGV4ID0gMDsKICAgIHRoaXMubWF4QnVmZmVyU2l6ZSA9IG1heEJ1ZmZlclNpemU7CiAgfQogIHJpbmdCdWZmZXJJbmRleChpbmRleCkgewogICAgaWYgKGluZGV4IDwgMCkgewogICAgICByZXR1cm4gaW5kZXggKyB0aGlzLm1heEJ1ZmZlclNpemU7CiAgICB9CiAgICBpZiAoaW5kZXggPj0gdGhpcy5tYXhCdWZmZXJTaXplKSB7CiAgICAgIHJldHVybiBpbmRleCAtIHRoaXMubWF4QnVmZmVyU2l6ZTsKICAgIH0KICAgIHJldHVybiBpbmRleDsKICB9CiAgcmVhZFNhbXBsZShyZWFkT2Zmc2V0KSB7CiAgICBjb25zdCByZWFkSW5kZXggPSB0aGlzLnJpbmdCdWZmZXJJbmRleCh0aGlzLndyaXRlSW5kZXggLSByZWFkT2Zmc2V0KTsKICAgIGNvbnN0IGluZGV4QSA9IE1hdGguZmxvb3IocmVhZEluZGV4KTsKICAgIGNvbnN0IGZyYWN0aW9uYWwgPSByZWFkSW5kZXggLSBpbmRleEE7CiAgICBjb25zdCBpbmRleEIgPSB0aGlzLnJpbmdCdWZmZXJJbmRleChpbmRleEEgKyAxKTsKICAgIHJldHVybiB0aGlzLmJ1ZmZlcltpbmRleEFdICogKDEgLSBmcmFjdGlvbmFsKSArIHRoaXMuYnVmZmVyW2luZGV4Ql0gKiBmcmFjdGlvbmFsOwogIH0KICB3cml0ZVNhbXBsZShpbnB1dCkgewogICAgdGhpcy5idWZmZXJbdGhpcy53cml0ZUluZGV4XSA9IGlucHV0OwogICAgdGhpcy53cml0ZUluZGV4ID0gKHRoaXMud3JpdGVJbmRleCArIDEpICUgdGhpcy5tYXhCdWZmZXJTaXplOwogIH0KICByZXNldCgpIHsKICAgIHRoaXMuYnVmZmVyLmZpbGwoMCk7CiAgfQp9CgovLyBzcmMvanVub3gvc2ltcGxlU2luZ2xlUG9sZUZpbHRlci5qcwpjbGFzcyBTaW1wbGVTaW5nbGVQb2xlRmlsdGVyIHsKICBjb25zdHJ1Y3RvcihzYW1wbGVSYXRlMiwgZmMgPSA1KSB7CiAgICB0aGlzLl9waU92ZXJTYW1wbGVSYXRlID0gTWF0aC5QSSAvIHNhbXBsZVJhdGUyOwogICAgdGhpcy5fYTAgPSAxOwogICAgdGhpcy5fYjEgPSAwOwogICAgdGhpcy5fejEgPSAwOwogICAgdGhpcy5zZXRDdXRvZmYoZmMpOwogIH0KICByZXNldCgpIHsKICAgIHRoaXMuX3oxID0gMDsKICB9CiAgcmVuZGVyTFAoeGluKSB7CiAgICBjb25zdCB4b3V0ID0geGluICogdGhpcy5fYTAgKyB0aGlzLl96MTsKICAgIHRoaXMuX3oxID0gLXRoaXMuX2IxICogeG91dDsKICAgIHJldHVybiB4b3V0OwogIH0KICByZW5kZXJIUCh4aW4pIHsKICAgIHJldHVybiB4aW4gLSB0aGlzLnJlbmRlckxQKHhpbik7CiAgfQogIHNldEN1dG9mZihmYykgewogICAgdGhpcy5fYjEgPSAtTWF0aC5leHAoLTIgKiBmYyAqIHRoaXMuX3BpT3ZlclNhbXBsZVJhdGUpOwogICAgdGhpcy5fYTAgPSAxICsgdGhpcy5fYjE7CiAgfQp9CgovLyBzcmMvanVub3gvY2hvcnVzLmpzCmNsYXNzIENob3J1cyB7CiAgY29uc3RydWN0b3Ioc2FtcGxlUmF0ZTIpIHsKICAgIHRoaXMubGVmdE91dHB1dCA9IDA7CiAgICB0aGlzLnJpZ2h0T3V0cHV0ID0gMDsKICAgIHRoaXMuX3NhbXBsZVJhdGUgPSBzYW1wbGVSYXRlMjsKICAgIHRoaXMuX2lzVXNlZCA9IGZhbHNlOwogICAgdGhpcy5fbmV4dENob3J1c01vZGUgPSAwOwogICAgdGhpcy5fcmluZ0J1ZmZlciA9IG5ldyBSaW5nQnVmZmVyKE1hdGgudHJ1bmMoc2FtcGxlUmF0ZTIgKiA2ZS0zKSk7CiAgICB0aGlzLl9wcmVGaWx0ZXIgPSBuZXcgU2ltcGxlU2luZ2xlUG9sZUZpbHRlcihzYW1wbGVSYXRlMiwgNzIzNyk7CiAgICB0aGlzLl9wb3N0TGVmdEZpbHRlciA9IG5ldyBTaW1wbGVTaW5nbGVQb2xlRmlsdGVyKHNhbXBsZVJhdGUyLCAxMDY0NCk7CiAgICB0aGlzLl9wb3N0UmlnaHRGaWx0ZXIgPSBuZXcgU2ltcGxlU2luZ2xlUG9sZUZpbHRlcihzYW1wbGVSYXRlMiwgMTA2NDQpOwogICAgdGhpcy5fZHJ5Q3VycmVudCA9IDE7CiAgICB0aGlzLl9kcnlDaGFuZ2UgPSAwOwogICAgdGhpcy5fZHJ5VGFyZ2V0ID0gMTsKICAgIHRoaXMuX2xmb1ZhbHVlID0gMDsKICAgIHRoaXMuX2xmb0luY3JlbWVudCA9IDAuMDE7CiAgICB0aGlzLl9tYXhMZWZ0T2Zmc2V0ID0gMDsKICAgIHRoaXMuX2F2ZXJhZ2VMZWZ0U2FtcGxlcyA9IDA7CiAgICB0aGlzLl9tYXhSaWdodE9mZnNldCA9IDA7CiAgICB0aGlzLl9hdmVyYWdlUmlnaHRTYW1wbGVzID0gMDsKICB9CiAgcmVuZGVyKGlucHV0KSB7CiAgICB0aGlzLl9pc1VzZWQgPSB0cnVlOwogICAgbGV0IGRyeSA9IHRoaXMuX2RyeUN1cnJlbnQ7CiAgICBpZiAodGhpcy5fZHJ5Q2hhbmdlICE9PSAwKSB7CiAgICAgIGRyeSArPSB0aGlzLl9kcnlDaGFuZ2U7CiAgICAgIGlmIChkcnkgPiAxKSB7CiAgICAgICAgZHJ5ID0gMTsKICAgICAgICB0aGlzLl9kcnlDaGFuZ2UgPSAwOwogICAgICAgIHRoaXMudXBkYXRlKHRoaXMuX25leHRDaG9ydXNNb2RlKTsKICAgICAgfSBlbHNlIGlmIChkcnkgPCB0aGlzLl9kcnlUYXJnZXQgJiYgdGhpcy5fZHJ5Q2hhbmdlIDwgMCkgewogICAgICAgIGRyeSA9IHRoaXMuX2RyeVRhcmdldDsKICAgICAgICB0aGlzLl9kcnlDaGFuZ2UgPSAwOwogICAgICB9CiAgICAgIHRoaXMuX2RyeUN1cnJlbnQgPSBkcnk7CiAgICB9CiAgICBpZiAoZHJ5ID09PSAxKSB7CiAgICAgIHRoaXMubGVmdE91dHB1dCA9IGlucHV0OwogICAgICB0aGlzLnJpZ2h0T3V0cHV0ID0gaW5wdXQ7CiAgICAgIHJldHVybjsKICAgIH0KICAgIGxldCBsZm9WYWx1ZSA9IHRoaXMuX2xmb1ZhbHVlICsgdGhpcy5fbGZvSW5jcmVtZW50OwogICAgaWYgKGxmb1ZhbHVlID4gMSB8fCBsZm9WYWx1ZSA8IC0xKSB7CiAgICAgIHRoaXMuX2xmb0luY3JlbWVudCA9IC10aGlzLl9sZm9JbmNyZW1lbnQ7CiAgICAgIGxmb1ZhbHVlID0gdGhpcy5fbGZvVmFsdWUgKyB0aGlzLl9sZm9JbmNyZW1lbnQ7CiAgICB9CiAgICB0aGlzLl9sZm9WYWx1ZSA9IGxmb1ZhbHVlOwogICAgY29uc3QgZHJ5T3V0cHV0ID0gaW5wdXQgKiBkcnk7CiAgICBjb25zdCB3ZXRGYWN0b3IgPSAxIC0gZHJ5OwogICAgY29uc3QgbGVmdERlbGF5U2FtcGxlcyA9IHRoaXMuX2F2ZXJhZ2VMZWZ0U2FtcGxlcyArIGxmb1ZhbHVlICogdGhpcy5fbWF4TGVmdE9mZnNldDsKICAgIGNvbnN0IGxlZnREZWxheWVkVmFsdWUgPSB0aGlzLl9yaW5nQnVmZmVyLnJlYWRTYW1wbGUobGVmdERlbGF5U2FtcGxlcyk7CiAgICB0aGlzLmxlZnRPdXRwdXQgPSBkcnlPdXRwdXQgKyB0aGlzLl9wb3N0TGVmdEZpbHRlci5yZW5kZXJMUChsZWZ0RGVsYXllZFZhbHVlICogd2V0RmFjdG9yKTsKICAgIGNvbnN0IHJpZ2h0RGVsYXlTYW1wbGVzID0gdGhpcy5fYXZlcmFnZVJpZ2h0U2FtcGxlcyArIGxmb1ZhbHVlICogdGhpcy5fbWF4UmlnaHRPZmZzZXQ7CiAgICBjb25zdCByaWdodERlbGF5ZWRWYWx1ZSA9IHRoaXMuX3JpbmdCdWZmZXIucmVhZFNhbXBsZShyaWdodERlbGF5U2FtcGxlcyk7CiAgICB0aGlzLnJpZ2h0T3V0cHV0ID0gZHJ5T3V0cHV0ICsgdGhpcy5fcG9zdFJpZ2h0RmlsdGVyLnJlbmRlckxQKHJpZ2h0RGVsYXllZFZhbHVlICogd2V0RmFjdG9yKTsKICAgIHRoaXMuX3JpbmdCdWZmZXIud3JpdGVTYW1wbGUodGhpcy5fcHJlRmlsdGVyLnJlbmRlckxQKHRoaXMuX2FwcGx5U2F0dXJhdGlvbihpbnB1dCkpKTsKICB9CiAgcmVzZXQoKSB7CiAgICB0aGlzLl9yaW5nQnVmZmVyLnJlc2V0KCk7CiAgICB0aGlzLl9wcmVGaWx0ZXIucmVzZXQoKTsKICAgIHRoaXMuX3Bvc3RMZWZ0RmlsdGVyLnJlc2V0KCk7CiAgICB0aGlzLl9wb3N0UmlnaHRGaWx0ZXIucmVzZXQoKTsKICAgIHRoaXMuX2lzVXNlZCA9IGZhbHNlOwogIH0KICB1cGRhdGUoY2hvcnVzTW9kZSkgewogICAgaWYgKHRoaXMuX2RyeUN1cnJlbnQgPCAxICYmICF0aGlzLl9pc1VzZWQpIHsKICAgICAgdGhpcy5fZHJ5Q2hhbmdlID0gNWUtNDsKICAgICAgdGhpcy5fZHJ5VGFyZ2V0ID0gMTsKICAgICAgdGhpcy5fbmV4dENob3J1c01vZGUgPSBjaG9ydXNNb2RlOwogICAgfSBlbHNlIHsKICAgICAgc3dpdGNoIChjaG9ydXNNb2RlKSB7CiAgICAgICAgY2FzZSAxOgogICAgICAgICAgdGhpcy5fdXBkYXRlVmFsdWVzKDAuNTEzLCAwLjQ0LCAxNTRlLTUsIDUxNWUtNSwgMTUxZS01LCA1NGUtNCwgdHJ1ZSk7CiAgICAgICAgICBicmVhazsKICAgICAgICBjYXNlIDI6CiAgICAgICAgICB0aGlzLl91cGRhdGVWYWx1ZXMoMC44NjMsIDAuNDQsIDE1NGUtNSwgNTE1ZS01LCAxNTFlLTUsIDU0ZS00LCB0cnVlKTsKICAgICAgICAgIGJyZWFrOwogICAgICAgIGNhc2UgMzoKICAgICAgICAgIHRoaXMuX3VwZGF0ZVZhbHVlcyg5Ljc1LCAwLjQ0LCAzMjJlLTUsIDM1NmUtNSwgMzI4ZS01LCAzNjVlLTUsIGZhbHNlKTsKICAgICAgICAgIGJyZWFrOwogICAgICAgIGRlZmF1bHQ6CiAgICAgICAgICB0aGlzLl91cGRhdGVWYWx1ZXMoMC41MTMsIDEsIDE1NGUtNSwgNTE1ZS01LCAxNTFlLTUsIDU0ZS00LCB0cnVlKTsKICAgICAgICAgIHRoaXMuX3JpbmdCdWZmZXIucmVzZXQoKTsKICAgICAgICAgIGJyZWFrOwogICAgICB9CiAgICB9CiAgfQogIF9hcHBseVNhdHVyYXRpb24oaW5wdXQpIHsKICAgIHJldHVybiBpbnB1dDsKICB9CiAgX3VwZGF0ZVZhbHVlcyhmcmVxLCBkcnksIG1pbkxlZnREZWxheSwgbWF4TGVmdERlbGF5LCBtaW5SaWdodERlbGF5LCBtYXhSaWdodERlbGF5LCBpc1N0ZXJlbykgewogICAgY29uc3QgYXZlcmFnZUxlZnREZWxheSA9IChtaW5MZWZ0RGVsYXkgKyBtYXhMZWZ0RGVsYXkpICogMC41OwogICAgY29uc3QgbWF4TGVmdE9mZnNldCA9IG1heExlZnREZWxheSAtIGF2ZXJhZ2VMZWZ0RGVsYXk7CiAgICB0aGlzLl9hdmVyYWdlTGVmdFNhbXBsZXMgPSBhdmVyYWdlTGVmdERlbGF5ICogdGhpcy5fc2FtcGxlUmF0ZTsKICAgIHRoaXMuX21heExlZnRPZmZzZXQgPSBtYXhMZWZ0T2Zmc2V0ICogdGhpcy5fc2FtcGxlUmF0ZTsKICAgIGNvbnN0IGF2ZXJhZ2VSaWdodERlbGF5ID0gKG1pblJpZ2h0RGVsYXkgKyBtYXhSaWdodERlbGF5KSAqIDAuNTsKICAgIGNvbnN0IG1heFJpZ2h0T2Zmc2V0ID0gbWF4UmlnaHREZWxheSAtIGF2ZXJhZ2VSaWdodERlbGF5OwogICAgdGhpcy5fYXZlcmFnZVJpZ2h0U2FtcGxlcyA9IGF2ZXJhZ2VSaWdodERlbGF5ICogdGhpcy5fc2FtcGxlUmF0ZTsKICAgIHRoaXMuX21heFJpZ2h0T2Zmc2V0ID0gbWF4UmlnaHRPZmZzZXQgKiB0aGlzLl9zYW1wbGVSYXRlICogKGlzU3RlcmVvID8gLTEgOiAxKTsKICAgIHRoaXMuX2RyeVRhcmdldCA9IGRyeTsKICAgIGlmICghdGhpcy5faXNVc2VkKSB7CiAgICAgIHRoaXMuX2RyeUNoYW5nZSA9IGRyeTsKICAgIH0KICAgIHRoaXMuX2RyeUNoYW5nZSA9IChkcnkgLSB0aGlzLl9kcnlDdXJyZW50KSAvIDFlMzsKICAgIHRoaXMuX2xmb0luY3JlbWVudCA9IE1hdGguc2lnbih0aGlzLl9sZm9JbmNyZW1lbnQpICogNCAqIGZyZXEgLyB0aGlzLl9zYW1wbGVSYXRlOwogIH0KfQoKLy8gc3JjL2p1bm94L2xmby5qcwpjbGFzcyBMRk8gewogIGNvbnN0cnVjdG9yKHNhbXBsZVJhdGUyKSB7CiAgICB0aGlzLl9vbmVPdmVyU2FtcGxlUmF0ZSA9IDEgLyBzYW1wbGVSYXRlMjsKICAgIHRoaXMuX3BoYXNlSW5jcmVtZW50ID0gMDsKICAgIHRoaXMuY3VycmVudFBoYXNlID0gMTsKICAgIHRoaXMuY3VycmVudFZhbHVlID0gMDsKICAgIHRoaXMuaXNSZXN0YXJ0ZWQgPSBmYWxzZTsKICAgIHRoaXMud2F2ZWZvcm0gPSAidHJpYW5nbGUiOwogIH0KICByZXNldCgpIHsKICAgIHRoaXMuY3VycmVudFBoYXNlID0gMTsKICAgIHRoaXMuY3VycmVudFZhbHVlID0gMDsKICB9CiAgcmVuZGVyKCkgewogICAgdGhpcy5pc1Jlc3RhcnRlZCA9IGZhbHNlOwogICAgdGhpcy5jdXJyZW50UGhhc2UgKz0gdGhpcy5fcGhhc2VJbmNyZW1lbnQ7CiAgICBpZiAodGhpcy5jdXJyZW50UGhhc2UgPiAxKSB7CiAgICAgIHRoaXMuaXNSZXN0YXJ0ZWQgPSB0cnVlOwogICAgICB0aGlzLmN1cnJlbnRQaGFzZSAtPSAxOwogICAgfQogICAgbGV0IHZhbHVlID0gMDsKICAgIHN3aXRjaCAodGhpcy53YXZlZm9ybSkgewogICAgICBjYXNlICJub25lIjoKICAgICAgICB2YWx1ZSA9IDA7CiAgICAgICAgYnJlYWs7CiAgICAgIGNhc2UgInNpbmUiOgogICAgICAgIHZhbHVlID0gTWF0aC5zaW4odGhpcy5jdXJyZW50UGhhc2UgKiAyICogTWF0aC5QSSk7CiAgICAgICAgYnJlYWs7CiAgICAgIGNhc2UgInNxdWFyZSI6CiAgICAgICAgdmFsdWUgPSB0aGlzLmN1cnJlbnRQaGFzZSA+IDAuNSA/IC0xIDogMTsKICAgICAgICBicmVhazsKICAgICAgY2FzZSAicmFuZG9tIjoKICAgICAgICB2YWx1ZSA9IHRoaXMuaXNSZXN0YXJ0ZWQgPyBNYXRoLnJhbmRvbSgpICogMiAtIDEgOiB0aGlzLmN1cnJlbnRWYWx1ZTsKICAgICAgICBicmVhazsKICAgICAgY2FzZSAibm9pc2UiOgogICAgICAgIHZhbHVlID0gTWF0aC5yYW5kb20oKSAqIDIgLSAxOwogICAgICAgIGJyZWFrOwogICAgICBkZWZhdWx0OgogICAgICAgIHZhbHVlID0gdGhpcy5jdXJyZW50UGhhc2UgKiA0OwogICAgICAgIGlmICh2YWx1ZSA+IDEpIHsKICAgICAgICAgIHZhbHVlID0gMiAtIHZhbHVlOwogICAgICAgIH0KICAgICAgICBpZiAodmFsdWUgPCAtMSkgewogICAgICAgICAgdmFsdWUgPSAtMiAtIHZhbHVlOwogICAgICAgIH0KICAgICAgICBicmVhazsKICAgIH0KICAgIHJldHVybiB0aGlzLmN1cnJlbnRWYWx1ZSA9IHZhbHVlOwogIH0KICBzZXRSYXRlKGZyZXF1ZW5jeSkgewogICAgdGhpcy5fcGhhc2VJbmNyZW1lbnQgPSBmcmVxdWVuY3kgKiB0aGlzLl9vbmVPdmVyU2FtcGxlUmF0ZTsKICB9Cn0KCi8vIHNyYy9qdW5veC9sZm9XaXRoRW52ZWxvcGUuanMKY2xhc3MgTEZPV2l0aEVudmVsb3BlIGV4dGVuZHMgTEZPIHsKICBjb25zdHJ1Y3RvcihzYW1wbGVSYXRlMikgewogICAgc3VwZXIoc2FtcGxlUmF0ZTIpOwogICAgY29uc3Qgc2VnbWVudHMgPSBbCiAgICAgIHRoaXMuX2RlbGF5ID0gbmV3IERlbGF5U2VnbWVudChzYW1wbGVSYXRlMiksCiAgICAgIHRoaXMuX2F0dGFjayA9IG5ldyBBdHRhY2tTZWdtZW50KHNhbXBsZVJhdGUyLCAwLjAzLCAxLCB0cnVlKSwKICAgICAgdGhpcy5fcmVsZWFzZSA9IG5ldyBEZWNheVNlZ21lbnQoc2FtcGxlUmF0ZTIsIDAuMDI1LCAwLCBmYWxzZSksCiAgICAgIHRoaXMuX3NodXRkb3duID0gbmV3IFNodXRkb3duU2VnbWVudChzYW1wbGVSYXRlMiwgMWUtMykKICAgIF07CiAgICB0aGlzLl9yZWxlYXNlLnNldER1cmF0aW9uKDAuMSk7CiAgICB0aGlzLl9lbnYgPSBuZXcgQWJzdHJhY3RFbnZlbG9wZShzZWdtZW50cyk7CiAgfQogIGlzQWN0aXZlKCkgewogICAgcmV0dXJuICF0aGlzLl9lbnYuaXNGaW5pc2hlZCgpOwogIH0KICB0cmlnZ2VyKCkgewogICAgaWYgKCF0aGlzLmlzQWN0aXZlKCkpIHsKICAgICAgdGhpcy5jdXJyZW50UGhhc2UgPSAxOwogICAgICB0aGlzLmN1cnJlbnRWYWx1ZSA9IDA7CiAgICB9CiAgICBpZiAodGhpcy5fZW52LmlzRmluaXNoZWQoKSB8fCAhdGhpcy5fZW52LmlzUmVsZWFzZWQoKSkgewogICAgICB0aGlzLl9lbnYudHJpZ2dlcigpOwogICAgfQogIH0KICByZWxlYXNlKCkgewogICAgdGhpcy5fZW52LnJlbGVhc2UoKTsKICB9CiAgc2h1dGRvd24oKSB7CiAgICB0aGlzLl9lbnYuc2h1dGRvd24oKTsKICB9CiAgcmVzZXQoKSB7CiAgICBzdXBlci5yZXNldCgpOwogICAgdGhpcy5fZW52LnJlc2V0KCk7CiAgfQogIHJlbmRlcigpIHsKICAgIGlmICghdGhpcy5pc0FjdGl2ZSgpKSB7CiAgICAgIHJldHVybiAwOwogICAgfQogICAgY29uc3QgZW52VmFsdWUgPSB0aGlzLl9lbnYucmVuZGVyKCk7CiAgICBpZiAoZW52VmFsdWUgPT09IDApIHsKICAgICAgcmV0dXJuIDA7CiAgICB9CiAgICByZXR1cm4gZW52VmFsdWUgKiBzdXBlci5yZW5kZXIoKTsKICB9CiAgc2V0VmFsdWVzKGZyZXF1ZW5jeSwgZGVsYXlEdXJhdGlvbiwgYXR0YWNrRHVyYXRpb24pIHsKICAgIHRoaXMuc2V0UmF0ZShmcmVxdWVuY3kpOwogICAgdGhpcy5fZGVsYXkuc2V0RHVyYXRpb24oZGVsYXlEdXJhdGlvbik7CiAgICB0aGlzLl9hdHRhY2suc2V0RHVyYXRpb24oYXR0YWNrRHVyYXRpb24pOwogIH0KfQoKLy8gc3JjL2p1bm94L2p1bm94LmpzCmNvbnN0IHN5bnRoU3RhdHVzID0gewogIFNJTEVOVDogMCwKICBOT1RFU19BQ1RJVkU6IDQKfTsKY2xhc3MgSnVub3ggewogIGNvbnN0cnVjdG9yKHtwYXRjaCwgc2FtcGxlUmF0ZTogc2FtcGxlUmF0ZTIsIHBvbHlwaG9ueX0pIHsKICAgIHRoaXMucGF0Y2ggPSBwYXRjaDsKICAgIHRoaXMuc2FtcGxlUmF0ZSA9IHNhbXBsZVJhdGUyOwogICAgdGhpcy5tYXhWb2ljZXMgPSBwb2x5cGhvbnk7CiAgICB0aGlzLnZvaWNlcyA9IFtdOwogICAgdGhpcy5zdGF0dXMgPSBzeW50aFN0YXR1cy5TSUxFTlQ7CiAgICB0aGlzLnBhcmFtZXRlcnMgPSBbCiAgICAgIHRoaXMuYmVuZEFtb3VudFBhcmFtID0gbmV3IFNtb290aE1vdmVzKDAsIHNhbXBsZVJhdGUyKSwKICAgICAgdGhpcy5kY29CZW5kRGVwdGhQYXJhbSA9IG5ldyBTbW9vdGhNb3ZlcygxLCBzYW1wbGVSYXRlMiksCiAgICAgIHRoaXMucGl0Y2hMZm9Nb2REZXB0aFBhcmFtID0gbmV3IFNtb290aE1vdmVzKDAsIHNhbXBsZVJhdGUyKSwKICAgICAgdGhpcy5wd21EZXB0aFBhcmFtID0gbmV3IFNtb290aE1vdmVzKDAsIHNhbXBsZVJhdGUyKSwKICAgICAgdGhpcy5zYXdMZXZlbFBhcmFtID0gbmV3IFNtb290aE1vdmVzKDAsIHNhbXBsZVJhdGUyKSwKICAgICAgdGhpcy5wdWxzZUxldmVsUGFyYW0gPSBuZXcgU21vb3RoTW92ZXMoMCwgc2FtcGxlUmF0ZTIpLAogICAgICB0aGlzLnN1YkxldmVsUGFyYW0gPSBuZXcgU21vb3RoTW92ZXMoMCwgc2FtcGxlUmF0ZTIpLAogICAgICB0aGlzLm5vaXNlTGV2ZWxQYXJhbSA9IG5ldyBTbW9vdGhNb3ZlcygwLCBzYW1wbGVSYXRlMiksCiAgICAgIHRoaXMuZmlsdGVyQ3V0b2ZmUGFyYW0gPSBuZXcgU21vb3RoTW92ZXMoMCwgc2FtcGxlUmF0ZTIpLAogICAgICB0aGlzLmZpbHRlclJlc29uYW5jZVBhcmFtID0gbmV3IFNtb290aE1vdmVzKDAsIHNhbXBsZVJhdGUyKSwKICAgICAgdGhpcy5maWx0ZXJCZW5kRGVwdGhQYXJhbSA9IG5ldyBTbW9vdGhNb3ZlcygxLCBzYW1wbGVSYXRlMiksCiAgICAgIHRoaXMuZmlsdGVyRW52TW9kUGFyYW0gPSBuZXcgU21vb3RoTW92ZXMoMCwgc2FtcGxlUmF0ZTIpLAogICAgICB0aGlzLmZpbHRlckxmb01vZFBhcmFtID0gbmV3IFNtb290aE1vdmVzKDAsIHNhbXBsZVJhdGUyKSwKICAgICAgdGhpcy5maWx0ZXJLZXlNb2RQYXJhbSA9IG5ldyBTbW9vdGhNb3ZlcygwLCBzYW1wbGVSYXRlMiksCiAgICAgIHRoaXMudmNhR2FpbkZhY3RvclBhcmFtID0gbmV3IFNtb290aE1vdmVzKDAsIHNhbXBsZVJhdGUyKQogICAgXTsKICAgIHRoaXMubGZvID0gbmV3IExGT1dpdGhFbnZlbG9wZShzYW1wbGVSYXRlMik7CiAgICB0aGlzLmxmby53YXZlZm9ybSA9ICJzaW5lIjsKICAgIHRoaXMuaHBmID0gbmV3IFNpbXBsZVNpbmdsZVBvbGVGaWx0ZXIoc2FtcGxlUmF0ZTIpOwogICAgdGhpcy5jaG9ydXMgPSBuZXcgQ2hvcnVzKHNhbXBsZVJhdGUyKTsKICAgIHRoaXMudXBkYXRlKCk7CiAgfQogIG5vdGVPbihub3RlLCB2ZWxvY2l0eSkgewogICAgdGhpcy5zdGF0dXMgPSBzeW50aFN0YXR1cy5OT1RFU19BQ1RJVkU7CiAgICBjb25zdCB2b2ljZUluZGV4ID0gdGhpcy52b2ljZXMuZmluZEluZGV4KCh2b2ljZTIpID0+IHZvaWNlMi5ub3RlID09PSBub3RlKTsKICAgIGlmICh2b2ljZUluZGV4ID49IDApIHsKICAgICAgdGhpcy52b2ljZXNbdm9pY2VJbmRleF0ubm90ZU9uKG5vdGUsIHZlbG9jaXR5KTsKICAgICAgcmV0dXJuOwogICAgfQogICAgaWYgKCF0aGlzLnZvaWNlcy5sZW5ndGggJiYgdGhpcy5wYXRjaC5sZm8uYXV0b1RyaWdnZXIpIHsKICAgICAgdGhpcy5sZm8udHJpZ2dlcigpOwogICAgfQogICAgY29uc3QgbmV3Vm9pY2UgPSBuZXcgVm9pY2Uoe3BhdGNoOiB0aGlzLnBhdGNoLCBzYW1wbGVSYXRlOiB0aGlzLnNhbXBsZVJhdGV9KTsKICAgIG5ld1ZvaWNlLm5vdGVPbihub3RlLCB2ZWxvY2l0eSk7CiAgICBpZiAodGhpcy52b2ljZXMubGVuZ3RoIDwgdGhpcy5tYXhWb2ljZXMpIHsKICAgICAgdGhpcy52b2ljZXMucHVzaChuZXdWb2ljZSk7CiAgICAgIHJldHVybjsKICAgIH0KICAgIHRoaXMudm9pY2VzWzBdID0gbmV3Vm9pY2U7CiAgfQogIG5vdGVPZmYobm90ZSkgewogICAgdGhpcy52b2ljZXMuZm9yRWFjaCgodm9pY2UyKSA9PiB2b2ljZTIubm90ZSA9PT0gbm90ZSAmJiAhdm9pY2UyLmlzRmluaXNoZWQoKSAmJiB2b2ljZTIubm90ZU9mZigpKTsKICB9CiAgcGl0Y2hCZW5kKHZhbHVlKSB7CiAgICB0aGlzLmJlbmRBbW91bnRQYXJhbS5zZXRWYWx1ZSh2YWx1ZSk7CiAgfQogIGxmb1RyaWdnZXIoKSB7CiAgICB0aGlzLmxmby50cmlnZ2VyKCk7CiAgfQogIGxmb1JlbGVhc2UoKSB7CiAgICB0aGlzLmxmby5yZWxlYXNlKCk7CiAgfQogIHJlbmRlcihvdXRMLCBvdXRSKSB7CiAgICBpZiAodGhpcy5zdGF0dXMgPT09IHN5bnRoU3RhdHVzLlNJTEVOVCkgewogICAgICByZXR1cm47CiAgICB9CiAgICB0aGlzLnN0YXR1cy0tOwogICAgdGhpcy52b2ljZXMgPSB0aGlzLnZvaWNlcy5maWx0ZXIoKHZvaWNlMikgPT4gIXZvaWNlMi5pc0ZpbmlzaGVkKCkpOwogICAgaWYgKHRoaXMudm9pY2VzLmxlbmd0aCkgewogICAgICB0aGlzLnN0YXR1cyA9IHN5bnRoU3RhdHVzLk5PVEVTX0FDVElWRTsKICAgIH0KICAgIGZvciAobGV0IGkgPSAwOyBpIDwgb3V0TC5sZW5ndGg7IGkrKykgewogICAgICBjb25zdCBiZW5kQW1vdW50ID0gdGhpcy5iZW5kQW1vdW50UGFyYW0uZ2V0TmV4dFZhbHVlKCk7CiAgICAgIGNvbnN0IGRjb0JlbmREZXB0aCA9IHRoaXMuZGNvQmVuZERlcHRoUGFyYW0uZ2V0TmV4dFZhbHVlKCk7CiAgICAgIGNvbnN0IHB3bURlcHRoID0gdGhpcy5wd21EZXB0aFBhcmFtLmdldE5leHRWYWx1ZSgpOwogICAgICBjb25zdCBwaXRjaExmb01vZERlcHRoID0gdGhpcy5waXRjaExmb01vZERlcHRoUGFyYW0uZ2V0TmV4dFZhbHVlKCk7CiAgICAgIGNvbnN0IHNhd0xldmVsID0gdGhpcy5zYXdMZXZlbFBhcmFtLmdldE5leHRWYWx1ZSgpOwogICAgICBjb25zdCBwdWxzZUxldmVsID0gdGhpcy5wdWxzZUxldmVsUGFyYW0uZ2V0TmV4dFZhbHVlKCk7CiAgICAgIGNvbnN0IHN1YkxldmVsID0gdGhpcy5zdWJMZXZlbFBhcmFtLmdldE5leHRWYWx1ZSgpOwogICAgICBjb25zdCBub2lzZUxldmVsID0gdGhpcy5ub2lzZUxldmVsUGFyYW0uZ2V0TmV4dFZhbHVlKCk7CiAgICAgIGNvbnN0IGZpbHRlckN1dG9mZiA9IHRoaXMuZmlsdGVyQ3V0b2ZmUGFyYW0uZ2V0TmV4dFZhbHVlKCk7CiAgICAgIGNvbnN0IGZpbHRlclJlc29uYW5jZSA9IHRoaXMuZmlsdGVyUmVzb25hbmNlUGFyYW0uZ2V0TmV4dFZhbHVlKCk7CiAgICAgIGNvbnN0IGZpbHRlckJlbmREZXB0aCA9IHRoaXMuZmlsdGVyQmVuZERlcHRoUGFyYW0uZ2V0TmV4dFZhbHVlKCk7CiAgICAgIGNvbnN0IGZpbHRlckVudk1vZCA9IHRoaXMuZmlsdGVyRW52TW9kUGFyYW0uZ2V0TmV4dFZhbHVlKCk7CiAgICAgIGNvbnN0IGZpbHRlckxmb01vZCA9IHRoaXMuZmlsdGVyTGZvTW9kUGFyYW0uZ2V0TmV4dFZhbHVlKCk7CiAgICAgIGNvbnN0IGZpbHRlcktleU1vZCA9IHRoaXMuZmlsdGVyS2V5TW9kUGFyYW0uZ2V0TmV4dFZhbHVlKCk7CiAgICAgIGNvbnN0IHZjYUdhaW5GYWN0b3IgPSB0aGlzLnZjYUdhaW5GYWN0b3JQYXJhbS5nZXROZXh0VmFsdWUoKTsKICAgICAgaWYgKGkgPT09IDApIHsKICAgICAgfQogICAgICBjb25zdCBsZm9PdXQgPSB0aGlzLmxmby5yZW5kZXIoKTsKICAgICAgY29uc3QgZGNvRGV0dW5lT2N0YXZlcyA9IGxmb091dCAqIHBpdGNoTGZvTW9kRGVwdGggKiAwLjI1ICsgYmVuZEFtb3VudCAqIGRjb0JlbmREZXB0aCAqIDcgLyAxMjsKICAgICAgbGV0IGRjb0RldHVuZUZhY3RvciA9IHRoaXMucGF0Y2guZGNvLnJhbmdlOwogICAgICBpZiAoZGNvRGV0dW5lT2N0YXZlcyAhPT0gMCkgewogICAgICAgIGRjb0RldHVuZUZhY3RvciAqPSBNYXRoLnBvdygyLCBkY29EZXR1bmVPY3RhdmVzKTsKICAgICAgfQogICAgICBjb25zdCBmaWx0ZXJEZXR1bmVPY3RhdmVzID0gYmVuZEFtb3VudCAqIGZpbHRlckJlbmREZXB0aCAqIDQgKyBmaWx0ZXJMZm9Nb2QgKiBsZm9PdXQgKiAzOwogICAgICBsZXQgbW9ub091dCA9IDA7CiAgICAgIGZvciAobGV0IHYgPSAwOyB2IDwgdGhpcy52b2ljZXMubGVuZ3RoOyB2KyspIHsKICAgICAgICBjb25zdCB2b2ljZTIgPSB0aGlzLnZvaWNlc1t2XTsKICAgICAgICBpZiAoIXZvaWNlMi5pc0ZpbmlzaGVkKCkpIHsKICAgICAgICAgIG1vbm9PdXQgKz0gdm9pY2UyLnJlbmRlcihsZm9PdXQsIGRjb0RldHVuZUZhY3RvciwgcHdtRGVwdGgsIHNhd0xldmVsLCBwdWxzZUxldmVsLCBzdWJMZXZlbCwgbm9pc2VMZXZlbCwgZmlsdGVyQ3V0b2ZmLCBmaWx0ZXJSZXNvbmFuY2UsIGZpbHRlckVudk1vZCwgZmlsdGVyRGV0dW5lT2N0YXZlcywgZmlsdGVyS2V5TW9kKTsKICAgICAgICB9CiAgICAgIH0KICAgICAgaWYgKHRoaXMucGF0Y2guaHBmID4gMCkgewogICAgICAgIGxldCBsb3dQYXNzT3V0ID0gdGhpcy5ocGYucmVuZGVyTFAobW9ub091dCk7CiAgICAgICAgaWYgKHRoaXMucGF0Y2guaHBmIDwgMC4yNSkgewogICAgICAgICAgbG93UGFzc091dCAqPSB0aGlzLnBhdGNoLmhwZiAqIDQ7CiAgICAgICAgfQogICAgICAgIG1vbm9PdXQgLT0gbG93UGFzc091dDsKICAgICAgfQogICAgICBtb25vT3V0ICo9IHZjYUdhaW5GYWN0b3I7CiAgICAgIG1vbm9PdXQgPSBmYXN0VGFuaCgzICogbW9ub091dCk7CiAgICAgIHRoaXMuY2hvcnVzLnJlbmRlcihtb25vT3V0KTsKICAgICAgb3V0TFtpXSA9IHRoaXMuY2hvcnVzLmxlZnRPdXRwdXQ7CiAgICAgIG91dFJbaV0gPSB0aGlzLmNob3J1cy5yaWdodE91dHB1dDsKICAgIH0KICAgIGlmICh0aGlzLnN0YXR1cyA9PT0gc3ludGhTdGF0dXMuU0lMRU5UKSB7CiAgICAgIGxldCBmYWRlTGV2ZWwgPSAxOwogICAgICBjb25zdCBmYWRlU3RlcCA9IGZhZGVMZXZlbCAvIG91dEwubGVuZ3RoOwogICAgICBmb3IgKGxldCBpID0gMDsgaSA8IG91dEwubGVuZ3RoOyBpKyspIHsKICAgICAgICBvdXRMW2ldICo9IGZhZGVMZXZlbDsKICAgICAgICBvdXRSW2ldICo9IGZhZGVMZXZlbDsKICAgICAgICBmYWRlTGV2ZWwgLT0gZmFkZVN0ZXA7CiAgICAgIH0KICAgICAgaWYgKHRoaXMucGF0Y2gubGZvLmF1dG9UcmlnZ2VyKSB7CiAgICAgICAgdGhpcy5sZm8ucmVzZXQoKTsKICAgICAgfQogICAgICB0aGlzLmhwZi5yZXNldCgpOwogICAgICB0aGlzLmNob3J1cy5yZXNldCgpOwogICAgICBmb3IgKGxldCBpID0gMDsgaSA8IHRoaXMucGFyYW1ldGVycy5sZW5ndGg7IGkrKykgewogICAgICAgIHRoaXMucGFyYW1ldGVyc1tpXS5yZXNldCgpOwogICAgICB9CiAgICB9CiAgfQogIHNldFZhbHVlKHBhdGgsIHZhbHVlKSB7CiAgICBjb25zdCBwYXRoU2VnbWVudHMgPSBwYXRoLnNwbGl0KCIuIik7CiAgICBpZiAocGF0aFNlZ21lbnRzLmxlbmd0aCkgewogICAgICBsZXQgdGFyZ2V0ID0gdGhpcy5wYXRjaDsKICAgICAgZm9yIChsZXQgaSA9IDA7IGkgPCBwYXRoU2VnbWVudHMubGVuZ3RoIC0gMTsgaSsrKSB7CiAgICAgICAgdGFyZ2V0ID0gdGFyZ2V0W3BhdGhTZWdtZW50c1tpXV0gfHwgKHRhcmdldFtwYXRoU2VnbWVudHNbaV1dID0ge30pOwogICAgICB9CiAgICAgIHRhcmdldFtwYXRoU2VnbWVudHNbcGF0aFNlZ21lbnRzLmxlbmd0aCAtIDFdXSA9IHZhbHVlOwogICAgICB0aGlzLnVwZGF0ZSgpOwogICAgfQogIH0KICB1cGRhdGUoKSB7CiAgICBsZXQgaXNBY3RpdmUgPSBmYWxzZTsKICAgIGZvciAobGV0IHYgPSAwOyB2IDwgdGhpcy52b2ljZXMubGVuZ3RoOyB2KyspIHsKICAgICAgY29uc3Qgdm9pY2UyID0gdGhpcy52b2ljZXNbdl07CiAgICAgIHZvaWNlMi51cGRhdGVQYXRjaCh0aGlzLnBhdGNoKTsKICAgICAgaXNBY3RpdmUgPSBpc0FjdGl2ZSB8fCAhdm9pY2UyLmlzRmluaXNoZWQoKTsKICAgIH0KICAgIGxldCBzYXdMZXZlbCA9IHRoaXMucGF0Y2guZGNvLnNhdyA/IDAuMiA6IDA7CiAgICBsZXQgcHVsc2VMZXZlbCA9IHRoaXMucGF0Y2guZGNvLnB1bHNlID8gMC4yIDogMDsKICAgIGxldCBzdWJMZXZlbCA9IHRoaXMucGF0Y2guZGNvLnN1YiA/IHRoaXMucGF0Y2guZGNvLnN1YkFtb3VudCAqIDAuMTk1IDogMDsKICAgIGxldCBub2lzZUxldmVsID0gdGhpcy5wYXRjaC5kY28ubm9pc2UgKiAwLjIxOwogICAgbGV0IG1peEZhY3RvciA9IHNhd0xldmVsICsgcHVsc2VMZXZlbCArIHN1YkxldmVsICsgbm9pc2VMZXZlbDsKICAgIGlmIChtaXhGYWN0b3IgPiAwLjI2KSB7CiAgICAgIG1peEZhY3RvciA9IDAuMjYgLyAoMC4yNiArIChtaXhGYWN0b3IgLSAwLjI2KSAqIDAuMyk7CiAgICAgIHB1bHNlTGV2ZWwgKj0gbWl4RmFjdG9yOwogICAgICBzYXdMZXZlbCAqPSBtaXhGYWN0b3I7CiAgICAgIHN1YkxldmVsICo9IG1peEZhY3RvcjsKICAgICAgbm9pc2VMZXZlbCAqPSBtaXhGYWN0b3I7CiAgICB9CiAgICB0aGlzLnNhd0xldmVsUGFyYW0uc2V0VmFsdWUoc2F3TGV2ZWwsIGlzQWN0aXZlKTsKICAgIHRoaXMucHVsc2VMZXZlbFBhcmFtLnNldFZhbHVlKHB1bHNlTGV2ZWwsIGlzQWN0aXZlKTsKICAgIHRoaXMuc3ViTGV2ZWxQYXJhbS5zZXRWYWx1ZShzdWJMZXZlbCwgaXNBY3RpdmUpOwogICAgdGhpcy5ub2lzZUxldmVsUGFyYW0uc2V0VmFsdWUobm9pc2VMZXZlbCwgaXNBY3RpdmUpOwogICAgdGhpcy5waXRjaExmb01vZERlcHRoUGFyYW0uc2V0VmFsdWUodGhpcy5wYXRjaC5kY28ubGZvLCBpc0FjdGl2ZSk7CiAgICB0aGlzLnB3bURlcHRoUGFyYW0uc2V0VmFsdWUodGhpcy5wYXRjaC5kY28ucHdtLCBpc0FjdGl2ZSk7CiAgICBjb25zdCBlbnZNb2REaXJlY3Rpb24gPSB0aGlzLnBhdGNoLnZjZi5tb2RQb3NpdGl2ZSA/IDEgOiAtMTsKICAgIHRoaXMuZmlsdGVyQ3V0b2ZmUGFyYW0uc2V0VmFsdWUodGhpcy5wYXRjaC52Y2YuZnJlcXVlbmN5LCBpc0FjdGl2ZSk7CiAgICB0aGlzLmZpbHRlclJlc29uYW5jZVBhcmFtLnNldFZhbHVlKHRoaXMucGF0Y2gudmNmLnJlc29uYW5jZSwgaXNBY3RpdmUpOwogICAgdGhpcy5maWx0ZXJFbnZNb2RQYXJhbS5zZXRWYWx1ZSh0aGlzLnBhdGNoLnZjZi5lbnZNb2QgKiBlbnZNb2REaXJlY3Rpb24sIGlzQWN0aXZlKTsKICAgIHRoaXMuZmlsdGVyTGZvTW9kUGFyYW0uc2V0VmFsdWUodGhpcy5wYXRjaC52Y2YubGZvTW9kLCBpc0FjdGl2ZSk7CiAgICB0aGlzLmZpbHRlcktleU1vZFBhcmFtLnNldFZhbHVlKHRoaXMucGF0Y2gudmNmLmtleU1vZCwgaXNBY3RpdmUpOwogICAgdGhpcy5jaG9ydXMudXBkYXRlKHRoaXMucGF0Y2guY2hvcnVzKTsKICAgIHNldExmb1ZhbHVlc0Zyb21TbGlkZXJzKHRoaXMubGZvLCB0aGlzLnBhdGNoLmxmby5mcmVxdWVuY3ksIHRoaXMucGF0Y2gubGZvLmRlbGF5KTsKICAgIHNldEhwZlZhbHVlc0Zyb21TbGlkZXJzKHRoaXMuaHBmLCB0aGlzLnBhdGNoLmhwZik7CiAgICBjb25zdCB2Y2FHYWluRmFjdG9yID0gTWF0aC5wb3coMS4yNTg5LCB0aGlzLnBhdGNoLnZjYSAqIDEwKSAqIDAuMTsKICAgIHRoaXMudmNhR2FpbkZhY3RvclBhcmFtLnNldFZhbHVlKHZjYUdhaW5GYWN0b3IsIGlzQWN0aXZlKTsKICB9CiAgcGFuaWMoKSB7CiAgICB0aGlzLnZvaWNlcyA9IFtdOwogIH0KfQpjb25zdCBjdXJ2ZUZyb21MZm9SYXRlU2xpZGVyVG9GcmVxID0gWzAuMywgMC44NSwgMy4zOSwgMTEuNDksIDIyLjIyXTsKY29uc3QgY3VydmVGcm9tTGZvRGVsYXlTbGlkZXJUb0RlbGF5ID0gWzAsIDAuMDYzOSwgMC44NSwgMS4yLCAyLjY4NV07CmNvbnN0IGN1cnZlRnJvbUxmb0RlbGF5U2xpZGVyVG9BdHRhY2sgPSBbMWUtMywgMC4wNTMsIDAuMTg4LCAwLjM0OCwgMS4xNV07CmZ1bmN0aW9uIHNldExmb1ZhbHVlc0Zyb21TbGlkZXJzKGxmbzIsIHJhdGVTbGlkZXIsIGRlbGF5U2xpZGVyKSB7CiAgY29uc3QgZnJlcXVlbmN5ID0gaW50ZXJwb2xhdGVkTG9va3VwKHJhdGVTbGlkZXIgKiBjdXJ2ZUZyb21MZm9SYXRlU2xpZGVyVG9GcmVxLmxlbmd0aCwgY3VydmVGcm9tTGZvUmF0ZVNsaWRlclRvRnJlcSk7CiAgY29uc3QgZGVsYXlEdXJhdGlvbiA9IGludGVycG9sYXRlZExvb2t1cChkZWxheVNsaWRlciAqIGN1cnZlRnJvbUxmb0RlbGF5U2xpZGVyVG9EZWxheS5sZW5ndGgsIGN1cnZlRnJvbUxmb0RlbGF5U2xpZGVyVG9EZWxheSk7CiAgY29uc3QgYXR0YWNrRHVyYXRpb24gPSBpbnRlcnBvbGF0ZWRMb29rdXAoZGVsYXlTbGlkZXIgKiBjdXJ2ZUZyb21MZm9EZWxheVNsaWRlclRvQXR0YWNrLmxlbmd0aCwgY3VydmVGcm9tTGZvRGVsYXlTbGlkZXJUb0F0dGFjayk7CiAgbGZvMi5zZXRWYWx1ZXMoZnJlcXVlbmN5LCBkZWxheUR1cmF0aW9uLCBhdHRhY2tEdXJhdGlvbik7Cn0KY29uc3QgY3VydmVGcm9tSHBmU2xpZGVyVG9GcmVxID0gWzE0MCwgMjUwLCA1MjAsIDEyMjBdOwpmdW5jdGlvbiBzZXRIcGZWYWx1ZXNGcm9tU2xpZGVycyhocGYsIHJhdGVTbGlkZXIpIHsKICBjb25zdCBmcmVxdWVuY3kgPSBpbnRlcnBvbGF0ZWRMb29rdXAocmF0ZVNsaWRlciAqIGN1cnZlRnJvbUhwZlNsaWRlclRvRnJlcS5sZW5ndGgsIGN1cnZlRnJvbUhwZlNsaWRlclRvRnJlcSk7CiAgaHBmLnNldEN1dG9mZihmcmVxdWVuY3kpOwp9CgovLyBzcmMvc3ludGguY29uc3RhbnRzLmpzCmNvbnN0IE5PVEVfT04gPSAibm90ZS1vbiI7CmNvbnN0IE5PVEVfT0ZGID0gIm5vdGUtb2ZmIjsKY29uc3QgU0VUX1BBUkFNID0gInNldC1wYXJhbSI7CmNvbnN0IFNFVF9QQVRDSCA9ICJzZXQtcGF0Y2giOwpjb25zdCBMRk9fVFJJR0dFUl9PTiA9ICJsZm8tdHJpZ2dlci1vbiI7CmNvbnN0IExGT19UUklHR0VSX09GRiA9ICJsZm8tdHJpZ2dlci1vZmYiOwpjb25zdCBQSVRDSF9CRU5EID0gInBpdGNoLWJlbmQiOwpjb25zdCBQQU5JQyA9ICJwYW5pYyI7CgovLyBzcmMvc3ludGgud29ya2xldC5qcwpjbGFzcyBKdW5veFdvcmtlciBleHRlbmRzIEF1ZGlvV29ya2xldFByb2Nlc3NvciB7CiAgY29uc3RydWN0b3Iob3B0aW9ucykgewogICAgc3VwZXIoKTsKICAgIHRoaXMuc3ludGggPSBuZXcgSnVub3goewogICAgICBwYXRjaDogb3B0aW9ucy5wcm9jZXNzb3JPcHRpb25zLnBhdGNoLAogICAgICBwb2x5cGhvbnk6IG9wdGlvbnMucHJvY2Vzc29yT3B0aW9ucy5wb2x5cGhvbnksCiAgICAgIHNhbXBsZVJhdGU6IHNhbXBsZVJhdGUgfHwgNDhlMwogICAgfSk7CiAgICB0aGlzLnBvcnQub25tZXNzYWdlID0gdGhpcy5oYW5kbGVNZXNzYWdlLmJpbmQodGhpcyk7CiAgfQogIGhhbmRsZU1lc3NhZ2UoZXZlbnQpIHsKICAgIGlmIChldmVudC5kYXRhLmFjdGlvbiA9PT0gTk9URV9PTikgewogICAgICB0aGlzLnN5bnRoLm5vdGVPbihldmVudC5kYXRhLm5vdGUsIGV2ZW50LmRhdGEudmVsb2NpdHkpOwogICAgfSBlbHNlIGlmIChldmVudC5kYXRhLmFjdGlvbiA9PT0gTk9URV9PRkYpIHsKICAgICAgdGhpcy5zeW50aC5ub3RlT2ZmKGV2ZW50LmRhdGEubm90ZSk7CiAgICB9IGVsc2UgaWYgKGV2ZW50LmRhdGEuYWN0aW9uID09PSBQSVRDSF9CRU5EKSB7CiAgICAgIHRoaXMuc3ludGgucGl0Y2hCZW5kKGV2ZW50LmRhdGEudmFsdWUpOwogICAgfSBlbHNlIGlmIChldmVudC5kYXRhLmFjdGlvbiA9PT0gU0VUX1BBUkFNKSB7CiAgICAgIHRoaXMuc3ludGguc2V0VmFsdWUoZXZlbnQuZGF0YS5uYW1lLCBldmVudC5kYXRhLnZhbHVlKTsKICAgIH0gZWxzZSBpZiAoZXZlbnQuZGF0YS5hY3Rpb24gPT09IFNFVF9QQVRDSCkgewogICAgICB0aGlzLnN5bnRoLnBhdGNoID0gZXZlbnQuZGF0YS5wYXRjaERhdGE7CiAgICAgIHRoaXMuc3ludGgudXBkYXRlKCk7CiAgICB9IGVsc2UgaWYgKGV2ZW50LmRhdGEuYWN0aW9uID09PSBMRk9fVFJJR0dFUl9PTikgewogICAgICB0aGlzLnN5bnRoLmxmb1RyaWdnZXIoKTsKICAgIH0gZWxzZSBpZiAoZXZlbnQuZGF0YS5hY3Rpb24gPT09IExGT19UUklHR0VSX09GRikgewogICAgICB0aGlzLnN5bnRoLmxmb1JlbGVhc2UoKTsKICAgIH0gZWxzZSBpZiAoZXZlbnQuZGF0YS5hY3Rpb24gPT09IFBBTklDKSB7CiAgICAgIHRoaXMuc3ludGgucGFuaWMoKTsKICAgIH0gZWxzZSB7CiAgICAgIGNvbnNvbGUubG9nKCJVbm1hbmFnZWQgbWVzc2FnZSIsIEpTT04uc3RyaW5naWZ5KGV2ZW50LmRhdGEpKTsKICAgIH0KICB9CiAgcHJvY2VzcyhpbnB1dHMsIG91dHB1dHMpIHsKICAgIGNvbnN0IG91dHB1dCA9IG91dHB1dHNbMF07CiAgICB0aGlzLnN5bnRoLnJlbmRlcihvdXRwdXRbMF0sIG91dHB1dFsxXSk7CiAgICByZXR1cm4gdHJ1ZTsKICB9Cn0KcmVnaXN0ZXJQcm9jZXNzb3IoImp1bm94LXN5bnRoIiwgSnVub3hXb3JrZXIpOwo=";
+var synth_worklet_default = '// src/junox/smoothMoves.js\nvar SmoothMoves = class {\n  /**\n   * Create a new parameter.\n   * @param {number} value - Initial value of the parameter.\n   * @param {number} sampleRate - Samples-per-second for the current audio context.\n   * @param {number} fc - Amount of smoothing for the LPF used to smooth changes (Hz).\n   */\n  constructor(value, sampleRate2, fc = 5) {\n    this.b1 = -Math.exp(-2 * fc * Math.PI / sampleRate2);\n    this.a0 = 1 + this.b1;\n    this.targetValue = value;\n    this.isStarted = false;\n    this.z1 = 0;\n    this.reset();\n  }\n  /**\n   * Change the current value to a new value using a linear transition over a period of time.\n   * @param {number} value - New parameter value.\n   * @param {boolean} useSmoothing = true - If true then the transition to the new value will be smoothed.\n   */\n  setValue(value, useSmoothing) {\n    this.targetValue = value;\n    if (!this.isStarted || !useSmoothing) {\n      this.reset();\n      return;\n    }\n  }\n  /**\n   * Reset immediately to the target value.\n   * This should only be used if the instrument is currently silent.\n   */\n  reset() {\n    this.z1 = this.targetValue * this.a0 - this.targetValue;\n    this.isStarted = false;\n  }\n  /**\n   * Get the next value of parameter.\n   * @returns {number}\n   */\n  getNextValue() {\n    this.isStarted = true;\n    const xout = this.targetValue * this.a0 - this.z1;\n    this.z1 = this.b1 * xout;\n    return xout;\n  }\n};\n\n// src/junox/dco.js\nvar Juno60DCO = class {\n  constructor(sampleRate2) {\n    this.sampleRate = sampleRate2;\n    this.currentPhase = 0;\n    this.phaseIncrement = 0;\n    this.pulseWidth = 0.5;\n    this.pulsePositive = 1;\n    this.pulseNegative = -1;\n    this.pulseHeight = 1;\n    this.subOutput = 1;\n  }\n  /**\n   * Signal the start of a new note (voice should be silent before this point).\n   * @param {number} noteNumber - MIDI note number (0 to 127).\n   */\n  noteOn(noteNumber) {\n    const noteFrequency = Math.pow(2, (noteNumber - 69) / 12) * 442;\n    this.phaseIncrement = noteFrequency / this.sampleRate;\n    this.currentPhase = 1.1;\n  }\n  /**\n   * Render output for a single quantum.\n   * @param {number} detuneFactor - Factor to increase note\'s frequency by (0.5 = octave-down, 1.0 = default, 2.0 = octave-up)\n   * @param {number} pulseWidth - Pulse width (0..1 - where 0 = square).\n   * @param {number} sawLevel - Output level of the Sawtooth waveform.\n   * @param {number} pulseLevel - Output level of the Pulse waveform.\n   * @param {number} subLevel - Output level of the Sub waveform.\n   */\n  render(detuneFactor, pulseWidth, sawLevel, pulseLevel, subLevel) {\n    const phaseIncrement = this.phaseIncrement * detuneFactor;\n    const origPhase = this.currentPhase;\n    this.currentPhase += phaseIncrement;\n    if (this.currentPhase > 1) {\n      this.currentPhase -= 1;\n      this.pulseWidth = 0.5 - 0.45 * pulseWidth;\n      this.pulsePositive = 1 - pulseWidth * 0.95;\n      this.pulseNegative = -1;\n      this.pulseHeight = 0.45 * (this.pulsePositive - this.pulseNegative);\n    }\n    let newSawOutput = 0;\n    if (sawLevel > 0) {\n      newSawOutput = this.currentPhase + this.currentPhase - 1;\n      newSawOutput -= this.calcPolyBLEP2(this.currentPhase, phaseIncrement, 1);\n    }\n    let newPulseOutput = 0;\n    if (pulseLevel > 0) {\n      newPulseOutput = this.currentPhase > this.pulseWidth ? this.pulsePositive *= 0.998 : this.pulseNegative *= 0.998;\n      newPulseOutput -= this.calcPolyBLEP2(this.currentPhase, phaseIncrement, this.pulseHeight);\n      const x = this.currentPhase - this.pulseWidth;\n      newPulseOutput += this.calcPolyBLEP2(x < 0 ? x + 1 : x, phaseIncrement, this.pulseHeight);\n    }\n    let newSubOutput = this.subOutput *= 0.998;\n    let y = this.currentPhase - 0.5;\n    if (y < phaseIncrement && y > -phaseIncrement) {\n      if (y < 0) {\n        y += 1;\n      }\n      const origSubOutput = newSubOutput;\n      if (this.currentPhase >= 0.5 && origPhase < 0.5) {\n        this.subOutput = newSubOutput = newSubOutput > 0 ? -1 : 1;\n      }\n      newSubOutput -= this.calcPolyBLEP2(y, phaseIncrement, origSubOutput);\n    }\n    return newSawOutput * sawLevel + newPulseOutput * pulseLevel + newSubOutput * subLevel;\n  }\n  /**\n   * Calculate the PolyBLEP correction that is required to reduce aliasing.\n   * @param {number} phase - Current phase.\n   * @param {number} inc - Current phase-increment (to produce the desired pitch).\n   * @param {number} height - Height of the PolyBLEP correction).\n   */\n  calcPolyBLEP2(phase, inc, height) {\n    let result = 0;\n    if (phase < inc) {\n      const t = phase / inc;\n      result = height * (t + t - t * t - 1);\n    } else if (phase + inc > 1) {\n      const t = (phase - 1) / inc;\n      result = height * (t * t + (t + t) + 1);\n    }\n    return result;\n  }\n};\n\n// src/junox/abstractEnvelope.js\nvar AbstractEnvelope = class {\n  constructor(segments) {\n    this._segments = segments;\n    this._currentPhase = -1;\n    this._currentValue = 0;\n  }\n  /**\n   * Returns true if the envelope is currently active.\n   */\n  isFinished() {\n    return this._currentPhase === -1;\n  }\n  /**\n   * Returns true if the envelope is active, and has been released or shutdown.\n   */\n  isReleased() {\n    return this._currentPhase !== 0 && this._currentPhase !== 1;\n  }\n  /**\n   * Returns true if the envelope is currently shutting-down.\n   */\n  isShuttingDown() {\n    return this._currentPhase === this._segments.length - 1;\n  }\n  /**\n   * Trigger (or retrigger) the envelope.\n   */\n  trigger() {\n    this._currentPhase = 0;\n    for (let segment of this._segments) {\n      segment.reset();\n    }\n  }\n  /**\n   * Release the current note.\n   */\n  release() {\n    if (this._currentPhase !== -1) {\n      this._currentPhase = this._segments.length - 2;\n    }\n  }\n  /**\n   * Shutdown the envelope (when you need all notes to stop quickly, or when you are stealing voices).\n   */\n  shutdown() {\n    if (this._currentPhase !== -1) {\n      this._currentPhase = this._segments.length - 1;\n    }\n  }\n  /**\n   * Reset the envelope (only used when the voice is silent).\n   */\n  reset() {\n    this._currentPhase = -1;\n    this._currentValue = 0;\n    for (let i = 0; i < this._segments.length; i++) {\n      this._segments[i].reset();\n    }\n  }\n  /**\n   * Calculate the next value of the envelope.\n   */\n  render() {\n    let currentPhase = this._currentPhase;\n    while (currentPhase >= 0 && currentPhase < this._segments.length) {\n      const segment = this._segments[currentPhase];\n      const nextValue = segment.process(this._currentValue);\n      if (segment.isComplete(nextValue)) {\n        currentPhase++;\n        if (currentPhase >= this._segments.length) {\n          this._currentValue = 0;\n          currentPhase = -1;\n        }\n        this._currentPhase = currentPhase;\n      } else {\n        this._currentValue = nextValue;\n        break;\n      }\n    }\n    return this._currentValue;\n  }\n};\nvar AttackSegment = class {\n  /**\n   * Create an envelope attack segment.\n   * @param {number} sampleRate - Samples-per-second for the current audio context.\n   * @param {number} attackTCO - For analog this is often "Math.exp(-1.5)".\n   * @param {number} target - Target level at-which this segment should stop.\n   * @param {bool} isSustainAtEnd - Set to true if the end of the segment is the sustain phase.\n   */\n  constructor(sampleRate2, attackTCO, target, isSustainAtEnd) {\n    this._sampleRate = sampleRate2;\n    this._attackTCO = attackTCO;\n    this._attackCoeff = 0;\n    this._attackOffset = 0;\n    this._isSustainAtEnd = isSustainAtEnd;\n    this.target = target;\n  }\n  /**\n   * Configure the segment so that it would attack from 0 to +1 in the specified number of seconds.\n   * @param {number} seconds - Planned duration of the segment (if the segment runs from 0 to +1)\n   */\n  setDuration(duration) {\n    const samples = this._sampleRate * duration;\n    this._attackCoeff = Math.exp(-Math.log((1 + this._attackTCO) / this._attackTCO) / samples);\n    this._attackOffset = (1 + this._attackTCO) * (1 - this._attackCoeff);\n  }\n  /**\n   * Reset the segment.\n   */\n  reset() {\n  }\n  /**\n   * Calculate the next value of this segment of the envelope.\n   * @param {number} previousValue - Previous value of the envelope.\n   * @returns {number} - Next value of the envelope\n   */\n  process(previousValue) {\n    const result = previousValue * this._attackCoeff + this._attackOffset;\n    return result > this.target && this._isSustainAtEnd ? this.target : result;\n  }\n  /**\n   * Test if the segment is now complete.\n   * @param {number} value - Value to test.\n   * @returns {bool} - True if the value if the segment is now complete.\n   */\n  isComplete(value) {\n    return value > this.target;\n  }\n};\nvar DecaySegment = class {\n  /**\n   * Create an envelope decay segment.\n   * @param {number} sampleRate - Samples-per-second for the current audio context.\n   * @param {number} decayTCO - For analog this is often "Math.exp(-4.95)".\n   * @param {number} target - Target level at-which this segment should stop.\n   * @param {bool} isSustainAtEnd - Set to true if the end of the segment is the sustain phase.\n   */\n  constructor(sampleRate2, decayTCO, target, isSustainAtEnd) {\n    this._sampleRate = sampleRate2;\n    this._decayTCO = decayTCO;\n    this._decayCoeff = 0;\n    this._decayOffset = 0;\n    this._isSustainAtEnd = isSustainAtEnd;\n    this.target = target;\n  }\n  /**\n   * Configure the segment so that it would decay from +1 to 0 in the specified number of seconds.\n   * @param {number} seconds - Planned duration of the segment (if the segment runs from +1 to 0)\n   */\n  setDuration(seconds) {\n    const samples = this._sampleRate * seconds;\n    this._decayCoeff = Math.exp(-Math.log((1 + this._decayTCO) / this._decayTCO) / samples);\n    this._decayOffset = (this.target - this._decayTCO) * (1 - this._decayCoeff);\n  }\n  /**\n   * Reset the segment.\n   */\n  reset() {\n  }\n  /**\n   * Calculate the next value of this segment of the envelope.\n   * @param {number} previousValue - Previous value of the envelope.\n   * @returns {number} - Next value of the envelope\n   */\n  process(previousValue) {\n    const result = previousValue * this._decayCoeff + this._decayOffset;\n    return result < this.target && this._isSustainAtEnd ? this.target : result;\n  }\n  /**\n   * Test if the segment is now complete.\n   * @param {number} value - Value to test.\n   * @returns {bool} - True if the value if the segment is now complete.\n   */\n  isComplete(value) {\n    return value <= this.target && !this._isSustainAtEnd || value < 0.02;\n  }\n};\nvar DelaySegment = class {\n  /**\n   * Create an envelope delay segment.\n   * @param {number} sampleRate - Samples-per-second for the current audio context.\n   */\n  constructor(sampleRate2) {\n    this._sampleRate = sampleRate2;\n    this._delaySampleCount = 0;\n    this._currentRemaining = 0;\n  }\n  /**\n   * Configure the segment so that it will delay for the specified number of seconds.\n   * @param {number} seconds - Planned duration of the segment.\n   */\n  setDuration(duration) {\n    const delaySampleCount = this._sampleRate * duration | 0;\n    this._currentRemaining += delaySampleCount - this._delaySampleCount;\n    this._delaySampleCount = delaySampleCount;\n  }\n  /**\n   * Reset the segment.\n   */\n  reset() {\n    this._currentRemaining = this._delaySampleCount;\n  }\n  /**\n   * Calculate the next value of this segment of the envelope.\n   * @param {number} previousValue - Previous value of the envelope.\n   * @returns {number} - Next value of the envelope.\n   */\n  process(previousValue) {\n    this._currentRemaining--;\n    return previousValue;\n  }\n  /**\n   * Test if the segment is now complete.\n   * @returns {bool} - True if the value if the segment is now complete.\n   */\n  isComplete() {\n    return this._currentRemaining <= 0;\n  }\n};\nvar ShutdownSegment = class {\n  /**\n   * Create an envelope shutdown segment.\n   * @param {number} sampleRate - Samples-per-second for the current audio context.\n   * @param {number} seconds - Planned duration of the segment (if the segment runs from +1 to 0)\n   */\n  constructor(sampleRate2, seconds) {\n    this._shutdownRate = 1 / (seconds * sampleRate2);\n  }\n  /**\n   * Reset the segment.\n   */\n  reset() {\n  }\n  /**\n   * Calculate the next value of this segment of the envelope.\n   * @param {number} previousValue - Previous value of the envelope.\n   * @returns {number} - Next value of the envelope\n   */\n  process(previousValue) {\n    const result = previousValue - this._shutdownRate;\n    return result < 0 ? 0 : result;\n  }\n  /**\n   * Test if the segment is now complete.\n   * @param {number} value - Value to test.\n   * @returns {bool} - True if the value if the segment is now complete.\n   */\n  isComplete(value) {\n    return value <= 0;\n  }\n};\n\n// src/junox/utils.mjs\nfunction fastTanh(x) {\n  if (x < -3) {\n    return -1;\n  } else if (x > 3) {\n    return 1;\n  }\n  const xSquared = x * x;\n  return x * (27 + xSquared) / (27 + 9 * xSquared);\n}\nfunction interpolatedLookup(value, table) {\n  const index = value | 0;\n  const indexNext = index + 1;\n  const factor = value - index;\n  if (index < 0) {\n    return table[0];\n  }\n  if (indexNext >= table.length) {\n    return table[table.length - 1];\n  }\n  return table[index] * (1 - factor) + table[indexNext] * factor;\n}\n\n// src/junox/juno60Envelope.js\nvar curveFromAttackSliderToDuration = [1e-3, 0.03, 0.24, 0.65, 3.25];\nvar curveFromDecaySliderToDuration = [2e-3, 0.096, 0.984, 4.449, 19.783];\nvar curveFromReleaseSliderToDuration = [2e-3, 0.096, 0.984, 4.449, 19.783];\nvar Juno60Envelope = class extends AbstractEnvelope {\n  /**\n   * Create a Juno-60 envelope.\n   * @param {number} sampleRate - Samples-per-second for the current audio context.\n   */\n  constructor(sampleRate2) {\n    super([\n      new AttackSegment(sampleRate2, 0.632, 1, false),\n      new DecaySegment(sampleRate2, 0.025, 0, true),\n      new DecaySegment(sampleRate2, 0.025, 0, false),\n      new ShutdownSegment(sampleRate2, 1e-3)\n    ]);\n    this._attack = this._segments[0];\n    this._decay = this._segments[1];\n    this._release = this._segments[2];\n    this._shutdown = this._segments[3];\n  }\n  /**\n   * Configure the segments of the envelope from direct values.\n   * @param {number} attackDuration - Number of seconds for the duration of the attack phase.\n   * @param {number} decayDuration - Number of seconds for the duration of the decay phase.\n   * @param {number} sustainLevel - Level of the sustain phase (0.0 to 1.0).\n   * @param {number} releaseDuration - Number of seconds for the duration of the release phase.\n   */\n  setValues(attackDuration, decayDuration, sustainLevel, releaseDuration) {\n    this._attack.setDuration(attackDuration);\n    this._decay.target = Math.max(0.02, sustainLevel);\n    this._decay.setDuration(decayDuration);\n    this._release.setDuration(this._decay.target <= 0.02 ? 0.01 : releaseDuration);\n  }\n  /**\n   * Configure the segments of the envelope from slider-positions.\n   * @param {number} attackSlider - Value of the attack slider (0.0 to 1.0).\n   * @param {number} decaySlider - Value of the decay slider (0.0 to 1.0).\n   * @param {number} sustainSlider - Value of the sustain slider (0.0 to 1.0).\n   * @param {number} releaseSlider - Value of the release slider (0.0 to 1.0).\n   */\n  setValuesFromSliders(attackSlider, decaySlider, sustainSlider, releaseSlider) {\n    const attackDuration = interpolatedLookup(\n      attackSlider * curveFromAttackSliderToDuration.length,\n      curveFromAttackSliderToDuration\n    );\n    const decayDuration = interpolatedLookup(decaySlider * curveFromDecaySliderToDuration.length, curveFromDecaySliderToDuration);\n    const releaseDuration = interpolatedLookup(\n      releaseSlider * curveFromReleaseSliderToDuration.length,\n      curveFromReleaseSliderToDuration\n    );\n    this.setValues(attackDuration, decayDuration, sustainSlider, releaseDuration);\n  }\n};\n\n// src/junox/ladderFilter.js\nvar LadderFilter = class {\n  constructor(sampleRate2) {\n    this.reset();\n    this.nyquistLimit = sampleRate2 * 0.5;\n    this.piOverSampleRate = Math.PI / sampleRate2;\n  }\n  /**\n   * Reset the filter - ready for the next note.\n   */\n  reset() {\n    this.z1 = 0;\n    this.z2 = 0;\n    this.z3 = 0;\n    this.z4 = 0;\n  }\n  /**\n   * Calculate the "cutoffFactor" for the specifed frequency.\n   * @param {number} fc - Cutoff frequency (Hz).\n   */\n  calcCutoffFactor(fc) {\n    if (fc > this.nyquistLimit) {\n      fc = this.nyquistLimit;\n    }\n    return Math.tan(fc * this.piOverSampleRate);\n  }\n  /**\n   * Trigger the filter (useful for percussive sounds).\n   * @param {number} initialExcite - Initial amount of excitement for the feedback resonance loop.\n   */\n  trigger(initialExcite) {\n    this.z4 += initialExcite;\n  }\n  /**\n   * Apply filtering to the input sigmal.\n   * If saturation or passband-compensation are required then pre-apply to input (Valimaki).\n   * Consider applying a peak-limiter to the output (to prevent blow-up).\n   * @param {number} input - Input signal (normally in range -1.0 to +1.0).\n   * @param {number} cutoffFactor - Result of prewarping the cutoff-frequency.\n   * @param {number} resonance - Resonance amount (range: 0.0 to 1.0).\n   * @param {number} mode - Filter mode (see ladderFilterModes).\n   */\n  process(input, cutoffFactor, resonance, mode = ladderFilterModes.LPF4) {\n    const oneOverOnePlusg = 1 / (1 + cutoffFactor);\n    const alpha = cutoffFactor * oneOverOnePlusg;\n    const beta4 = oneOverOnePlusg;\n    const beta3 = beta4 * alpha;\n    const beta2 = beta3 * alpha;\n    const beta1 = beta2 * alpha;\n    const feedback = beta1 * this.z1 + beta2 * this.z2 + beta3 * this.z3 + beta4 * this.z4;\n    const k = 4 * resonance;\n    const xin = (input - k * feedback) / (1 + k * alpha * alpha * alpha * alpha);\n    const lpf1In = (xin - this.z1) * alpha;\n    const lpf1Out = lpf1In + this.z1;\n    this.z1 = lpf1In + lpf1Out;\n    const lpf2In = (lpf1Out - this.z2) * alpha;\n    const lpf2Out = lpf2In + this.z2;\n    this.z2 = lpf2In + lpf2Out;\n    const lpf3In = (lpf2Out - this.z3) * alpha;\n    const lpf3Out = lpf3In + this.z3;\n    this.z3 = lpf3In + lpf3Out;\n    const lpf4In = (lpf3Out - this.z4) * alpha;\n    const lpf4Out = lpf4In + this.z4;\n    this.z4 = lpf4In + lpf4Out;\n    return mode[4] * lpf4Out + mode[3] * lpf3Out + mode[2] * lpf2Out + mode[1] * lpf1Out + mode[0] * xin;\n  }\n};\nvar ladderFilterModes = {\n  LPF2: Float64Array.from([0, 0, 1, 0, 0]),\n  LPF4: Float64Array.from([0, 0, 0, 0, 1]),\n  BPF2: Float64Array.from([0, 2, -2, 0, 0]),\n  BPF4: Float64Array.from([0, 0, 4, -8, 4]),\n  HPF2: Float64Array.from([1, -2, 1, 0, 0]),\n  HPF4: Float64Array.from([1, -4, 6, -4, 1])\n};\nladderFilterModes.all = [\n  ladderFilterModes.LPF2,\n  ladderFilterModes.LPF4,\n  ladderFilterModes.BPF2,\n  ladderFilterModes.BPF4,\n  ladderFilterModes.HPF2,\n  ladderFilterModes.HPF4\n];\n\n// src/junox/noise.js\nvar Noise = class {\n  constructor(sampleRate2, fc = 5e3) {\n    this._b1 = -Math.exp(-2 * fc * Math.PI / sampleRate2);\n    this._a0 = 1 + this._b1;\n    this._z1 = 0;\n  }\n  render() {\n    const xin = Math.random() * 2 - 1;\n    const xout = xin * this._a0 - this._z1;\n    this._z1 = this._b1 * xout;\n    return xout;\n  }\n};\n\n// src/junox/voice.js\nvar Voice = class {\n  constructor({ patch, sampleRate: sampleRate2 }) {\n    this.patch = patch;\n    this.sampleRate = sampleRate2;\n    this.note = -1;\n    this.velocity = 0;\n    this.filterNoteFactor = 0;\n    this.dco = new Juno60DCO(sampleRate2);\n    this.noise = new Noise(sampleRate2, 5e3);\n    this.modEnv = new Juno60Envelope(sampleRate2);\n    this.ampEnv = new Juno60Envelope(sampleRate2);\n    this.moogVCF = new LadderFilter(sampleRate2);\n  }\n  /**\n   * Render output for a single quantum. The passed-in parameters should be "smoothed" so that we don\'t hear zippering.\n   * @param {number} lfoOut - Current value of the LFO (between -1 and +1)\n   * @param {number} detuneFactor - Factor to increase note\'s frequency by (0.5 = octave-down, 1.0 = default, 2.0 = octave-up)\n   * @param {number} pwmDepth - Pulse width depth (between 0-square and 1)\n   * @param {number} sawLevel - Output level of the Sawtooth waveform (between 0 and 1).\n   * @param {number} pulseLevel - Output level of the Pulse waveform (between 0 and 1).\n   * @param {number} subLevel - Output level of the Sub waveform (between 0 and 1).\n   * @param {number} noiseLevel - Output level of the noise (between 0 and 1).\n   * @param {number} filterCutoff - Current value of the filter\'s cutoff slider (between 0 and 1).\n   * @param {number} filterResonance - Current value of the filter\'s resonance slider (between 0 and 1).\n   * @param {number} filterEnvMod - Current value of the filter\'s envelope modulation slider (between -1 (for negative) and +1 (for positive)).\n   * @param {number} lfoDetuneOctaves - Number of octaves that the filter is detuned-by (for LFO and bend-lever).\n   * @param {number} filterKeyMod - Current value of the filter\'s keyboard modulation slider (between 0 and 1).\n   */\n  render(lfoOut, detuneFactor, pwmDepth, sawLevel, pulseLevel, subLevel, noiseLevel, filterCutoff, filterResonance, filterEnvMod, lfoDetuneOctaves, filterKeyMod) {\n    const modEnvOut = this.modEnv.render();\n    const ampEnvOut = this.ampEnv.render();\n    let pulseWidth = pwmDepth;\n    if (this.patch.dco.pwmMod === "l") {\n      pulseWidth *= lfoOut * 0.5 + 0.5;\n    } else if (this.patch.dco.pwmMod === "e") {\n      pulseWidth *= modEnvOut;\n    }\n    let dcoOut = this.dco.render(detuneFactor, pulseWidth, sawLevel, pulseLevel, subLevel);\n    if (noiseLevel > 0) {\n      dcoOut += this.noise.render() * noiseLevel;\n    }\n    const cutoffDetuneOctave = filterCutoff * 200 / 12;\n    const envDetuneOctaves = modEnvOut * filterEnvMod * 12;\n    const keyboardDetuneOctaves = filterKeyMod * this.filterNoteFactor;\n    const resonanceDetuneOctaves = this.patch.vcf.resonance * 0.5;\n    const vcfCutoffValue = cutoffDetuneOctave + lfoDetuneOctaves * ampEnvOut + // Using env to dumb-down LFO makes UFO patch sound more natural.\n    keyboardDetuneOctaves + envDetuneOctaves + resonanceDetuneOctaves;\n    const cutoffFrequency = 7.8 * Math.pow(2, vcfCutoffValue);\n    const vcfOut = this.moogVCF.process(dcoOut, this.moogVCF.calcCutoffFactor(cutoffFrequency), filterResonance);\n    return this.velocity * vcfOut * ampEnvOut;\n  }\n  noteOn(note, velocity) {\n    if (note !== this.note || this.isFinished()) {\n      this.note = note;\n      this.dco.noteOn(note);\n      this.modEnv.reset();\n      this.ampEnv.reset();\n      this.moogVCF.reset();\n      const c4 = 60;\n      const fiveOctaves = 5 * 12;\n      this.filterNoteFactor = 5 * ((this.note - c4) / fiveOctaves);\n    }\n    if (!this.patch.dco.saw && !this.patch.dco.pulse && !this.patch.dco.subAmount && !this.patch.dco.noise) {\n      const initialExcite = this.patch.vcf.resonance * this.patch.vcf.resonance * 0.01;\n      this.moogVCF.trigger(initialExcite);\n    }\n    this.velocity = velocity;\n    this.updatePatch(this.patch);\n    this.modEnv.trigger();\n    this.ampEnv.trigger();\n  }\n  noteOff() {\n    this.modEnv.release();\n    this.ampEnv.release();\n  }\n  shutdown() {\n    this.modEnv.shutdown();\n    this.ampEnv.shutdown();\n  }\n  isReleased() {\n    return this.ampEnv.isReleased();\n  }\n  isShuttingDown() {\n    return this.ampEnv.isShuttingDown();\n  }\n  getLevel() {\n    return this.ampEnv._currentValue;\n  }\n  isFinished() {\n    return this.ampEnv.isFinished();\n  }\n  updatePatch(patch) {\n    const env = patch.env;\n    this.modEnv.setValuesFromSliders(env.attack, env.decay, env.sustain, env.release);\n    if (patch.vcaType === "env") {\n      this.ampEnv.setValuesFromSliders(env.attack, env.decay, env.sustain, env.release);\n    } else {\n      this.ampEnv.setValues(247e-5, 57e-4, 0.98, 57e-4);\n    }\n    this.patch = patch;\n  }\n};\n\n// src/junox/ringBuffer.js\nvar RingBuffer = class {\n  /**\n   * @param {number} maxBufferSize - Maximum number of samples that the signal can be delayed-by (calculate using `delaySeconds * sampleRate`).\n   */\n  constructor(maxBufferSize) {\n    this.buffer = new Float32Array(maxBufferSize);\n    this.writeIndex = 0;\n    this.maxBufferSize = maxBufferSize;\n  }\n  /**\n   *\n   * @param {number} index\n   */\n  ringBufferIndex(index) {\n    if (index < 0) {\n      return index + this.maxBufferSize;\n    }\n    if (index >= this.maxBufferSize) {\n      return index - this.maxBufferSize;\n    }\n    return index;\n  }\n  /**\n   * Read a sample from the ring-buffer.\n   * Delay period = `readOffset / sampleRate`\n   * @param (number) readOffset - The number of samples between the read and the write position\n   */\n  readSample(readOffset) {\n    const readIndex = this.ringBufferIndex(this.writeIndex - readOffset);\n    const indexA = Math.floor(readIndex);\n    const fractional = readIndex - indexA;\n    const indexB = this.ringBufferIndex(indexA + 1);\n    return this.buffer[indexA] * (1 - fractional) + this.buffer[indexB] * fractional;\n  }\n  /**\n   * Write a new sample into the ring-buffer.\n   * @param {number} input\n   */\n  writeSample(input) {\n    this.buffer[this.writeIndex] = input;\n    this.writeIndex = (this.writeIndex + 1) % this.maxBufferSize;\n  }\n  /**\n   * Reset the delay-line\'s contents (only used when the instrument is silent).\n   */\n  reset() {\n    this.buffer.fill(0);\n  }\n};\n\n// src/junox/simpleSinglePoleFilter.js\nvar SimpleSinglePoleFilter = class {\n  /**\n   * @constructor\n   * @param {number} sampleRate - Sample rate (Hz)\n   * @param {*} fc - Cutoff frequency (Hz)\n   */\n  constructor(sampleRate2, fc = 5) {\n    this._piOverSampleRate = Math.PI / sampleRate2;\n    this._a0 = 1;\n    this._b1 = 0;\n    this._z1 = 0;\n    this.setCutoff(fc);\n  }\n  /**\n   * Flush storage and clear feedback.\n   */\n  reset() {\n    this._z1 = 0;\n  }\n  /**\n   * Process a single sample through the low-pass filter (using transposed direct form II technique).\n   * @param {number} xin - Input value.\n   * @returns {number} - Output value.\n   */\n  renderLP(xin) {\n    const xout = xin * this._a0 + this._z1;\n    this._z1 = -this._b1 * xout;\n    return xout;\n  }\n  /**\n   * Process using high-pass filter (inverse of low-pass).\n   * @param {number} xin - Input value.\n   * @returns {number} - Output value.\n   */\n  renderHP(xin) {\n    return xin - this.renderLP(xin);\n  }\n  /**\n   * Set cutoff frequency for for simple low pass filter.\n   * @param {number} fc - Cutoff frequency (Hz)\n   */\n  setCutoff(fc) {\n    this._b1 = -Math.exp(-2 * fc * this._piOverSampleRate);\n    this._a0 = 1 + this._b1;\n  }\n};\n\n// src/junox/chorus.js\nvar Chorus = class {\n  /**\n   * @constructor\n   * @param {number} sampleRate\n   */\n  constructor(sampleRate2) {\n    this.leftOutput = 0;\n    this.rightOutput = 0;\n    this._sampleRate = sampleRate2;\n    this._isUsed = false;\n    this._nextChorusMode = 0;\n    this._ringBuffer = new RingBuffer(Math.trunc(sampleRate2 * 6e-3));\n    this._preFilter = new SimpleSinglePoleFilter(sampleRate2, 7237);\n    this._postLeftFilter = new SimpleSinglePoleFilter(sampleRate2, 10644);\n    this._postRightFilter = new SimpleSinglePoleFilter(sampleRate2, 10644);\n    this._dryCurrent = 1;\n    this._dryChange = 0;\n    this._dryTarget = 1;\n    this._lfoValue = 0;\n    this._lfoIncrement = 0.01;\n    this._maxLeftOffset = 0;\n    this._averageLeftSamples = 0;\n    this._maxRightOffset = 0;\n    this._averageRightSamples = 0;\n  }\n  /**\n   * Calculate the `leftOutput` and `rightOutput` signal values for the specified `input`.\n   * @param {number} input\n   */\n  render(input) {\n    this._isUsed = true;\n    let dry = this._dryCurrent;\n    if (this._dryChange !== 0) {\n      dry += this._dryChange;\n      if (dry > 1) {\n        dry = 1;\n        this._dryChange = 0;\n        this.update(this._nextChorusMode);\n      } else if (dry < this._dryTarget && this._dryChange < 0) {\n        dry = this._dryTarget;\n        this._dryChange = 0;\n      }\n      this._dryCurrent = dry;\n    }\n    if (dry === 1) {\n      this.leftOutput = input;\n      this.rightOutput = input;\n      return;\n    }\n    let lfoValue = this._lfoValue + this._lfoIncrement;\n    if (lfoValue > 1 || lfoValue < -1) {\n      this._lfoIncrement = -this._lfoIncrement;\n      lfoValue = this._lfoValue + this._lfoIncrement;\n    }\n    this._lfoValue = lfoValue;\n    const dryOutput = input * dry;\n    const wetFactor = 1 - dry;\n    const leftDelaySamples = this._averageLeftSamples + lfoValue * this._maxLeftOffset;\n    const leftDelayedValue = this._ringBuffer.readSample(leftDelaySamples);\n    this.leftOutput = dryOutput + this._postLeftFilter.renderLP(leftDelayedValue * wetFactor);\n    const rightDelaySamples = this._averageRightSamples + lfoValue * this._maxRightOffset;\n    const rightDelayedValue = this._ringBuffer.readSample(rightDelaySamples);\n    this.rightOutput = dryOutput + this._postRightFilter.renderLP(rightDelayedValue * wetFactor);\n    this._ringBuffer.writeSample(this._preFilter.renderLP(this._applySaturation(input)));\n  }\n  /**\n   * Reset the delay-line\'s contents (only used when the instrument is silent).\n   */\n  reset() {\n    this._ringBuffer.reset();\n    this._preFilter.reset();\n    this._postLeftFilter.reset();\n    this._postRightFilter.reset();\n    this._isUsed = false;\n  }\n  /**\n   * Update the chorus effect to the specified mode.\n   * @param {number} chorusMode - New chorus-mode setting.\n   */\n  update(chorusMode) {\n    if (this._dryCurrent < 1 && !this._isUsed) {\n      this._dryChange = 5e-4;\n      this._dryTarget = 1;\n      this._nextChorusMode = chorusMode;\n    } else {\n      switch (chorusMode) {\n        case 1:\n          this._updateValues(0.513, 0.44, 154e-5, 515e-5, 151e-5, 54e-4, true);\n          break;\n        case 2:\n          this._updateValues(0.863, 0.44, 154e-5, 515e-5, 151e-5, 54e-4, true);\n          break;\n        case 3:\n          this._updateValues(9.75, 0.44, 322e-5, 356e-5, 328e-5, 365e-5, false);\n          break;\n        default:\n          this._updateValues(0.513, 1, 154e-5, 515e-5, 151e-5, 54e-4, true);\n          this._ringBuffer.reset();\n          break;\n      }\n    }\n  }\n  /**\n   * @private Apply mild saturation (to mimic the NLP from the BBD).\n   * @param {number} input - Input value.\n   * @returns {number} - Result of the saturated input.\n   */\n  _applySaturation(input) {\n    return input;\n  }\n  /**\n   * @private Apply the internal settings.\n   * @param {number} freq - Frequency (Hz).\n   * @param {number} dry - Ratio of dry:wet (1.0 = fully-dry).\n   * @param {number} minLeftDelay - Minimum delay for the left channel (seconds).\n   * @param {number} maxLeftDelay - Maximum delay for the left channel (seconds).\n   * @param {number} minRightDelay - Minimum delay for the right channel (seconds).\n   * @param {number} maxRightDelay - Maximum delay for the right channel (seconds).\n   * @param {boolean} isStereo - True if the output image should be stereo.\n   */\n  _updateValues(freq, dry, minLeftDelay, maxLeftDelay, minRightDelay, maxRightDelay, isStereo) {\n    const averageLeftDelay = (minLeftDelay + maxLeftDelay) * 0.5;\n    const maxLeftOffset = maxLeftDelay - averageLeftDelay;\n    this._averageLeftSamples = averageLeftDelay * this._sampleRate;\n    this._maxLeftOffset = maxLeftOffset * this._sampleRate;\n    const averageRightDelay = (minRightDelay + maxRightDelay) * 0.5;\n    const maxRightOffset = maxRightDelay - averageRightDelay;\n    this._averageRightSamples = averageRightDelay * this._sampleRate;\n    this._maxRightOffset = maxRightOffset * this._sampleRate * (isStereo ? -1 : 1);\n    this._dryTarget = dry;\n    if (!this._isUsed) {\n      this._dryCurrent = dry;\n      this._dryChange = 0;\n    } else {\n      this._dryChange = (dry - this._dryCurrent) / 1e3;\n    }\n    this._lfoIncrement = Math.sign(this._lfoIncrement) * 4 * freq / this._sampleRate;\n  }\n};\n\n// src/junox/lfo.js\nvar LFO = class {\n  /**\n   * @constructor.\n   * @param {number} sampleRate - Samples-per-second for the current audio context.\n   */\n  constructor(sampleRate2) {\n    this._oneOverSampleRate = 1 / sampleRate2;\n    this._phaseIncrement = 0;\n    this.currentPhase = 1;\n    this.currentValue = 0;\n    this.isRestarted = false;\n    this.waveform = "triangle";\n  }\n  /**\n   * Reset the LFO (only used when the instrument is silent).\n   */\n  reset() {\n    this.currentPhase = 1;\n    this.currentValue = 0;\n  }\n  /**\n   * Calculate the next value of the LFO.\n   */\n  render() {\n    this.isRestarted = false;\n    this.currentPhase += this._phaseIncrement;\n    if (this.currentPhase > 1) {\n      this.isRestarted = true;\n      this.currentPhase -= 1;\n    }\n    let value = 0;\n    switch (this.waveform) {\n      case "none":\n        value = 0;\n        break;\n      case "sine":\n        value = Math.sin(this.currentPhase * 2 * Math.PI);\n        break;\n      case "square":\n        value = this.currentPhase > 0.5 ? -1 : 1;\n        break;\n      case "random":\n        value = this.isRestarted ? Math.random() * 2 - 1 : this.currentValue;\n        break;\n      case "noise":\n        value = Math.random() * 2 - 1;\n        break;\n      default:\n        value = this.currentPhase * 4;\n        if (value > 1) {\n          value = 2 - value;\n        }\n        if (value < -1) {\n          value = -2 - value;\n        }\n        break;\n    }\n    return this.currentValue = value;\n  }\n  /**\n   * Set the speed of the LFO..\n   * @param {number} frequency - Frequency of the LFO (Hz).\n   */\n  setRate(frequency) {\n    this._phaseIncrement = frequency * this._oneOverSampleRate;\n  }\n};\n\n// src/junox/lfoWithEnvelope.js\nvar LFOWithEnvelope = class extends LFO {\n  /**\n   * @constructor.\n   * @param {number} sampleRate - Samples-per-second for the current audio context.\n   */\n  constructor(sampleRate2) {\n    super(sampleRate2);\n    const segments = [\n      this._delay = new DelaySegment(sampleRate2),\n      this._attack = new AttackSegment(sampleRate2, 0.03, 1, true),\n      this._release = new DecaySegment(sampleRate2, 0.025, 0, false),\n      this._shutdown = new ShutdownSegment(sampleRate2, 1e-3)\n    ];\n    this._release.setDuration(0.1);\n    this._env = new AbstractEnvelope(segments);\n  }\n  /**\n   * Returns true if the envelope is currently active.\n   */\n  isActive() {\n    return !this._env.isFinished();\n  }\n  /**\n   * Trigger (or retrigger) the envelope.\n   */\n  trigger() {\n    if (!this.isActive()) {\n      this.currentPhase = 1;\n      this.currentValue = 0;\n    }\n    if (this._env.isFinished() || !this._env.isReleased()) {\n      this._env.trigger();\n    }\n  }\n  /**\n   * Release the current note.\n   */\n  release() {\n    this._env.release();\n  }\n  /**\n   * Shutdown the envelope (when you need all notes to stop quickly, or when you are stealing voices).\n   */\n  shutdown() {\n    this._env.shutdown();\n  }\n  /**\n   * Reset the envelope (only used when the voice is silent).\n   * @override\n   */\n  reset() {\n    super.reset();\n    this._env.reset();\n  }\n  /**\n   * Calculate the next value of the LFO.\n   * @override\n   */\n  render() {\n    if (!this.isActive()) {\n      return 0;\n    }\n    const envValue = this._env.render();\n    if (envValue === 0) {\n      return 0;\n    }\n    return envValue * super.render();\n  }\n  /**\n   * Configure the LFO from direct values.\n   * @param {number} frequency - Frequency of the LFO (Hz).\n   * @param {number} delayDuration - Number of seconds for the duration of the delay phase.\n   * @param {number} attackDuration - Number of seconds for the duration of the attack phase.\n   */\n  setValues(frequency, delayDuration, attackDuration) {\n    this.setRate(frequency);\n    this._delay.setDuration(delayDuration);\n    this._attack.setDuration(attackDuration);\n  }\n};\n\n// src/junox/junox.js\nvar synthStatus = {\n  SILENT: 0,\n  NOTES_ACTIVE: 4\n  // This is the number of trailing frames that will be rendered AFTER all notes have finished.\n};\nvar Junox = class {\n  constructor({ patch, sampleRate: sampleRate2, polyphony }) {\n    this.patch = patch;\n    this.sampleRate = sampleRate2;\n    this.maxVoices = polyphony;\n    this.voices = [];\n    this.status = synthStatus.SILENT;\n    this.parameters = [\n      this.bendAmountParam = new SmoothMoves(0, sampleRate2),\n      this.dcoBendDepthParam = new SmoothMoves(1, sampleRate2),\n      this.pitchLfoModDepthParam = new SmoothMoves(0, sampleRate2),\n      this.pwmDepthParam = new SmoothMoves(0, sampleRate2),\n      this.sawLevelParam = new SmoothMoves(0, sampleRate2),\n      this.pulseLevelParam = new SmoothMoves(0, sampleRate2),\n      this.subLevelParam = new SmoothMoves(0, sampleRate2),\n      this.noiseLevelParam = new SmoothMoves(0, sampleRate2),\n      this.filterCutoffParam = new SmoothMoves(0, sampleRate2),\n      this.filterResonanceParam = new SmoothMoves(0, sampleRate2),\n      this.filterBendDepthParam = new SmoothMoves(1, sampleRate2),\n      this.filterEnvModParam = new SmoothMoves(0, sampleRate2),\n      this.filterLfoModParam = new SmoothMoves(0, sampleRate2),\n      this.filterKeyModParam = new SmoothMoves(0, sampleRate2),\n      this.vcaGainFactorParam = new SmoothMoves(0, sampleRate2)\n    ];\n    this.lfo = new LFOWithEnvelope(sampleRate2);\n    this.lfo.waveform = "sine";\n    this.hpf = new SimpleSinglePoleFilter(sampleRate2);\n    this.chorus = new Chorus(sampleRate2);\n    this.update();\n  }\n  noteOn(note, velocity) {\n    this.status = synthStatus.NOTES_ACTIVE;\n    const voiceIndex = this.voices.findIndex((voice) => voice.note === note && !voice.isShuttingDown());\n    if (voiceIndex >= 0) {\n      this.voices[voiceIndex].noteOn(note, velocity);\n      return;\n    }\n    if (!this.voices.length && this.patch.lfo.autoTrigger) {\n      this.lfo.trigger();\n    }\n    const newVoice = new Voice({ patch: this.patch, sampleRate: this.sampleRate });\n    newVoice.noteOn(note, velocity);\n    const activeVoices = this.voices.filter((voice) => !voice.isShuttingDown());\n    if (activeVoices.length >= this.maxVoices) {\n      const releasedVoices = activeVoices.filter((voice) => voice.isReleased());\n      const candidates = releasedVoices.length ? releasedVoices : activeVoices;\n      let victim = candidates[0];\n      for (let i = 1; i < candidates.length; i++) {\n        if (candidates[i].getLevel() < victim.getLevel()) {\n          victim = candidates[i];\n        }\n      }\n      victim.shutdown();\n    }\n    this.voices.push(newVoice);\n  }\n  noteOff(note) {\n    this.voices.forEach((voice) => voice.note === note && !voice.isFinished() && voice.noteOff());\n  }\n  pitchBend(value) {\n    this.bendAmountParam.setValue(value);\n  }\n  lfoTrigger() {\n    this.lfo.trigger();\n  }\n  lfoRelease() {\n    this.lfo.release();\n  }\n  render(outL, outR) {\n    if (this.status === synthStatus.SILENT) {\n      return;\n    }\n    this.status--;\n    this.voices = this.voices.filter((voice) => !voice.isFinished());\n    if (this.voices.length) {\n      this.status = synthStatus.NOTES_ACTIVE;\n    }\n    for (let i = 0; i < outL.length; i++) {\n      const bendAmount = this.bendAmountParam.getNextValue();\n      const dcoBendDepth = this.dcoBendDepthParam.getNextValue();\n      const pwmDepth = this.pwmDepthParam.getNextValue();\n      const pitchLfoModDepth = this.pitchLfoModDepthParam.getNextValue();\n      const sawLevel = this.sawLevelParam.getNextValue();\n      const pulseLevel = this.pulseLevelParam.getNextValue();\n      const subLevel = this.subLevelParam.getNextValue();\n      const noiseLevel = this.noiseLevelParam.getNextValue();\n      const filterCutoff = this.filterCutoffParam.getNextValue();\n      const filterResonance = this.filterResonanceParam.getNextValue();\n      const filterBendDepth = this.filterBendDepthParam.getNextValue();\n      const filterEnvMod = this.filterEnvModParam.getNextValue();\n      const filterLfoMod = this.filterLfoModParam.getNextValue();\n      const filterKeyMod = this.filterKeyModParam.getNextValue();\n      const vcaGainFactor = this.vcaGainFactorParam.getNextValue();\n      if (i === 0) {\n      }\n      const lfoOut = this.lfo.render();\n      const dcoDetuneOctaves = lfoOut * pitchLfoModDepth * 0.25 + // +-300 cents (page 14).\n      bendAmount * dcoBendDepth * 7 / 12;\n      let dcoDetuneFactor = this.patch.dco.range;\n      if (dcoDetuneOctaves !== 0) {\n        dcoDetuneFactor *= Math.pow(2, dcoDetuneOctaves);\n      }\n      const filterDetuneOctaves = bendAmount * filterBendDepth * 4 + // +- 4 octaves\n      filterLfoMod * lfoOut * 3;\n      let monoOut = 0;\n      for (let v = 0; v < this.voices.length; v++) {\n        const voice = this.voices[v];\n        if (!voice.isFinished()) {\n          monoOut += voice.render(\n            lfoOut,\n            dcoDetuneFactor,\n            pwmDepth,\n            sawLevel,\n            pulseLevel,\n            subLevel,\n            noiseLevel,\n            filterCutoff,\n            filterResonance,\n            filterEnvMod,\n            filterDetuneOctaves,\n            filterKeyMod\n          );\n        }\n      }\n      if (this.patch.hpf > 0) {\n        let lowPassOut = this.hpf.renderLP(monoOut);\n        if (this.patch.hpf < 0.25) {\n          lowPassOut *= this.patch.hpf * 4;\n        }\n        monoOut -= lowPassOut;\n      }\n      monoOut *= vcaGainFactor;\n      monoOut = fastTanh(3 * monoOut);\n      this.chorus.render(monoOut);\n      outL[i] = this.chorus.leftOutput;\n      outR[i] = this.chorus.rightOutput;\n    }\n    if (this.status === synthStatus.SILENT) {\n      let fadeLevel = 1;\n      const fadeStep = fadeLevel / outL.length;\n      for (let i = 0; i < outL.length; i++) {\n        outL[i] *= fadeLevel;\n        outR[i] *= fadeLevel;\n        fadeLevel -= fadeStep;\n      }\n      if (this.patch.lfo.autoTrigger) {\n        this.lfo.reset();\n      }\n      this.hpf.reset();\n      this.chorus.reset();\n      for (let i = 0; i < this.parameters.length; i++) {\n        this.parameters[i].reset();\n      }\n    }\n  }\n  setValue(path, value) {\n    const pathSegments = path.split(".");\n    if (pathSegments.length) {\n      let target = this.patch;\n      for (let i = 0; i < pathSegments.length - 1; i++) {\n        target = target[pathSegments[i]] || (target[pathSegments[i]] = {});\n      }\n      target[pathSegments[pathSegments.length - 1]] = value;\n      this.update();\n    }\n  }\n  update() {\n    let isActive = false;\n    for (let v = 0; v < this.voices.length; v++) {\n      const voice = this.voices[v];\n      voice.updatePatch(this.patch);\n      isActive = isActive || !voice.isFinished();\n    }\n    let sawLevel = this.patch.dco.saw ? 0.2 : 0;\n    let pulseLevel = this.patch.dco.pulse ? 0.2 : 0;\n    let subLevel = this.patch.dco.sub ? this.patch.dco.subAmount * 0.195 : 0;\n    let noiseLevel = this.patch.dco.noise * 0.21;\n    let mixFactor = sawLevel + pulseLevel + subLevel + noiseLevel;\n    if (mixFactor > 0.26) {\n      mixFactor = 0.26 / (0.26 + (mixFactor - 0.26) * 0.3);\n      pulseLevel *= mixFactor;\n      sawLevel *= mixFactor;\n      subLevel *= mixFactor;\n      noiseLevel *= mixFactor;\n    }\n    this.sawLevelParam.setValue(sawLevel, isActive);\n    this.pulseLevelParam.setValue(pulseLevel, isActive);\n    this.subLevelParam.setValue(subLevel, isActive);\n    this.noiseLevelParam.setValue(noiseLevel, isActive);\n    this.pitchLfoModDepthParam.setValue(this.patch.dco.lfo, isActive);\n    this.pwmDepthParam.setValue(this.patch.dco.pwm, isActive);\n    const envModDirection = this.patch.vcf.modPositive ? 1 : -1;\n    this.filterCutoffParam.setValue(this.patch.vcf.frequency, isActive);\n    this.filterResonanceParam.setValue(this.patch.vcf.resonance, isActive);\n    this.filterEnvModParam.setValue(this.patch.vcf.envMod * envModDirection, isActive);\n    this.filterLfoModParam.setValue(this.patch.vcf.lfoMod, isActive);\n    this.filterKeyModParam.setValue(this.patch.vcf.keyMod, isActive);\n    this.chorus.update(this.patch.chorus);\n    setLfoValuesFromSliders(this.lfo, this.patch.lfo.frequency, this.patch.lfo.delay);\n    setHpfValuesFromSliders(this.hpf, this.patch.hpf);\n    const vcaGainFactor = Math.pow(1.2589, this.patch.vca * 10) * 0.1;\n    this.vcaGainFactorParam.setValue(vcaGainFactor, isActive);\n  }\n  panic() {\n    this.voices = [];\n  }\n};\nvar curveFromLfoRateSliderToFreq = [0.3, 0.85, 3.39, 11.49, 22.22];\nvar curveFromLfoDelaySliderToDelay = [0, 0.0639, 0.85, 1.2, 2.685];\nvar curveFromLfoDelaySliderToAttack = [1e-3, 0.053, 0.188, 0.348, 1.15];\nfunction setLfoValuesFromSliders(lfo, rateSlider, delaySlider) {\n  const frequency = interpolatedLookup(rateSlider * curveFromLfoRateSliderToFreq.length, curveFromLfoRateSliderToFreq);\n  const delayDuration = interpolatedLookup(delaySlider * curveFromLfoDelaySliderToDelay.length, curveFromLfoDelaySliderToDelay);\n  const attackDuration = interpolatedLookup(delaySlider * curveFromLfoDelaySliderToAttack.length, curveFromLfoDelaySliderToAttack);\n  lfo.setValues(frequency, delayDuration, attackDuration);\n}\nvar curveFromHpfSliderToFreq = [140, 250, 520, 1220];\nfunction setHpfValuesFromSliders(hpf, rateSlider) {\n  const frequency = interpolatedLookup(rateSlider * curveFromHpfSliderToFreq.length, curveFromHpfSliderToFreq);\n  hpf.setCutoff(frequency);\n}\n\n// src/synth.constants.js\nvar NOTE_ON = "note-on";\nvar NOTE_OFF = "note-off";\nvar SET_PARAM = "set-param";\nvar SET_PATCH = "set-patch";\nvar ALL_NOTES_OFF = "all-notes-off";\nvar LFO_TRIGGER_ON = "lfo-trigger-on";\nvar LFO_TRIGGER_OFF = "lfo-trigger-off";\nvar PITCH_BEND = "pitch-bend";\n\n// src/synth.worklet.js\nvar JunoxWorker = class extends AudioWorkletProcessor {\n  constructor(options) {\n    super();\n    this.synth = new Junox({\n      patch: options.processorOptions.patch,\n      polyphony: options.processorOptions.polyphony,\n      // eslint-disable-next-line no-undef\n      sampleRate: sampleRate || 48e3\n    });\n    this.port.onmessage = this.handleMessage.bind(this);\n  }\n  handleMessage(event) {\n    if (event.data.action === NOTE_ON) {\n      this.synth.noteOn(event.data.note, event.data.velocity);\n    } else if (event.data.action === NOTE_OFF) {\n      this.synth.noteOff(event.data.note);\n    } else if (event.data.action === PITCH_BEND) {\n      this.synth.pitchBend(event.data.value);\n    } else if (event.data.action === SET_PARAM) {\n      this.synth.setValue(event.data.name, event.data.value);\n    } else if (event.data.action === SET_PATCH) {\n      this.synth.patch = event.data.patchData;\n      this.synth.update();\n    } else if (event.data.action === LFO_TRIGGER_ON) {\n      this.synth.lfoTrigger();\n    } else if (event.data.action === LFO_TRIGGER_OFF) {\n      this.synth.lfoRelease();\n    } else if (event.data.action === ALL_NOTES_OFF) {\n      this.synth.panic();\n    } else {\n      console.log("Unmanaged message", JSON.stringify(event.data));\n    }\n  }\n  process(inputs, outputs) {\n    const output = outputs[0];\n    this.synth.render(output[0], output[1]);\n    return true;\n  }\n};\nregisterProcessor("junox-synth", JunoxWorker);\n';
 
 // src/synth.node.js
-async function createJuno60(ac, processorOptions) {
-  const processorBlob = base64DataToBlob(synth_worklet_default);
-  const processorUrl = URL.createObjectURL(processorBlob);
+var processorBlob = new Blob([synth_worklet_default], { type: "application/javascript; charset=utf-8" });
+var processorUrl = URL.createObjectURL(processorBlob);
+async function createJuno60(ac, patch = defaultPatch, processorOptions = {}) {
   await ac.audioWorklet.addModule(processorUrl);
-  return new SynthWorkletNode(ac, processorOptions);
+  return new SynthWorkletNode(ac, { patch, ...processorOptions });
 }
-function base64DataToBlob(dataUrl, contentType = "application/javascript; charset=utf-8") {
-  var byteString = atob(dataUrl.split(",")[1]);
-  var ab = new ArrayBuffer(byteString.length);
-  var ia = new Uint8Array(ab);
-  for (var i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i);
-  }
-  return new Blob([ab], {type: contentType});
-}
-class SynthWorkletNode extends AudioWorkletNode {
+var SynthWorkletNode = class extends AudioWorkletNode {
   constructor(context, processorOptions) {
     super(context, "junox-synth", {
       ...defaultAudioNodeOptions,
@@ -699,22 +690,22 @@ class SynthWorkletNode extends AudioWorkletNode {
     });
   }
   lfoTrigger() {
-    this.port.postMessage({action: LFO_TRIGGER_ON});
+    this.port.postMessage({ action: LFO_TRIGGER_ON });
   }
   lfoRelease() {
-    this.port.postMessage({action: LFO_TRIGGER_OFF});
+    this.port.postMessage({ action: LFO_TRIGGER_OFF });
   }
   panic() {
     this.port.postMessage({
-      action: PANIC
+      action: ALL_NOTES_OFF
     });
   }
-}
-const defaultPatch = {
+};
+var defaultPatch = {
   name: "Strings 1",
   vca: 0.5,
   vcaType: "env",
-  lfo: {autoTrigger: true, frequency: 0.6, delay: 0},
+  lfo: { autoTrigger: true, frequency: 0.6, delay: 0 },
   dco: {
     range: 1,
     saw: true,
@@ -735,17 +726,17 @@ const defaultPatch = {
     lfoMod: 0,
     keyMod: 1
   },
-  env: {attack: 0.4, decay: 0, sustain: 1, release: 0.45},
+  env: { attack: 0.4, decay: 0, sustain: 1, release: 0.45 },
   chorus: 1
 };
-const defaultAudioNodeOptions = {
+var defaultAudioNodeOptions = {
   numberOfInputs: 0,
   numberOfOutputs: 1,
   channelCountMode: "explicit",
   channelCount: 2,
   outputChannelCount: [2]
 };
-const defaultProcessorOptions = {
+var defaultProcessorOptions = {
   patch: defaultPatch,
   polyphony: 6
 };

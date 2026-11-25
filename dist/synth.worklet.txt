@@ -1,5 +1,11 @@
 // src/junox/smoothMoves.js
-class SmoothMoves {
+var SmoothMoves = class {
+  /**
+   * Create a new parameter.
+   * @param {number} value - Initial value of the parameter.
+   * @param {number} sampleRate - Samples-per-second for the current audio context.
+   * @param {number} fc - Amount of smoothing for the LPF used to smooth changes (Hz).
+   */
   constructor(value, sampleRate2, fc = 5) {
     this.b1 = -Math.exp(-2 * fc * Math.PI / sampleRate2);
     this.a0 = 1 + this.b1;
@@ -8,6 +14,11 @@ class SmoothMoves {
     this.z1 = 0;
     this.reset();
   }
+  /**
+   * Change the current value to a new value using a linear transition over a period of time.
+   * @param {number} value - New parameter value.
+   * @param {boolean} useSmoothing = true - If true then the transition to the new value will be smoothed.
+   */
   setValue(value, useSmoothing) {
     this.targetValue = value;
     if (!this.isStarted || !useSmoothing) {
@@ -15,20 +26,28 @@ class SmoothMoves {
       return;
     }
   }
+  /**
+   * Reset immediately to the target value.
+   * This should only be used if the instrument is currently silent.
+   */
   reset() {
     this.z1 = this.targetValue * this.a0 - this.targetValue;
     this.isStarted = false;
   }
+  /**
+   * Get the next value of parameter.
+   * @returns {number}
+   */
   getNextValue() {
     this.isStarted = true;
     const xout = this.targetValue * this.a0 - this.z1;
     this.z1 = this.b1 * xout;
     return xout;
   }
-}
+};
 
 // src/junox/dco.js
-class Juno60DCO {
+var Juno60DCO = class {
   constructor(sampleRate2) {
     this.sampleRate = sampleRate2;
     this.currentPhase = 0;
@@ -39,11 +58,23 @@ class Juno60DCO {
     this.pulseHeight = 1;
     this.subOutput = 1;
   }
+  /**
+   * Signal the start of a new note (voice should be silent before this point).
+   * @param {number} noteNumber - MIDI note number (0 to 127).
+   */
   noteOn(noteNumber) {
     const noteFrequency = Math.pow(2, (noteNumber - 69) / 12) * 442;
     this.phaseIncrement = noteFrequency / this.sampleRate;
     this.currentPhase = 1.1;
   }
+  /**
+   * Render output for a single quantum.
+   * @param {number} detuneFactor - Factor to increase note's frequency by (0.5 = octave-down, 1.0 = default, 2.0 = octave-up)
+   * @param {number} pulseWidth - Pulse width (0..1 - where 0 = square).
+   * @param {number} sawLevel - Output level of the Sawtooth waveform.
+   * @param {number} pulseLevel - Output level of the Pulse waveform.
+   * @param {number} subLevel - Output level of the Sub waveform.
+   */
   render(detuneFactor, pulseWidth, sawLevel, pulseLevel, subLevel) {
     const phaseIncrement = this.phaseIncrement * detuneFactor;
     const origPhase = this.currentPhase;
@@ -81,6 +112,12 @@ class Juno60DCO {
     }
     return newSawOutput * sawLevel + newPulseOutput * pulseLevel + newSubOutput * subLevel;
   }
+  /**
+   * Calculate the PolyBLEP correction that is required to reduce aliasing.
+   * @param {number} phase - Current phase.
+   * @param {number} inc - Current phase-increment (to produce the desired pitch).
+   * @param {number} height - Height of the PolyBLEP correction).
+   */
   calcPolyBLEP2(phase, inc, height) {
     let result = 0;
     if (phase < inc) {
@@ -92,40 +129,61 @@ class Juno60DCO {
     }
     return result;
   }
-}
+};
 
 // src/junox/abstractEnvelope.js
-class AbstractEnvelope {
+var AbstractEnvelope = class {
   constructor(segments) {
     this._segments = segments;
     this._currentPhase = -1;
     this._currentValue = 0;
   }
+  /**
+   * Returns true if the envelope is currently active.
+   */
   isFinished() {
     return this._currentPhase === -1;
   }
+  /**
+   * Returns true if the envelope is active, and has been released or shutdown.
+   */
   isReleased() {
-    return this.currentPhase !== 0 && this.currentPhase !== 1;
+    return this._currentPhase !== 0 && this._currentPhase !== 1;
   }
+  /**
+   * Returns true if the envelope is currently shutting-down.
+   */
   isShuttingDown() {
-    return this.currentPhase === this._segments.length - 1;
+    return this._currentPhase === this._segments.length - 1;
   }
+  /**
+   * Trigger (or retrigger) the envelope.
+   */
   trigger() {
     this._currentPhase = 0;
     for (let segment of this._segments) {
       segment.reset();
     }
   }
+  /**
+   * Release the current note.
+   */
   release() {
     if (this._currentPhase !== -1) {
       this._currentPhase = this._segments.length - 2;
     }
   }
+  /**
+   * Shutdown the envelope (when you need all notes to stop quickly, or when you are stealing voices).
+   */
   shutdown() {
     if (this._currentPhase !== -1) {
       this._currentPhase = this._segments.length - 1;
     }
   }
+  /**
+   * Reset the envelope (only used when the voice is silent).
+   */
   reset() {
     this._currentPhase = -1;
     this._currentValue = 0;
@@ -133,6 +191,9 @@ class AbstractEnvelope {
       this._segments[i].reset();
     }
   }
+  /**
+   * Calculate the next value of the envelope.
+   */
   render() {
     let currentPhase = this._currentPhase;
     while (currentPhase >= 0 && currentPhase < this._segments.length) {
@@ -152,8 +213,15 @@ class AbstractEnvelope {
     }
     return this._currentValue;
   }
-}
-class AttackSegment {
+};
+var AttackSegment = class {
+  /**
+   * Create an envelope attack segment.
+   * @param {number} sampleRate - Samples-per-second for the current audio context.
+   * @param {number} attackTCO - For analog this is often "Math.exp(-1.5)".
+   * @param {number} target - Target level at-which this segment should stop.
+   * @param {bool} isSustainAtEnd - Set to true if the end of the segment is the sustain phase.
+   */
   constructor(sampleRate2, attackTCO, target, isSustainAtEnd) {
     this._sampleRate = sampleRate2;
     this._attackTCO = attackTCO;
@@ -162,22 +230,46 @@ class AttackSegment {
     this._isSustainAtEnd = isSustainAtEnd;
     this.target = target;
   }
+  /**
+   * Configure the segment so that it would attack from 0 to +1 in the specified number of seconds.
+   * @param {number} seconds - Planned duration of the segment (if the segment runs from 0 to +1)
+   */
   setDuration(duration) {
     const samples = this._sampleRate * duration;
     this._attackCoeff = Math.exp(-Math.log((1 + this._attackTCO) / this._attackTCO) / samples);
     this._attackOffset = (1 + this._attackTCO) * (1 - this._attackCoeff);
   }
+  /**
+   * Reset the segment.
+   */
   reset() {
   }
+  /**
+   * Calculate the next value of this segment of the envelope.
+   * @param {number} previousValue - Previous value of the envelope.
+   * @returns {number} - Next value of the envelope
+   */
   process(previousValue) {
     const result = previousValue * this._attackCoeff + this._attackOffset;
     return result > this.target && this._isSustainAtEnd ? this.target : result;
   }
+  /**
+   * Test if the segment is now complete.
+   * @param {number} value - Value to test.
+   * @returns {bool} - True if the value if the segment is now complete.
+   */
   isComplete(value) {
     return value > this.target;
   }
-}
-class DecaySegment {
+};
+var DecaySegment = class {
+  /**
+   * Create an envelope decay segment.
+   * @param {number} sampleRate - Samples-per-second for the current audio context.
+   * @param {number} decayTCO - For analog this is often "Math.exp(-4.95)".
+   * @param {number} target - Target level at-which this segment should stop.
+   * @param {bool} isSustainAtEnd - Set to true if the end of the segment is the sustain phase.
+   */
   constructor(sampleRate2, decayTCO, target, isSustainAtEnd) {
     this._sampleRate = sampleRate2;
     this._decayTCO = decayTCO;
@@ -186,59 +278,114 @@ class DecaySegment {
     this._isSustainAtEnd = isSustainAtEnd;
     this.target = target;
   }
+  /**
+   * Configure the segment so that it would decay from +1 to 0 in the specified number of seconds.
+   * @param {number} seconds - Planned duration of the segment (if the segment runs from +1 to 0)
+   */
   setDuration(seconds) {
     const samples = this._sampleRate * seconds;
     this._decayCoeff = Math.exp(-Math.log((1 + this._decayTCO) / this._decayTCO) / samples);
     this._decayOffset = (this.target - this._decayTCO) * (1 - this._decayCoeff);
   }
+  /**
+   * Reset the segment.
+   */
   reset() {
   }
+  /**
+   * Calculate the next value of this segment of the envelope.
+   * @param {number} previousValue - Previous value of the envelope.
+   * @returns {number} - Next value of the envelope
+   */
   process(previousValue) {
     const result = previousValue * this._decayCoeff + this._decayOffset;
     return result < this.target && this._isSustainAtEnd ? this.target : result;
   }
+  /**
+   * Test if the segment is now complete.
+   * @param {number} value - Value to test.
+   * @returns {bool} - True if the value if the segment is now complete.
+   */
   isComplete(value) {
     return value <= this.target && !this._isSustainAtEnd || value < 0.02;
   }
-}
-class DelaySegment {
+};
+var DelaySegment = class {
+  /**
+   * Create an envelope delay segment.
+   * @param {number} sampleRate - Samples-per-second for the current audio context.
+   */
   constructor(sampleRate2) {
     this._sampleRate = sampleRate2;
     this._delaySampleCount = 0;
     this._currentRemaining = 0;
   }
+  /**
+   * Configure the segment so that it will delay for the specified number of seconds.
+   * @param {number} seconds - Planned duration of the segment.
+   */
   setDuration(duration) {
     const delaySampleCount = this._sampleRate * duration | 0;
     this._currentRemaining += delaySampleCount - this._delaySampleCount;
     this._delaySampleCount = delaySampleCount;
   }
+  /**
+   * Reset the segment.
+   */
   reset() {
     this._currentRemaining = this._delaySampleCount;
   }
+  /**
+   * Calculate the next value of this segment of the envelope.
+   * @param {number} previousValue - Previous value of the envelope.
+   * @returns {number} - Next value of the envelope.
+   */
   process(previousValue) {
     this._currentRemaining--;
     return previousValue;
   }
+  /**
+   * Test if the segment is now complete.
+   * @returns {bool} - True if the value if the segment is now complete.
+   */
   isComplete() {
     return this._currentRemaining <= 0;
   }
-}
-class ShutdownSegment {
+};
+var ShutdownSegment = class {
+  /**
+   * Create an envelope shutdown segment.
+   * @param {number} sampleRate - Samples-per-second for the current audio context.
+   * @param {number} seconds - Planned duration of the segment (if the segment runs from +1 to 0)
+   */
   constructor(sampleRate2, seconds) {
     this._shutdownRate = 1 / (seconds * sampleRate2);
   }
+  /**
+   * Reset the segment.
+   */
   reset() {
   }
+  /**
+   * Calculate the next value of this segment of the envelope.
+   * @param {number} previousValue - Previous value of the envelope.
+   * @returns {number} - Next value of the envelope
+   */
   process(previousValue) {
     const result = previousValue - this._shutdownRate;
-    return this.value < 0 ? 0 : result;
+    return result < 0 ? 0 : result;
   }
+  /**
+   * Test if the segment is now complete.
+   * @param {number} value - Value to test.
+   * @returns {bool} - True if the value if the segment is now complete.
+   */
   isComplete(value) {
     return value <= 0;
   }
-}
+};
 
-// src/junox/utils.js
+// src/junox/utils.mjs
 function fastTanh(x) {
   if (x < -3) {
     return -1;
@@ -262,10 +409,14 @@ function interpolatedLookup(value, table) {
 }
 
 // src/junox/juno60Envelope.js
-const curveFromAttackSliderToDuration = [1e-3, 0.03, 0.24, 0.65, 3.25];
-const curveFromDecaySliderToDuration = [2e-3, 0.096, 0.984, 4.449, 19.783];
-const curveFromReleaseSliderToDuration = [2e-3, 0.096, 0.984, 4.449, 19.783];
-class Juno60Envelope extends AbstractEnvelope {
+var curveFromAttackSliderToDuration = [1e-3, 0.03, 0.24, 0.65, 3.25];
+var curveFromDecaySliderToDuration = [2e-3, 0.096, 0.984, 4.449, 19.783];
+var curveFromReleaseSliderToDuration = [2e-3, 0.096, 0.984, 4.449, 19.783];
+var Juno60Envelope = class extends AbstractEnvelope {
+  /**
+   * Create a Juno-60 envelope.
+   * @param {number} sampleRate - Samples-per-second for the current audio context.
+   */
   constructor(sampleRate2) {
     super([
       new AttackSegment(sampleRate2, 0.632, 1, false),
@@ -278,42 +429,82 @@ class Juno60Envelope extends AbstractEnvelope {
     this._release = this._segments[2];
     this._shutdown = this._segments[3];
   }
+  /**
+   * Configure the segments of the envelope from direct values.
+   * @param {number} attackDuration - Number of seconds for the duration of the attack phase.
+   * @param {number} decayDuration - Number of seconds for the duration of the decay phase.
+   * @param {number} sustainLevel - Level of the sustain phase (0.0 to 1.0).
+   * @param {number} releaseDuration - Number of seconds for the duration of the release phase.
+   */
   setValues(attackDuration, decayDuration, sustainLevel, releaseDuration) {
     this._attack.setDuration(attackDuration);
     this._decay.target = Math.max(0.02, sustainLevel);
     this._decay.setDuration(decayDuration);
     this._release.setDuration(this._decay.target <= 0.02 ? 0.01 : releaseDuration);
   }
+  /**
+   * Configure the segments of the envelope from slider-positions.
+   * @param {number} attackSlider - Value of the attack slider (0.0 to 1.0).
+   * @param {number} decaySlider - Value of the decay slider (0.0 to 1.0).
+   * @param {number} sustainSlider - Value of the sustain slider (0.0 to 1.0).
+   * @param {number} releaseSlider - Value of the release slider (0.0 to 1.0).
+   */
   setValuesFromSliders(attackSlider, decaySlider, sustainSlider, releaseSlider) {
-    const attackDuration = interpolatedLookup(attackSlider * curveFromAttackSliderToDuration.length, curveFromAttackSliderToDuration);
+    const attackDuration = interpolatedLookup(
+      attackSlider * curveFromAttackSliderToDuration.length,
+      curveFromAttackSliderToDuration
+    );
     const decayDuration = interpolatedLookup(decaySlider * curveFromDecaySliderToDuration.length, curveFromDecaySliderToDuration);
-    const releaseDuration = interpolatedLookup(releaseSlider * curveFromReleaseSliderToDuration.length, curveFromReleaseSliderToDuration);
+    const releaseDuration = interpolatedLookup(
+      releaseSlider * curveFromReleaseSliderToDuration.length,
+      curveFromReleaseSliderToDuration
+    );
     this.setValues(attackDuration, decayDuration, sustainSlider, releaseDuration);
   }
-}
+};
 
 // src/junox/ladderFilter.js
-class LadderFilter {
+var LadderFilter = class {
   constructor(sampleRate2) {
     this.reset();
     this.nyquistLimit = sampleRate2 * 0.5;
     this.piOverSampleRate = Math.PI / sampleRate2;
   }
+  /**
+   * Reset the filter - ready for the next note.
+   */
   reset() {
     this.z1 = 0;
     this.z2 = 0;
     this.z3 = 0;
     this.z4 = 0;
   }
+  /**
+   * Calculate the "cutoffFactor" for the specifed frequency.
+   * @param {number} fc - Cutoff frequency (Hz).
+   */
   calcCutoffFactor(fc) {
     if (fc > this.nyquistLimit) {
       fc = this.nyquistLimit;
     }
     return Math.tan(fc * this.piOverSampleRate);
   }
+  /**
+   * Trigger the filter (useful for percussive sounds).
+   * @param {number} initialExcite - Initial amount of excitement for the feedback resonance loop.
+   */
   trigger(initialExcite) {
     this.z4 += initialExcite;
   }
+  /**
+   * Apply filtering to the input sigmal.
+   * If saturation or passband-compensation are required then pre-apply to input (Valimaki).
+   * Consider applying a peak-limiter to the output (to prevent blow-up).
+   * @param {number} input - Input signal (normally in range -1.0 to +1.0).
+   * @param {number} cutoffFactor - Result of prewarping the cutoff-frequency.
+   * @param {number} resonance - Resonance amount (range: 0.0 to 1.0).
+   * @param {number} mode - Filter mode (see ladderFilterModes).
+   */
   process(input, cutoffFactor, resonance, mode = ladderFilterModes.LPF4) {
     const oneOverOnePlusg = 1 / (1 + cutoffFactor);
     const alpha = cutoffFactor * oneOverOnePlusg;
@@ -338,12 +529,12 @@ class LadderFilter {
     this.z4 = lpf4In + lpf4Out;
     return mode[4] * lpf4Out + mode[3] * lpf3Out + mode[2] * lpf2Out + mode[1] * lpf1Out + mode[0] * xin;
   }
-}
-const ladderFilterModes = {
+};
+var ladderFilterModes = {
   LPF2: Float64Array.from([0, 0, 1, 0, 0]),
   LPF4: Float64Array.from([0, 0, 0, 0, 1]),
   BPF2: Float64Array.from([0, 2, -2, 0, 0]),
-  BPF2: Float64Array.from([0, 0, 4, -8, 4]),
+  BPF4: Float64Array.from([0, 0, 4, -8, 4]),
   HPF2: Float64Array.from([1, -2, 1, 0, 0]),
   HPF4: Float64Array.from([1, -4, 6, -4, 1])
 };
@@ -357,7 +548,7 @@ ladderFilterModes.all = [
 ];
 
 // src/junox/noise.js
-class Noise {
+var Noise = class {
   constructor(sampleRate2, fc = 5e3) {
     this._b1 = -Math.exp(-2 * fc * Math.PI / sampleRate2);
     this._a0 = 1 + this._b1;
@@ -369,11 +560,11 @@ class Noise {
     this._z1 = this._b1 * xout;
     return xout;
   }
-}
+};
 
 // src/junox/voice.js
-class Voice {
-  constructor({patch, sampleRate: sampleRate2}) {
+var Voice = class {
+  constructor({ patch, sampleRate: sampleRate2 }) {
     this.patch = patch;
     this.sampleRate = sampleRate2;
     this.note = -1;
@@ -385,6 +576,21 @@ class Voice {
     this.ampEnv = new Juno60Envelope(sampleRate2);
     this.moogVCF = new LadderFilter(sampleRate2);
   }
+  /**
+   * Render output for a single quantum. The passed-in parameters should be "smoothed" so that we don't hear zippering.
+   * @param {number} lfoOut - Current value of the LFO (between -1 and +1)
+   * @param {number} detuneFactor - Factor to increase note's frequency by (0.5 = octave-down, 1.0 = default, 2.0 = octave-up)
+   * @param {number} pwmDepth - Pulse width depth (between 0-square and 1)
+   * @param {number} sawLevel - Output level of the Sawtooth waveform (between 0 and 1).
+   * @param {number} pulseLevel - Output level of the Pulse waveform (between 0 and 1).
+   * @param {number} subLevel - Output level of the Sub waveform (between 0 and 1).
+   * @param {number} noiseLevel - Output level of the noise (between 0 and 1).
+   * @param {number} filterCutoff - Current value of the filter's cutoff slider (between 0 and 1).
+   * @param {number} filterResonance - Current value of the filter's resonance slider (between 0 and 1).
+   * @param {number} filterEnvMod - Current value of the filter's envelope modulation slider (between -1 (for negative) and +1 (for positive)).
+   * @param {number} lfoDetuneOctaves - Number of octaves that the filter is detuned-by (for LFO and bend-lever).
+   * @param {number} filterKeyMod - Current value of the filter's keyboard modulation slider (between 0 and 1).
+   */
   render(lfoOut, detuneFactor, pwmDepth, sawLevel, pulseLevel, subLevel, noiseLevel, filterCutoff, filterResonance, filterEnvMod, lfoDetuneOctaves, filterKeyMod) {
     const modEnvOut = this.modEnv.render();
     const ampEnvOut = this.ampEnv.render();
@@ -402,7 +608,8 @@ class Voice {
     const envDetuneOctaves = modEnvOut * filterEnvMod * 12;
     const keyboardDetuneOctaves = filterKeyMod * this.filterNoteFactor;
     const resonanceDetuneOctaves = this.patch.vcf.resonance * 0.5;
-    const vcfCutoffValue = cutoffDetuneOctave + lfoDetuneOctaves * ampEnvOut + keyboardDetuneOctaves + envDetuneOctaves + resonanceDetuneOctaves;
+    const vcfCutoffValue = cutoffDetuneOctave + lfoDetuneOctaves * ampEnvOut + // Using env to dumb-down LFO makes UFO patch sound more natural.
+    keyboardDetuneOctaves + envDetuneOctaves + resonanceDetuneOctaves;
     const cutoffFrequency = 7.8 * Math.pow(2, vcfCutoffValue);
     const vcfOut = this.moogVCF.process(dcoOut, this.moogVCF.calcCutoffFactor(cutoffFrequency), filterResonance);
     return this.velocity * vcfOut * ampEnvOut;
@@ -431,6 +638,19 @@ class Voice {
     this.modEnv.release();
     this.ampEnv.release();
   }
+  shutdown() {
+    this.modEnv.shutdown();
+    this.ampEnv.shutdown();
+  }
+  isReleased() {
+    return this.ampEnv.isReleased();
+  }
+  isShuttingDown() {
+    return this.ampEnv.isShuttingDown();
+  }
+  getLevel() {
+    return this.ampEnv._currentValue;
+  }
   isFinished() {
     return this.ampEnv.isFinished();
   }
@@ -444,15 +664,22 @@ class Voice {
     }
     this.patch = patch;
   }
-}
+};
 
 // src/junox/ringBuffer.js
-class RingBuffer {
+var RingBuffer = class {
+  /**
+   * @param {number} maxBufferSize - Maximum number of samples that the signal can be delayed-by (calculate using `delaySeconds * sampleRate`).
+   */
   constructor(maxBufferSize) {
     this.buffer = new Float32Array(maxBufferSize);
     this.writeIndex = 0;
     this.maxBufferSize = maxBufferSize;
   }
+  /**
+   *
+   * @param {number} index
+   */
   ringBufferIndex(index) {
     if (index < 0) {
       return index + this.maxBufferSize;
@@ -462,6 +689,11 @@ class RingBuffer {
     }
     return index;
   }
+  /**
+   * Read a sample from the ring-buffer.
+   * Delay period = `readOffset / sampleRate`
+   * @param (number) readOffset - The number of samples between the read and the write position
+   */
   readSample(readOffset) {
     const readIndex = this.ringBufferIndex(this.writeIndex - readOffset);
     const indexA = Math.floor(readIndex);
@@ -469,17 +701,29 @@ class RingBuffer {
     const indexB = this.ringBufferIndex(indexA + 1);
     return this.buffer[indexA] * (1 - fractional) + this.buffer[indexB] * fractional;
   }
+  /**
+   * Write a new sample into the ring-buffer.
+   * @param {number} input
+   */
   writeSample(input) {
     this.buffer[this.writeIndex] = input;
     this.writeIndex = (this.writeIndex + 1) % this.maxBufferSize;
   }
+  /**
+   * Reset the delay-line's contents (only used when the instrument is silent).
+   */
   reset() {
     this.buffer.fill(0);
   }
-}
+};
 
 // src/junox/simpleSinglePoleFilter.js
-class SimpleSinglePoleFilter {
+var SimpleSinglePoleFilter = class {
+  /**
+   * @constructor
+   * @param {number} sampleRate - Sample rate (Hz)
+   * @param {*} fc - Cutoff frequency (Hz)
+   */
   constructor(sampleRate2, fc = 5) {
     this._piOverSampleRate = Math.PI / sampleRate2;
     this._a0 = 1;
@@ -487,25 +731,46 @@ class SimpleSinglePoleFilter {
     this._z1 = 0;
     this.setCutoff(fc);
   }
+  /**
+   * Flush storage and clear feedback.
+   */
   reset() {
     this._z1 = 0;
   }
+  /**
+   * Process a single sample through the low-pass filter (using transposed direct form II technique).
+   * @param {number} xin - Input value.
+   * @returns {number} - Output value.
+   */
   renderLP(xin) {
     const xout = xin * this._a0 + this._z1;
     this._z1 = -this._b1 * xout;
     return xout;
   }
+  /**
+   * Process using high-pass filter (inverse of low-pass).
+   * @param {number} xin - Input value.
+   * @returns {number} - Output value.
+   */
   renderHP(xin) {
     return xin - this.renderLP(xin);
   }
+  /**
+   * Set cutoff frequency for for simple low pass filter.
+   * @param {number} fc - Cutoff frequency (Hz)
+   */
   setCutoff(fc) {
     this._b1 = -Math.exp(-2 * fc * this._piOverSampleRate);
     this._a0 = 1 + this._b1;
   }
-}
+};
 
 // src/junox/chorus.js
-class Chorus {
+var Chorus = class {
+  /**
+   * @constructor
+   * @param {number} sampleRate
+   */
   constructor(sampleRate2) {
     this.leftOutput = 0;
     this.rightOutput = 0;
@@ -526,6 +791,10 @@ class Chorus {
     this._maxRightOffset = 0;
     this._averageRightSamples = 0;
   }
+  /**
+   * Calculate the `leftOutput` and `rightOutput` signal values for the specified `input`.
+   * @param {number} input
+   */
   render(input) {
     this._isUsed = true;
     let dry = this._dryCurrent;
@@ -562,6 +831,9 @@ class Chorus {
     this.rightOutput = dryOutput + this._postRightFilter.renderLP(rightDelayedValue * wetFactor);
     this._ringBuffer.writeSample(this._preFilter.renderLP(this._applySaturation(input)));
   }
+  /**
+   * Reset the delay-line's contents (only used when the instrument is silent).
+   */
   reset() {
     this._ringBuffer.reset();
     this._preFilter.reset();
@@ -569,6 +841,10 @@ class Chorus {
     this._postRightFilter.reset();
     this._isUsed = false;
   }
+  /**
+   * Update the chorus effect to the specified mode.
+   * @param {number} chorusMode - New chorus-mode setting.
+   */
   update(chorusMode) {
     if (this._dryCurrent < 1 && !this._isUsed) {
       this._dryChange = 5e-4;
@@ -592,9 +868,24 @@ class Chorus {
       }
     }
   }
+  /**
+   * @private Apply mild saturation (to mimic the NLP from the BBD).
+   * @param {number} input - Input value.
+   * @returns {number} - Result of the saturated input.
+   */
   _applySaturation(input) {
     return input;
   }
+  /**
+   * @private Apply the internal settings.
+   * @param {number} freq - Frequency (Hz).
+   * @param {number} dry - Ratio of dry:wet (1.0 = fully-dry).
+   * @param {number} minLeftDelay - Minimum delay for the left channel (seconds).
+   * @param {number} maxLeftDelay - Maximum delay for the left channel (seconds).
+   * @param {number} minRightDelay - Minimum delay for the right channel (seconds).
+   * @param {number} maxRightDelay - Maximum delay for the right channel (seconds).
+   * @param {boolean} isStereo - True if the output image should be stereo.
+   */
   _updateValues(freq, dry, minLeftDelay, maxLeftDelay, minRightDelay, maxRightDelay, isStereo) {
     const averageLeftDelay = (minLeftDelay + maxLeftDelay) * 0.5;
     const maxLeftOffset = maxLeftDelay - averageLeftDelay;
@@ -606,15 +897,21 @@ class Chorus {
     this._maxRightOffset = maxRightOffset * this._sampleRate * (isStereo ? -1 : 1);
     this._dryTarget = dry;
     if (!this._isUsed) {
-      this._dryChange = dry;
+      this._dryCurrent = dry;
+      this._dryChange = 0;
+    } else {
+      this._dryChange = (dry - this._dryCurrent) / 1e3;
     }
-    this._dryChange = (dry - this._dryCurrent) / 1e3;
     this._lfoIncrement = Math.sign(this._lfoIncrement) * 4 * freq / this._sampleRate;
   }
-}
+};
 
 // src/junox/lfo.js
-class LFO {
+var LFO = class {
+  /**
+   * @constructor.
+   * @param {number} sampleRate - Samples-per-second for the current audio context.
+   */
   constructor(sampleRate2) {
     this._oneOverSampleRate = 1 / sampleRate2;
     this._phaseIncrement = 0;
@@ -623,10 +920,16 @@ class LFO {
     this.isRestarted = false;
     this.waveform = "triangle";
   }
+  /**
+   * Reset the LFO (only used when the instrument is silent).
+   */
   reset() {
     this.currentPhase = 1;
     this.currentValue = 0;
   }
+  /**
+   * Calculate the next value of the LFO.
+   */
   render() {
     this.isRestarted = false;
     this.currentPhase += this._phaseIncrement;
@@ -663,13 +966,21 @@ class LFO {
     }
     return this.currentValue = value;
   }
+  /**
+   * Set the speed of the LFO..
+   * @param {number} frequency - Frequency of the LFO (Hz).
+   */
   setRate(frequency) {
     this._phaseIncrement = frequency * this._oneOverSampleRate;
   }
-}
+};
 
 // src/junox/lfoWithEnvelope.js
-class LFOWithEnvelope extends LFO {
+var LFOWithEnvelope = class extends LFO {
+  /**
+   * @constructor.
+   * @param {number} sampleRate - Samples-per-second for the current audio context.
+   */
   constructor(sampleRate2) {
     super(sampleRate2);
     const segments = [
@@ -681,9 +992,15 @@ class LFOWithEnvelope extends LFO {
     this._release.setDuration(0.1);
     this._env = new AbstractEnvelope(segments);
   }
+  /**
+   * Returns true if the envelope is currently active.
+   */
   isActive() {
     return !this._env.isFinished();
   }
+  /**
+   * Trigger (or retrigger) the envelope.
+   */
   trigger() {
     if (!this.isActive()) {
       this.currentPhase = 1;
@@ -693,16 +1010,30 @@ class LFOWithEnvelope extends LFO {
       this._env.trigger();
     }
   }
+  /**
+   * Release the current note.
+   */
   release() {
     this._env.release();
   }
+  /**
+   * Shutdown the envelope (when you need all notes to stop quickly, or when you are stealing voices).
+   */
   shutdown() {
     this._env.shutdown();
   }
+  /**
+   * Reset the envelope (only used when the voice is silent).
+   * @override
+   */
   reset() {
     super.reset();
     this._env.reset();
   }
+  /**
+   * Calculate the next value of the LFO.
+   * @override
+   */
   render() {
     if (!this.isActive()) {
       return 0;
@@ -713,20 +1044,27 @@ class LFOWithEnvelope extends LFO {
     }
     return envValue * super.render();
   }
+  /**
+   * Configure the LFO from direct values.
+   * @param {number} frequency - Frequency of the LFO (Hz).
+   * @param {number} delayDuration - Number of seconds for the duration of the delay phase.
+   * @param {number} attackDuration - Number of seconds for the duration of the attack phase.
+   */
   setValues(frequency, delayDuration, attackDuration) {
     this.setRate(frequency);
     this._delay.setDuration(delayDuration);
     this._attack.setDuration(attackDuration);
   }
-}
+};
 
 // src/junox/junox.js
-const synthStatus = {
+var synthStatus = {
   SILENT: 0,
   NOTES_ACTIVE: 4
+  // This is the number of trailing frames that will be rendered AFTER all notes have finished.
 };
-class Junox {
-  constructor({patch, sampleRate: sampleRate2, polyphony}) {
+var Junox = class {
+  constructor({ patch, sampleRate: sampleRate2, polyphony }) {
     this.patch = patch;
     this.sampleRate = sampleRate2;
     this.maxVoices = polyphony;
@@ -757,7 +1095,7 @@ class Junox {
   }
   noteOn(note, velocity) {
     this.status = synthStatus.NOTES_ACTIVE;
-    const voiceIndex = this.voices.findIndex((voice2) => voice2.note === note);
+    const voiceIndex = this.voices.findIndex((voice) => voice.note === note && !voice.isShuttingDown());
     if (voiceIndex >= 0) {
       this.voices[voiceIndex].noteOn(note, velocity);
       return;
@@ -765,16 +1103,24 @@ class Junox {
     if (!this.voices.length && this.patch.lfo.autoTrigger) {
       this.lfo.trigger();
     }
-    const newVoice = new Voice({patch: this.patch, sampleRate: this.sampleRate});
+    const newVoice = new Voice({ patch: this.patch, sampleRate: this.sampleRate });
     newVoice.noteOn(note, velocity);
-    if (this.voices.length < this.maxVoices) {
-      this.voices.push(newVoice);
-      return;
+    const activeVoices = this.voices.filter((voice) => !voice.isShuttingDown());
+    if (activeVoices.length >= this.maxVoices) {
+      const releasedVoices = activeVoices.filter((voice) => voice.isReleased());
+      const candidates = releasedVoices.length ? releasedVoices : activeVoices;
+      let victim = candidates[0];
+      for (let i = 1; i < candidates.length; i++) {
+        if (candidates[i].getLevel() < victim.getLevel()) {
+          victim = candidates[i];
+        }
+      }
+      victim.shutdown();
     }
-    this.voices[0] = newVoice;
+    this.voices.push(newVoice);
   }
   noteOff(note) {
-    this.voices.forEach((voice2) => voice2.note === note && !voice2.isFinished() && voice2.noteOff());
+    this.voices.forEach((voice) => voice.note === note && !voice.isFinished() && voice.noteOff());
   }
   pitchBend(value) {
     this.bendAmountParam.setValue(value);
@@ -790,7 +1136,7 @@ class Junox {
       return;
     }
     this.status--;
-    this.voices = this.voices.filter((voice2) => !voice2.isFinished());
+    this.voices = this.voices.filter((voice) => !voice.isFinished());
     if (this.voices.length) {
       this.status = synthStatus.NOTES_ACTIVE;
     }
@@ -813,17 +1159,32 @@ class Junox {
       if (i === 0) {
       }
       const lfoOut = this.lfo.render();
-      const dcoDetuneOctaves = lfoOut * pitchLfoModDepth * 0.25 + bendAmount * dcoBendDepth * 7 / 12;
+      const dcoDetuneOctaves = lfoOut * pitchLfoModDepth * 0.25 + // +-300 cents (page 14).
+      bendAmount * dcoBendDepth * 7 / 12;
       let dcoDetuneFactor = this.patch.dco.range;
       if (dcoDetuneOctaves !== 0) {
         dcoDetuneFactor *= Math.pow(2, dcoDetuneOctaves);
       }
-      const filterDetuneOctaves = bendAmount * filterBendDepth * 4 + filterLfoMod * lfoOut * 3;
+      const filterDetuneOctaves = bendAmount * filterBendDepth * 4 + // +- 4 octaves
+      filterLfoMod * lfoOut * 3;
       let monoOut = 0;
       for (let v = 0; v < this.voices.length; v++) {
-        const voice2 = this.voices[v];
-        if (!voice2.isFinished()) {
-          monoOut += voice2.render(lfoOut, dcoDetuneFactor, pwmDepth, sawLevel, pulseLevel, subLevel, noiseLevel, filterCutoff, filterResonance, filterEnvMod, filterDetuneOctaves, filterKeyMod);
+        const voice = this.voices[v];
+        if (!voice.isFinished()) {
+          monoOut += voice.render(
+            lfoOut,
+            dcoDetuneFactor,
+            pwmDepth,
+            sawLevel,
+            pulseLevel,
+            subLevel,
+            noiseLevel,
+            filterCutoff,
+            filterResonance,
+            filterEnvMod,
+            filterDetuneOctaves,
+            filterKeyMod
+          );
         }
       }
       if (this.patch.hpf > 0) {
@@ -871,9 +1232,9 @@ class Junox {
   update() {
     let isActive = false;
     for (let v = 0; v < this.voices.length; v++) {
-      const voice2 = this.voices[v];
-      voice2.updatePatch(this.patch);
-      isActive = isActive || !voice2.isFinished();
+      const voice = this.voices[v];
+      voice.updatePatch(this.patch);
+      isActive = isActive || !voice.isFinished();
     }
     let sawLevel = this.patch.dco.saw ? 0.2 : 0;
     let pulseLevel = this.patch.dco.pulse ? 0.2 : 0;
@@ -908,39 +1269,40 @@ class Junox {
   panic() {
     this.voices = [];
   }
-}
-const curveFromLfoRateSliderToFreq = [0.3, 0.85, 3.39, 11.49, 22.22];
-const curveFromLfoDelaySliderToDelay = [0, 0.0639, 0.85, 1.2, 2.685];
-const curveFromLfoDelaySliderToAttack = [1e-3, 0.053, 0.188, 0.348, 1.15];
-function setLfoValuesFromSliders(lfo2, rateSlider, delaySlider) {
+};
+var curveFromLfoRateSliderToFreq = [0.3, 0.85, 3.39, 11.49, 22.22];
+var curveFromLfoDelaySliderToDelay = [0, 0.0639, 0.85, 1.2, 2.685];
+var curveFromLfoDelaySliderToAttack = [1e-3, 0.053, 0.188, 0.348, 1.15];
+function setLfoValuesFromSliders(lfo, rateSlider, delaySlider) {
   const frequency = interpolatedLookup(rateSlider * curveFromLfoRateSliderToFreq.length, curveFromLfoRateSliderToFreq);
   const delayDuration = interpolatedLookup(delaySlider * curveFromLfoDelaySliderToDelay.length, curveFromLfoDelaySliderToDelay);
   const attackDuration = interpolatedLookup(delaySlider * curveFromLfoDelaySliderToAttack.length, curveFromLfoDelaySliderToAttack);
-  lfo2.setValues(frequency, delayDuration, attackDuration);
+  lfo.setValues(frequency, delayDuration, attackDuration);
 }
-const curveFromHpfSliderToFreq = [140, 250, 520, 1220];
+var curveFromHpfSliderToFreq = [140, 250, 520, 1220];
 function setHpfValuesFromSliders(hpf, rateSlider) {
   const frequency = interpolatedLookup(rateSlider * curveFromHpfSliderToFreq.length, curveFromHpfSliderToFreq);
   hpf.setCutoff(frequency);
 }
 
 // src/synth.constants.js
-const NOTE_ON = "note-on";
-const NOTE_OFF = "note-off";
-const SET_PARAM = "set-param";
-const SET_PATCH = "set-patch";
-const LFO_TRIGGER_ON = "lfo-trigger-on";
-const LFO_TRIGGER_OFF = "lfo-trigger-off";
-const PITCH_BEND = "pitch-bend";
-const PANIC = "panic";
+var NOTE_ON = "note-on";
+var NOTE_OFF = "note-off";
+var SET_PARAM = "set-param";
+var SET_PATCH = "set-patch";
+var ALL_NOTES_OFF = "all-notes-off";
+var LFO_TRIGGER_ON = "lfo-trigger-on";
+var LFO_TRIGGER_OFF = "lfo-trigger-off";
+var PITCH_BEND = "pitch-bend";
 
 // src/synth.worklet.js
-class JunoxWorker extends AudioWorkletProcessor {
+var JunoxWorker = class extends AudioWorkletProcessor {
   constructor(options) {
     super();
     this.synth = new Junox({
       patch: options.processorOptions.patch,
       polyphony: options.processorOptions.polyphony,
+      // eslint-disable-next-line no-undef
       sampleRate: sampleRate || 48e3
     });
     this.port.onmessage = this.handleMessage.bind(this);
@@ -961,7 +1323,7 @@ class JunoxWorker extends AudioWorkletProcessor {
       this.synth.lfoTrigger();
     } else if (event.data.action === LFO_TRIGGER_OFF) {
       this.synth.lfoRelease();
-    } else if (event.data.action === PANIC) {
+    } else if (event.data.action === ALL_NOTES_OFF) {
       this.synth.panic();
     } else {
       console.log("Unmanaged message", JSON.stringify(event.data));
@@ -972,5 +1334,5 @@ class JunoxWorker extends AudioWorkletProcessor {
     this.synth.render(output[0], output[1]);
     return true;
   }
-}
+};
 registerProcessor("junox-synth", JunoxWorker);

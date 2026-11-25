@@ -29,7 +29,7 @@ class JunoxWorker extends AudioWorkletProcessor {
       this.synth.lfoTrigger()
     } else if (event.data.action === CONSTANTS.LFO_TRIGGER_OFF) {
       this.synth.lfoRelease()
-    } else if (event.data.action === CONSTANTS.PANIC) {
+    } else if (event.data.action === CONSTANTS.ALL_NOTES_OFF) {
       this.synth.panic()
     } else {
       console.log('Unmanaged message', JSON.stringify(event.data))
