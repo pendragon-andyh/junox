@@ -7,7 +7,6 @@ class JunoxWorker extends AudioWorkletProcessor {
     this.synth = new Junox({
       patch: options.processorOptions.patch,
       polyphony: options.processorOptions.polyphony,
-      // eslint-disable-next-line no-undef
       sampleRate: sampleRate || 48000,
     })
     this.port.onmessage = this.handleMessage.bind(this)
