@@ -30,7 +30,7 @@
     "test": "node --test tests/*.test.mjs",
     "deploy:bump-version": "npm version patch",
     "deploy:npm": "echo \"TODO - implement https://zellwk.com/blog/publish-to-npm/\"",
-    "deploy:github": "gh-pages --dist .",
+    "deploy:github": "gh-pages --dist . --src \"{**/*,!node_modules/**,!node_modules,!.git/**,!.git}\"",
     "npm:install": "npm install",
     "npm:install-force": "npm install --force",
     "npm:upgrade-latest": "npm update",
