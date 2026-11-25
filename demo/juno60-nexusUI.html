@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Juno 60 demo</title>
+
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="juno60-nexusUI.css" />
+
+    <script
+      src="https://code.jquery.com/jquery-4.1.0.slim.min.js"
+      integrity="sha384-93zDwyBtpgzWRkh9XZg/1NkOu32G1MAPods6KLt+XmtfciH5DSFeTj7hM8xq7CFG"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/nexusui@2.1.4/dist/NexusUI.js"></script>
+    -->
+    <script src="./NexusUI.js"></script>
+  </head>
+
+  <body>
+    <header class="navbar navbar-dark bg-primary">
+      <span class="navbar-brand mb-0 h1">JUNOX - Juno60</span>
+
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="btn btn-sm btn-outline-light" href="https://github.com/pendragon-andyh/junox" target="_blank">
+            Github
+          </a>
+        </li>
+      </ul>
+    </header>
+
+    <div class="container-fluid">
+      <div id="synth-container">
+        <div class="float-right d-flex">
+          <div class="btn-group">
+            <button type="button" class="btn btn-outline-dark" id="btnSavePatch">Save patch</button>
+            <button
+              type="button"
+              class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="javascript:">Reset patch</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="javascript:">Import patch</a>
+              <a class="dropdown-item" href="javascript:">Export patch</a>
+            </div>
+          </div>
+
+          &nbsp;
+
+          <button class="btn btn-outline-dark" id="btnMidi">MIDI</button>
+
+          &nbsp;
+
+          <button class="btn btn-outline-dark" id="btnRecord">
+            <div class="whenRecording">
+              Stop
+              <div class="spinner-grow spinner-grow-sm text-danger" role="status">
+                <span class="sr-only">Recording...</span>
+              </div>
+            </div>
+            <div class="whenNotRecording">
+              Record
+            </div>
+          </button>
+        </div>
+
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" id="synth-patches-tab" data-toggle="tab" href="#synth-patches">Patches</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="synth-controls-tab" data-toggle="tab" href="#synth-controls">Controls</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="synth-analyse-tab" data-toggle="tab" href="#synth-analyse">Analyse</a>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div id="synth-patches" class="tab-pane active" id="home" role="tabpanel" aria-labelledby="synth-patches-tab">
+            <div class="control-block d-none" id="patch-list-mine">
+              <h2>My patches</h2>
+              <div class="control patch-list"></div>
+            </div>
+
+            <div class="control-block d-none" id="patch-list-juno60-factoryA">
+              <h2>Juno 60 - Factory Bank A</h2>
+              <div class="control patch-list"></div>
+            </div>
+
+            <div class="control-block d-none" id="patch-list-juno60-factoryB">
+              <h2>Juno 60 - Factory Bank B</h2>
+              <div class="control patch-list">
+                <div class="alert alert-info" role="alert">
+                  Coming soon!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="synth-controls" class="tab-pane" id="home" role="tabpanel" aria-labelledby="synth-controls-tab">
+            <div class="control-block">
+              <h2>BEND</h2>
+              <div>
+                <div class="control control-slider" title="How much pitch-bend to apply to the DCO pitch">
+                  <label class="control-label">DCO</label>
+                  <div id="dco-bend-depth"></div>
+                </div>
+                <div class="control control-slider" title="How much pitch-bend to apply to the VCF cutoff">
+                  <label class="control-label">VCF</label>
+                  <div id="vcf-bend-depth"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h2>LFO</h2>
+              <div class="control control-slider" title="Speed of the LFO (between 0.3 and 20 Hz)">
+                <label class="control-label">Rate</label>
+                <div id="lfo-rate"></div>
+              </div>
+              <div class="control control-slider" title="Delay before the start of the LFO">
+                <label class="control-label">Delay</label>
+                <div id="lfo-delay"></div>
+              </div>
+              <div class="control control-radio-group">
+                <label class="control-label">Trig mode</label>
+                <div class="radio-buttons">
+                  <div title="Trigger the LFO when a note is played"><span id="lfo-trigger-mode-auto"></span>Auto</div>
+                  <div title="Trigger the LFO manually"><span id="lfo-trigger-mode-manual"></span>Man</div>
+                </div>
+                <div id="lfo-manual-trigger-wrapper" title="Manually trigger the LFO">
+                  <span id="lfo-manual-trigger"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h2>DCO</h2>
+              <div class="control control-radio-group" title="Range of operation for the DCO">
+                <label class="control-label">Range</label>
+                <div class="radio-buttons">
+                  <div><span id="dco-range-16"></span>16'</div>
+                  <div><span id="dco-range-8"></span>8'</div>
+                  <div><span id="dco-range-4"></span>4'</div>
+                </div>
+              </div>
+              <div class="control control-slider" title="Depth of LFO modulation of the DCO's pitch">
+                <label class="control-label">LFO</label>
+                <div id="dco-lfo-depth"></div>
+              </div>
+              <div class="control control-group">
+                <div class="control control-slider" title="Width of the pulse wave">
+                  <label class="control-label">PWM</label>
+                  <div id="dco-pwm-depth"></div>
+                </div>
+                <div class="control control-radio-group">
+                  <label class="control-label"></label>
+                  <div class="radio-buttons">
+                    <div title="Modulate the pulse wave's width from the LFO"><span id="dco-pwm-source-lfo"></span>LFO</div>
+                    <div title="Manually set the pulse wave's width"><span id="dco-pwm-source-manual"></span>Man</div>
+                    <div title="Modulate the pulse wave's width from the envelope"><span id="dco-pwm-source-env"></span>Env</div>
+                  </div>
+                </div>
+                <div class="control control-slider" title="Volume of pulse wave">
+                  <label class="control-label">Pulse</label>
+                  <div id="dco-pulse-level"></div>
+                </div>
+              </div>
+              <div class="control control-slider" title="Volume of saw wave">
+                <label class="control-label">Saw</label>
+                <div id="dco-saw-level"></div>
+              </div>
+              <div class="control control-slider" title="Volume of sub-oscillator">
+                <label class="control-label">Sub</label>
+                <div id="dco-sub-level"></div>
+              </div>
+              <div class="control control-slider" title="Volume of noise">
+                <label class="control-label">Noise</label>
+                <div id="dco-noise-level"></div>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h2>HPF</h2>
+              <div class="control control-slider hpf-width" title="Cutoff frequency for the high pass filter">
+                <label class="control-label">Freq</label>
+                <div id="hpf-freq"></div>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h2>VCF</h2>
+              <div class="control control-slider" title="Cutoff frequency of the VCF">
+                <label class="control-label">Freq</label>
+                <div id="vcf-freq"></div>
+              </div>
+              <div class="control control-slider" title="Resonance of the VCF">
+                <label class="control-label">Res</label>
+                <div id="vcf-resonance"></div>
+              </div>
+              <div class="control control-group">
+                <div class="control control-radio-group" title="Polarity of the envelope's modulation">
+                  <label class="control-label"></label>
+                  <div class="radio-buttons">
+                    <div><span id="vcf-polarity-positive"></span>+</div>
+                    <div><span id="vcf-polarity-negative"></span>-</div>
+                  </div>
+                </div>
+                <div class="control control-slider" title="Amount of Envelope modulation for cutoff frequency">
+                  <label class="control-label">Env</label>
+                  <div id="vcf-env"></div>
+                </div>
+              </div>
+              <div class="control control-slider" title="Amount of LFO modulation for cutoff frequency">
+                <label class="control-label">LFO</label>
+                <div id="vcf-lfo"></div>
+              </div>
+              <div class="control control-slider" title="Amount of keyboard-tracking for cutoff frequency">
+                <label class="control-label">Key</label>
+                <div id="vcf-key"></div>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h2>VCA</h2>
+              <div class="control control-group">
+                <div class="control control-radio-group">
+                  <label class="control-label"></label>
+                  <div class="radio-buttons">
+                    <div title="Control each note's amplitude from the envelope"><span id="vca-source-env"></span>Env</div>
+                    <div title="Control each note's amplitude from its gate signal"><span id="vca-source-gate"></span>Gate</div>
+                  </div>
+                </div>
+                <div class="control control-slider" title="Amplitude level">
+                  <label class="control-label">Level</label>
+                  <div id="vca-level"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h2>ENV</h2>
+              <div class="control control-slider" title="Attack rate (0=fast, 10=slooow)">
+                <label class="control-label">A</label>
+                <div id="env-attack"></div>
+              </div>
+              <div class="control control-slider" title="Decay rate (0=fast, 10=slooow)">
+                <label class="control-label">D</label>
+                <div id="env-decay"></div>
+              </div>
+              <div class="control control-slider" title="Sustain level (until note is released)">
+                <label class="control-label">S</label>
+                <div id="env-sustain"></div>
+              </div>
+              <div class="control control-slider" title="Release rate (0=fast, 10=slooow)">
+                <label class="control-label">R</label>
+                <div id="env-release"></div>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h2>Chorus</h2>
+              <div class="control control-radio-group chorus-width">
+                <label class="control-label">Mode</label>
+                <div class="radio-buttons">
+                  <div title="Chorus effect off"><span id="chorus-mode-0"></span>Off</div>
+                  <div title="Slow chorus effect"><span id="chorus-mode-1"></span>I</div>
+                  <div title="Stronger chorus effect"><span id="chorus-mode-2"></span>II</div>
+                  <div title="Sea-sick chorus effect"><span id="chorus-mode-3"></span>I+II</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="synth-analyse" class="tab-pane" id="home" role="tabpanel" aria-labelledby="synth-analyse-tab">
+            <div class="control-block" id="oscilloscope">
+              <h2>Oscilloscope</h2>
+              <div class="control">
+                <span id="oscilloscope-view"></span>
+              </div>
+            </div>
+
+            <div class="control-block" id="spectrogram">
+              <h2>Spectrogram</h2>
+              <div class="control">
+                <span id="spectrogram-view"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="synth-performance">
+          <div class="control-block" id="piano-block">
+            <h2 id="piano-message">&nbsp;</h2>
+            <div class="control control-slider float-left" title="Bend the note's pitch">
+              <div id="pitchBend"></div>
+            </div>
+
+            <div class="control control-radio-group float-right" title="Visible range for the keyboard">
+              <label class="control-label">Octave</label>
+              <div class="radio-buttons">
+                <div><span id="piano-change-octave-plus2"></span>+2</div>
+                <div><span id="piano-change-octave-plus1"></span>+1</div>
+                <div><span id="piano-change-octave-0"></span>0</div>
+                <div><span id="piano-change-octave-minus1"></span>-1</div>
+              </div>
+            </div>
+
+            <div id="piano-wrapper">
+              <div id="piano"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal" id="modal-midi" tabindex="-1" role="dialog" aria-labelledby="modal-midi-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <form id="formMidi">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modal-midi-label">
+                  MIDI integration
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group row">
+                  <label for="midiInputPort" class="col-sm-3 col-form-label">Input device</label>
+                  <div class="col-sm-9">
+                    <select class="form-control" id="midiInputPort">
+                      <option value="">Not selected</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-success btn-outline-dark">OK</button>
+                <button type="button" class="btn btn-outline-dark" data-dismiss="modal">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="modal-save-patch" tabindex="-1" role="dialog" aria-labelledby="modal-save-patch-label" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <form id="formSavePatch">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modal-save-patch-label">
+                Save patch
+              </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group row">
+                <label for="patchName" class="col-sm-3 col-form-label">Patch name</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="patchName" required pattern="^[A-Za-z0-9 .-]{1,24}$" maxlength="24" />
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success btn-outline-dark">OK</button>
+              <button type="button" class="btn btn-outline-dark" data-dismiss="modal">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { MidiAdapter } from '../src/midiAdapter.js'
+      import { MidiConsumer } from '../src/midiConsumer.js'
+      import { NexusUIHelper } from './nexusui-helper.js'
+      import { createJuno60, defaultPatch, Juno60FactoryPatchesA } from '../dist/synth.node.mjs'
+
+      const audioContext = new AudioContext()
+      unlockAudioContext(audioContext)
+      Nexus.context = audioContext
+
+      function unlockAudioContext(audioContext) {
+        if (audioContext.state === 'suspended') {
+          const events = ['pointerdown', 'touchstart', 'touchend', 'mousedown', 'keydown', 'click']
+
+          console.log('Audio context - suspended until user interaction ...')
+          events.forEach((eventName) => document.addEventListener(eventName, unlock, true))
+
+          function unlock() {
+            audioContext.resume().then(() => {
+              if (audioContext.state === 'running') {
+                events.forEach((eventName) => document.removeEventListener(eventName, unlock, true))
+                console.log('Audio context - unlocked ...')
+              }
+            })
+          }
+        }
+      }
+
+      let synthNode = null
+      createJuno60(audioContext).then((x) => {
+        synthNode = x
+        synthNode.connect(audioContext.destination)
+      })
+
+      Nexus.colors.accent = 'rgb(0, 123, 255)'
+      Nexus.colors.mediumLight = '#669'
+      Nexus.colors.fill = 'rgba(0, 123, 255, 0.15)'
+
+      const ui = new NexusUIHelper(Nexus)
+
+      const lfoRate = ui.createSlider(1, 'LFO Rate', '#lfo-rate', onControlChange)
+      const lfoDelay = ui.createSlider(2, 'LFO Delay', '#lfo-delay', onControlChange)
+      const lfoTriggerMode = ui.createRadioButtonGroup(
+        3,
+        'LFO Trigger Mode',
+        {
+          true: '#lfo-trigger-mode-auto',
+          false: '#lfo-trigger-mode-manual',
+        },
+        onControlChange
+      )
+      const lfoManualTrigger = new Nexus.Button('#lfo-manual-trigger', {
+        size: [60, 60],
+        mode: 'button',
+      })
+      lfoManualTrigger.on('change', (state) => {
+        if (state) {
+          synthNode && synthNode.lfoTrigger()
+        } else {
+          synthNode && synthNode.lfoRelease()
+        }
+      })
+
+      const dcoRange = ui.createRadioButtonGroup(
+        3,
+        'DCO range',
+        {
+          0.5: '#dco-range-16',
+          1: '#dco-range-8',
+          2: '#dco-range-4',
+        },
+        onControlChange
+      )
+      const dcoLfoDepth = ui.createSlider(4, 'DCO LFO Modulation Depth', '#dco-lfo-depth', onControlChange)
+      const dcoPwmDepth = ui.createSlider(5, 'DCO PWM Modulation Depth', '#dco-pwm-depth', onControlChange)
+      const dcoPwmSource = ui.createRadioButtonGroup(
+        6,
+        'DCO PWM Source',
+        {
+          l: '#dco-pwm-source-lfo',
+          m: '#dco-pwm-source-manual',
+          e: '#dco-pwm-source-env',
+        },
+        onControlChange
+      )
+      const dcoPulseLevel = ui.createSlider(7, 'DCO Pulse Level', '#dco-pulse-level', onControlChange)
+      const dcoSawLevel = ui.createSlider(8, 'DCO Saw Level', '#dco-saw-level', onControlChange)
+      const dcoSubLevel = ui.createSlider(9, 'DCO Sub Level', '#dco-sub-level', onControlChange)
+      const dcoNoiseLevel = ui.createSlider(10, 'DCO Noise Level', '#dco-noise-level', onControlChange)
+
+      const hpfFreq = ui.createSlider(11, 'HPF Cutoff', '#hpf-freq', onControlChange)
+
+      const vcfFreq = ui.createSlider(12, 'VCF Cutoff', '#vcf-freq', onControlChange)
+      const vcfResonance = ui.createSlider(13, 'VCF Resonance', '#vcf-resonance', onControlChange)
+      const vcfPolarity = ui.createRadioButtonGroup(
+        14,
+        'VCF Polarity',
+        {
+          true: '#vcf-polarity-positive',
+          false: '#vcf-polarity-negative',
+        },
+        onControlChange
+      )
+      const vcfEnv = ui.createSlider(15, 'VCF Envelope Modulation Depth', '#vcf-env', onControlChange)
+      const vcfLfo = ui.createSlider(16, 'VCF LFO Modulation Depth', '#vcf-lfo', onControlChange)
+      const vcfKey = ui.createSlider(17, 'VCF Keyboard Tracking Depth', '#vcf-key', onControlChange)
+
+      const vcaSource = ui.createRadioButtonGroup(
+        18,
+        'VCA Source',
+        {
+          env: '#vca-source-env',
+          gate: '#vca-source-gate',
+        },
+        onControlChange
+      )
+      const vcaLevel = ui.createSlider(19, 'VCA Level', '#vca-level', onControlChange)
+
+      const envAttack = ui.createSlider(20, 'Envelope Attack Rate', '#env-attack', onControlChange)
+      const envDecay = ui.createSlider(21, 'Envelope Decay Rate', '#env-decay', onControlChange)
+      const envSustain = ui.createSlider(22, 'Envelope Sustain Level', '#env-sustain', onControlChange)
+      const envRelease = ui.createSlider(23, 'Envelope Release Rate', '#env-release', onControlChange)
+
+      const chorusMode = ui.createRadioButtonGroup(
+        24,
+        'Chorus Mode',
+        {
+          0: '#chorus-mode-0',
+          1: '#chorus-mode-1',
+          2: '#chorus-mode-2',
+          3: '#chorus-mode-3',
+        },
+        onControlChange
+      )
+
+      const dcoBendDepth = ui.createSlider(24, 'DCO Pitch-Bend Depth', '#dco-bend-depth', onControlChange)
+      const vcfBendDepth = ui.createSlider(25, 'DCO Cutoff-Bend Depth', '#vcf-bend-depth', onControlChange)
+
+      const pitchBend = ui.createSlider(
+        100,
+        'Bend lever',
+        '#pitchBend',
+        function () {
+          synthNode && synthNode.pitchBend(pitchBend.value * 0.1)
+        },
+        { minValue: -10, maxValue: 10, isCentred: true, showValue: false, size: [50, 200] }
+      )
+
+      const piano = new Nexus.Piano('#piano', {
+        lowNote: 36,
+        highNote: 96,
+        mode: 'button',
+        size: [2582, 210],
+      })
+      const pianoKeyNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+      for (let key of piano.keys) {
+        const octave = Math.floor(key.note / 12)
+        const octaveNote = key.note - octave * 12
+        const keyName = pianoKeyNames[octaveNote].replace('#', '<sup>#</sup>') + (octave - 1).toString()
+        const $keySpan = $(`<span class="piano-key-name">${keyName}</span>`)
+        $keySpan.appendTo(key.parent)
+      }
+
+      // Allow user to change the visible range of octaves.
+      const pianoOctave = ui.createRadioButtonGroup(
+        101,
+        'Keyboard octave',
+        {
+          '0': '#piano-change-octave-0',
+          '+2': '#piano-change-octave-plus2',
+          '+1': '#piano-change-octave-plus1',
+          '-1': '#piano-change-octave-minus1',
+        },
+        function () {
+          $('#piano').css('margin-left', `${parseInt(pianoOctave.value, 10) * -501}px`)
+        }
+      )
+
+      let oscilloscope
+      let spectrogram
+      $('a[data-toggle="tab"]')
+        .on('shown.bs.tab', function (e) {
+          if (e.target.id === 'synth-analyse-tab') {
+            if (!oscilloscope) {
+              oscilloscope = new Nexus.Oscilloscope('#oscilloscope-view')
+              oscilloscope.colors.fill = '#efe'
+              spectrogram = new Nexus.Spectrogram('#spectrogram-view')
+              spectrogram.colors.fill = '#efe'
+            }
+
+            if (oscilloscope && synthNode) {
+              oscilloscope.connect(synthNode)
+              spectrogram.connect(synthNode)
+              resizeVisualization()
+            }
+          }
+        })
+        .on('hidden.bs.tab', function (e) {
+          if (e.target.id === 'synth-analyse-tab') {
+            if (oscilloscope) {
+              oscilloscope.disconnect()
+              spectrogram.disconnect()
+            }
+          }
+        })
+      // If the window is resized then default to middle-C being centred.
+      $(window).resize(resizeVisualization)
+      function resizeVisualization() {
+        const oscWidth = $('#oscilloscope-view').parent().width()
+        if (oscWidth > 0 && oscilloscope) {
+          oscilloscope.resize(oscWidth, 200)
+        }
+
+        const spectWidth = $('#spectrogram-view').parent().width()
+        if (spectWidth > 0 && spectrogram) {
+          spectrogram.resize(spectWidth, 200)
+        }
+      }
+
+      // Load Andy's base testing scenario.
+      let patchName = defaultPatch.name
+      let originalPatchJson = ''
+      deserializeFromPatchToControls(defaultPatch)
+
+      function onControlChange() {
+        // If "originalPatchJson" then we're doing a bulk change - so ignore temporarily.
+        if (originalPatchJson === null) {
+          return
+        }
+
+        // Seialize the current control panel settings.
+        const patch = serializeFromControlsToPatch()
+        const currentPatchJson = JSON.stringify(patch)
+        console.log(currentPatchJson)
+        synthNode && synthNode.setPatch(patch)
+
+        // Update the status message and show "save patch" button if user has changed stuff.
+        $('#piano-message').text(patchName)
+        $('#btnSavePatch').toggleClass('btn-warning', currentPatchJson !== originalPatchJson)
+
+        // Show/hide related stuff.
+        $('#lfo-manual-trigger-wrapper').css('display', lfoTriggerMode.value.toString() === 'false' ? 'block' : 'none')
+      }
+
+      function compare(a, b) {
+        if (a > b) return 1
+        if (a < b) return -1
+        return 0
+      }
+
+      function buildPatchList($controlBlock, patches, activePatchName, allowDelete) {
+        const $patchList = $controlBlock.find('.patch-list').empty()
+
+        let itemCount = 0
+        let $patchColumn = null
+        for (let patch of Object.values(patches).sort((a, b) => compare(a.name, b.name))) {
+          itemCount++
+
+          // Append a new column if necessary.
+          if ($patchColumn === null || $patchColumn.children().length >= 6) {
+            $patchColumn = $('<ul></ul>').appendTo($patchList)
+          }
+
+          // Add new patch item.
+          const $item = $('<li><a class="btn btn-outline-primary"></a></li>')
+            .appendTo($patchColumn)
+            .children('a')
+            .text(patch.name)
+            .attr('title', patch.name)
+            .data('patch', patch)
+            .toggleClass('active', activePatchName === patch.name)
+          if (allowDelete) {
+            $('<a class="delete-item" title="Remove this patch">X</a>').prependTo($item.addClass('can-delete-item'))
+          }
+        }
+
+        $controlBlock.removeClass('d-none').toggle(itemCount > 0)
+      }
+
+      // Display the available patches.
+      buildPatchList($('#patch-list-mine'), JSON.parse(localStorage.getItem('Juno60-MyPatches') || '{}'), null, true)
+      buildPatchList($('#patch-list-juno60-factoryA'), Juno60FactoryPatchesA, null, false)
+
+      $(document.body)
+        .on('click', '.patch-list a.btn', function () {
+          // Highlight the current patch.
+          $('.patch-list a.active').removeClass('active')
+          $(this).addClass('active')
+
+          // Apply the patch to the control-panel.
+          deserializeFromPatchToControls($(this).data('patch'))
+        })
+        .on('click', '.patch-list a.delete-item', function (ev) {
+          ev.preventDefault()
+          const patch = $(this).parent().data('patch')
+          if (confirm(`Remove '${patch.name}' - are you sure?`)) {
+            const myPatches = JSON.parse(localStorage.getItem('Juno60-MyPatches') || '{}')
+            delete myPatches[patch.name]
+            localStorage.setItem('Juno60-MyPatches', JSON.stringify(myPatches))
+            buildPatchList($('#patch-list-mine'), myPatches, patchName, true)
+          }
+          return false
+        })
+
+      function serializeFromControlsToPatch() {
+        return {
+          name: patchName,
+          vca: (0.1 * vcaLevel.value).toFixed(2) * 1.0,
+          vcaType: vcaSource.value,
+          lfo: {
+            autoTrigger: lfoTriggerMode.value === 'true',
+            frequency: (0.1 * lfoRate.value).toFixed(2) * 1.0,
+            delay: (0.1 * lfoDelay.value).toFixed(2) * 1.0,
+          },
+          dco: {
+            range: dcoRange.value * 1.0,
+            saw: (0.1 * dcoSawLevel.value).toFixed(2) * 1.0,
+            pulse: (0.1 * dcoPulseLevel.value).toFixed(2) * 1.0,
+            sub: dcoSubLevel.value > 0, //TODO - Improve names.
+            subAmount: (0.1 * dcoSubLevel.value).toFixed(2) * 1.0,
+            noise: (0.1 * dcoNoiseLevel.value).toFixed(2) * 1.0,
+            pwm: (0.1 * dcoPwmDepth.value).toFixed(2) * 1.0,
+            pwmMod: dcoPwmSource.value,
+            lfo: (0.1 * dcoLfoDepth.value).toFixed(2) * 1.0,
+          },
+          hpf: (0.1 * hpfFreq.value).toFixed(2) * 1.0,
+          vcf: {
+            type: 'moog',
+            frequency: (0.1 * vcfFreq.value).toFixed(2) * 1.0,
+            resonance: (0.1 * vcfResonance.value).toFixed(2) * 1.0,
+            modPositive: vcfPolarity.value === 'true',
+            envMod: (0.1 * vcfEnv.value).toFixed(2) * 1.0,
+            lfoMod: (0.1 * vcfLfo.value).toFixed(2) * 1.0,
+            keyMod: (0.1 * vcfKey.value).toFixed(2) * 1.0,
+          },
+          env: {
+            attack: (0.1 * envAttack.value).toFixed(2) * 1.0,
+            decay: (0.1 * envDecay.value).toFixed(2) * 1.0,
+            sustain: (0.1 * envSustain.value).toFixed(2) * 1.0,
+            release: (0.1 * envRelease.value).toFixed(2) * 1.0,
+          },
+          bend: {
+            dcoDepth: (0.1 * dcoBendDepth.value).toFixed(2) * 1.0,
+            vcfDepth: (0.1 * vcfBendDepth.value).toFixed(2) * 1.0,
+          },
+          chorus: chorusMode.value * 1,
+        }
+      }
+
+      function deserializeFromPatchToControls(patch) {
+        // Disable change-tracking.
+        originalPatchJson = null
+
+        patchName = patch.name || 'Unknown'
+
+        vcaLevel.value = (patch.vca || 0) * 10
+        vcaSource.value = (patch.vcaType || 'env').toString()
+
+        lfoTriggerMode.value = (patch.lfo.autoTrigger === false ? false : true).toString()
+        lfoRate.value = (patch.lfo.frequency || 0) * 10
+        lfoDelay.value = (patch.lfo.delay || 0) * 10
+
+        dcoRange.value = (patch.dco.range || 1).toString()
+        if (patch.dco.saw === false) {
+          dcoSawLevel.value = 0
+        } else if (patch.dco.saw === true) {
+          dcoSawLevel.value = 10
+        } else {
+          dcoSawLevel.value = (patch.dco.saw || 0) * 10
+        }
+        if (patch.dco.pulse === false) {
+          dcoPulseLevel.value = 0
+        } else if (patch.dco.pulse === true) {
+          dcoPulseLevel.value = 10
+        } else {
+          dcoPulseLevel.value = (patch.dco.pulse || 0) * 10
+        }
+        if (patch.dco.sub === false) {
+          dcoSubLevel.value = 0
+        } else {
+          dcoSubLevel.value = (patch.dco.subAmount || 0) * 10
+        }
+        dcoNoiseLevel.value = (patch.dco.noise || 0) * 10
+        dcoPwmDepth.value = (patch.dco.pwm || 0) * 10
+        dcoPwmSource.value = patch.dco.pwmMod || 'm'
+        dcoLfoDepth.value = (patch.dco.lfo || 0) * 10
+
+        hpfFreq.value = (patch.hpf || 0) * 10
+
+        vcfFreq.value = (patch.vcf.frequency || 0) * 10
+        vcfResonance.value = (patch.vcf.resonance || 0) * 10
+        vcfPolarity.value = (patch.vcf.modPositive === false ? false : true).toString()
+        vcfEnv.value = (patch.vcf.envMod || 0) * 10
+        vcfLfo.value = (patch.vcf.lfoMod || 0) * 10
+        vcfKey.value = (patch.vcf.keyMod || 0) * 10
+
+        envAttack.value = (patch.env.attack || 0) * 10
+        envDecay.value = (patch.env.decay || 0) * 10
+        envSustain.value = (patch.env.sustain || 0) * 10
+        envRelease.value = (patch.env.release || 0) * 10
+
+        chorusMode.value = (patch.chorus || 0).toString()
+
+        dcoBendDepth.value = getValueOrDefault((patch.bend || {}).dcoDepth, 0.5) * 10
+        vcfBendDepth.value = getValueOrDefault((patch.bend || {}).vcfDepth, 0.5) * 10
+
+        // Re-enable change tracking.
+        originalPatchJson = JSON.stringify(serializeFromControlsToPatch())
+        patchName = patch.name
+        onControlChange()
+      }
+
+      function getValueOrDefault(value, defaultValue) {
+        return value === undefined || value === null ? defaultValue : value
+      }
+
+      let isNexusChanging = false
+
+      const consumer = new MidiConsumer()
+      consumer.onNoteOn = (noteNumber, velocity) => {
+        console.log(`NoteOn - note=${noteNumber}`)
+        if (audioContext.state === 'suspended') {
+          audioContext.resume()
+        }
+        synthNode && synthNode.noteOn(noteNumber, velocity / 127)
+        if (!isNexusChanging) {
+          if (noteNumber >= piano.range.low && noteNumber <= piano.range.high) {
+            piano.toggleKey(noteNumber, true)
+          }
+        }
+      }
+      consumer.onNoteOff = (noteNumber, velocity) => {
+        console.log(`NoteOff - note=${noteNumber}`)
+        synthNode && synthNode.noteOff(noteNumber, velocity / 127)
+        if (!isNexusChanging) {
+          if (noteNumber >= piano.range.low && noteNumber <= piano.range.high) {
+            piano.toggleKey(noteNumber, false)
+          }
+        }
+      }
+      consumer.onPitchBend = (bendValue) => {
+        console.log(`PitchBend - value=${bendValue}`)
+        // TODO
+        if (!isNexusChanging) {
+          pitchBend.value = bendValue * 10
+        }
+      }
+
+      // Key mapping for normal English PC keyboard to MIDI notes.
+      // Taken from https://tutorials.renoise.com/wiki/Playing_Notes_with_the_Computer_Keyboard
+      const keyMapping = {
+        "z": 48, // C3
+        "s": 49,
+        "x": 50,
+        "d": 51,
+        "c": 52,
+        "v": 53,
+        "g": 54,
+        "b": 55,
+        "h": 56,
+        "n": 57,
+        "j": 58,
+        "m": 59,
+        ",": 60, // C4
+        "l": 61,
+        ".": 62,
+        ";": 63,
+        "/": 64,
+        "q": 60, // Another C4
+        "2": 61,
+        "w": 62,
+        "3": 63,
+        "e": 64,
+        "r": 65,
+        "5": 66,
+        "t": 67,
+        "6": 68,
+        "y": 69,
+        "7": 70,
+        "u": 71,
+        "i": 72, // C5
+        "9": 73,
+        "o": 74,
+        "0": 75,
+        "p": 76,
+        "[": 77,
+        "=": 78,
+        "]": 79, // G5
+      }
+      $(document)
+        .on("keydown", e => {
+          let noteNumber = keyMapping[e.key]
+          if (noteNumber !== undefined && e.target.tagName === "BODY"){
+            noteNumber += parseInt(pianoOctave.value, 10) * 12
+            consumer.noteOn(noteNumber, 127)
+          }
+        })
+        .on("keyup", e => {
+          let noteNumber = keyMapping[e.key]
+          if (noteNumber !== undefined && e.target.tagName === "BODY"){
+            noteNumber += parseInt(pianoOctave.value, 10) * 12
+            consumer.noteOff(noteNumber, 127)
+          }
+        })
+
+      piano.on('change', (v) => {
+        isNexusChanging = true
+        if (v.state) {
+          consumer.noteOn(v.note, 127)
+        } else {
+          consumer.noteOff(v.note, 127)
+        }
+        isNexusChanging = false
+      })
+
+      const midiAdapter = new MidiAdapter()
+      $('#btnMidi').click(function () {
+        if (!navigator.requestMIDIAccess) {
+          alert('Sorry - MIDI not available')
+          return
+        }
+
+        if (midiAdapter.isConnected()) {
+          openMidiModal()
+        } else {
+          midiAdapter.connect().then(openMidiModal)
+        }
+      })
+      function openMidiModal() {
+        const $midiInputPort = $('#midiInputPort')
+
+        // Get the existing details.
+        let existingMidiPort = $midiInputPort.val() || localStorage.getItem('midiInputPort') || ''
+
+        // Populate the drop-down list with the list of MIDI input devices.
+        $midiInputPort.children().slice(1).remove()
+        $.each(midiAdapter.listInputs(), (i, x) => {
+          const $portHtml = $('<option></option>').attr('value', x.id).text(x.name).appendTo($midiInputPort)
+          if (existingMidiPort === '') {
+            existingMidiPort = x.id
+          }
+        })
+        $midiInputPort.val(existingMidiPort)
+
+        // Open the MIDI dialog and focus on the drop-down list.
+        $('#modal-midi').modal()
+        setTimeout(function () {
+          $('#modal-midi button[type=submit]').focus()
+        }, 0)
+      }
+      $('#modal-midi').on('hidden.bs.modal', function (e) {
+        midiAdapter.routeInputMessagesTo(consumer)
+      })
+      $('#formMidi').submit(function (ev) {
+        ev.preventDefault()
+        $('#modal-midi').modal('hide')
+        const chosenMidiPort = $('#midiInputPort').val()
+        midiAdapter.setInputPort(chosenMidiPort)
+        if (chosenMidiPort) {
+          localStorage.setItem('midiInputPort', chosenMidiPort)
+          $('#btnMidi').addClass('btn-success')
+        } else {
+          $('#btnMidi').removeClass('btn-success')
+        }
+        return false
+      })
+
+      $('#btnSavePatch').click(function () {
+        $('#patchName').attr('name', Math.random()).val(patchName)
+        $('#modal-save-patch').modal()
+        setTimeout(function () {
+          $('#patchName').focus()[0].select()
+        }, 0)
+      })
+      $('#formSavePatch').submit(function (ev) {
+        ev.preventDefault()
+        patchName = $('#patchName').val()
+        const serializedPatch = serializeFromControlsToPatch()
+        deserializeFromPatchToControls(serializedPatch)
+
+        const myPatches = JSON.parse(localStorage.getItem('Juno60-MyPatches') || '{}')
+        myPatches[patchName] = serializedPatch
+        localStorage.setItem('Juno60-MyPatches', JSON.stringify(myPatches))
+
+        $('.patch-list a.active').removeClass('active')
+        buildPatchList($('#patch-list-mine'), myPatches, patchName, true)
+
+        $('#modal-save-patch').modal('hide')
+        return false
+      })
+
+      // Allow sound to be recorded.
+      let recordDest = null
+      let recordChunks = null
+      let recordRecorder = null
+      $('#btnRecord').click(function () {
+        if (recordRecorder) {
+          // Ask the existing recording-session to stop.
+          recordRecorder.stop()
+          synthNode.disconnect(recordDest)
+        } else {
+          // Plug a recording-destination into the audio graph.
+          recordDest = audioContext.createMediaStreamDestination()
+          synthNode.connect(recordDest)
+
+          // Record the output.
+          recordChunks = []
+          recordRecorder = new MediaRecorder(recordDest.stream)
+          recordRecorder.ondataavailable = function (evt) {
+            // Accumulate chunks of audio output.
+            recordChunks.push(evt.data)
+          }
+          recordRecorder.onstop = function () {
+            // Make blob out of our chunks.
+            // const blob = new Blob(recordChunks, { type: 'audio/mpeg; codecs=mp3' })
+            const blob = new Blob(recordChunks, { type: 'audio/mp4; codecs=flac' })
+
+            // Download the blob.
+            const link = document.createElement('a')
+            // link.download = 'junox-download.mp3'
+            link.download = 'junox-download.mp4'
+            link.href = URL.createObjectURL(blob)
+            link.click()
+            URL.revokeObjectURL(link.href)
+
+            recordChunks = null
+            recordRecorder = null
+            recordDest = null
+
+            $('#btnRecord').removeClass('recording')
+          }
+          recordRecorder.start()
+
+          $(this).addClass('recording')
+        }
+      })
+    </script>
+  </body>
+</html>
